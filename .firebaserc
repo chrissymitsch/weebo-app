@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "bento-starter",
+    "default": "weebo-app",
     "weebo": "weebo-b37d8"
   }
 }
