@@ -10,13 +10,13 @@ import '@/firebase/authentication'
 import '@/misc/handle-apple-install-prompt'
 import 'pwacompat'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
   router,
   store,
   render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');
 
 // eslint-disable-next-line no-console
 console.info(`
@@ -24,4 +24,4 @@ console.info(`
 
 👉 https://bento-starter.netlify.com/
 
-`)
+`);

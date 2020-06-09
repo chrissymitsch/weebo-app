@@ -8,13 +8,13 @@ export default {
    * Callback fired when user login
    */
   login: async ({ commit, dispatch }, firebaseAuthUser) => {
-    const userFromFirebase = await new UsersDB().read(firebaseAuthUser.uid)
+    const userFromFirebase = await new UsersDB().read(firebaseAuthUser.uid);
 
     const user = isNil(userFromFirebase)
       ? await createNewUserFromFirebaseAuthUser(firebaseAuthUser)
-      : userFromFirebase
+      : userFromFirebase;
 
-    commit('setUser', user)
+    commit('setUser', user);
     dispatch('projects/getUserProjects', null, { root: true })
   },
 
@@ -22,10 +22,10 @@ export default {
    * Callback fired when user logout
    */
   logout: ({ commit }) => {
-    commit('setUser', null)
-    commit('projects/setProjects', null, { root: true })
+    commit('setUser', null);
+    commit('projects/setProjects', null, { root: true });
 
-    const currentRouter = router.app.$route
+    const currentRouter = router.app.$route;
     if (!(currentRouter.meta && currentRouter.meta.authNotRequired)) {
       router.push('/login')
     }

@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'production') {
     },
     updated(reg) {
       // eslint-disable-next-line no-console
-      console.info('New content is available; please refresh.')
+      console.info('New content is available; please refresh.');
       store.commit(`app/setSWRegistrationForNewContent`, reg)
     },
     offline() {
@@ -39,11 +39,11 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 if ('serviceWorker' in navigator) {
-  let refreshing = false
+  let refreshing = false;
   // This is triggered when a new service worker take over
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (refreshing) return
-    refreshing = true
+    if (refreshing) return;
+    refreshing = true;
 
     window.location.reload()
   })

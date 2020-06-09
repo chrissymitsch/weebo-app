@@ -4,7 +4,7 @@ import authentication from './authentication'
 import app from './app'
 import projects from './projects'
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 /* If you don't know about Vuex, please refer to https://vuex.vuejs.org/ */
 

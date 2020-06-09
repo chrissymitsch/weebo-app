@@ -7,7 +7,7 @@ export default {
   setProjects: (state, projects) => (state.projects = projects),
   addProject: (state, project) => state.projects.push(project),
   removeProjectById: (state, projectId) => {
-    const index = state.projects.findIndex(project => project.id === projectId)
+    const index = state.projects.findIndex(project => project.id === projectId);
     state.projects.splice(index, 1)
   },
 
@@ -15,7 +15,7 @@ export default {
   addProjectDeletionPending: (state, projectId) =>
     state.projectDeletionPending.push(projectId),
   removeProjectDeletionPending: (state, projectId) => {
-    const index = state.projects.findIndex(project => project.id === projectId)
+    const index = state.projects.findIndex(project => project.id === projectId);
     state.projectDeletionPending.splice(index, 1)
   },
 

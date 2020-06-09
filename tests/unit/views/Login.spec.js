@@ -21,28 +21,28 @@ const defaultStoreStructure = {
       }
     }
   }
-}
+};
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
+const localVue = createLocalVue();
+localVue.use(Vuex);
 
 const $router = {
   push: jest.fn()
-}
+};
 
 describe('LoginView', () => {
   describe('when user is defined', () => {
-    let storeStructure
+    let storeStructure;
 
     beforeEach(() => {
-      storeStructure = cloneDeep(defaultStoreStructure)
+      storeStructure = cloneDeep(defaultStoreStructure);
       storeStructure.modules.authentication.state.user = 'Evan'
-    })
+    });
 
     describe('and redirectUrl is defined', () => {
       it('should redirect to redirectUrl', () => {
-        const store = new Vuex.Store(storeStructure)
-        const redirectUrl = '/redirectUrl'
+        const store = new Vuex.Store(storeStructure);
+        const redirectUrl = '/redirectUrl';
         shallowMount(LoginView, {
           store,
           localVue,
@@ -54,14 +54,14 @@ describe('LoginView', () => {
             },
             $router
           }
-        })
+        });
         expect($router.push).toHaveBeenCalledWith(redirectUrl)
       })
-    })
+    });
 
     describe('but redirectUrl not defined', () => {
       it('should redirect to /products', () => {
-        const store = new Vuex.Store(storeStructure)
+        const store = new Vuex.Store(storeStructure);
         shallowMount(LoginView, {
           store,
           localVue,
@@ -71,87 +71,87 @@ describe('LoginView', () => {
             },
             $router
           }
-        })
+        });
         expect($router.push).toHaveBeenCalledWith('/products')
       })
     })
-  })
+  });
 
   describe('when user is null', () => {
-    let storeStructure
+    let storeStructure;
     beforeEach(() => {
-      storeStructure = cloneDeep(defaultStoreStructure)
+      storeStructure = cloneDeep(defaultStoreStructure);
       storeStructure.modules.authentication.state.user = null
-    })
+    });
 
     it('should not display loader if user is null', () => {
-      const store = new Vuex.Store(storeStructure)
-      const wrapper = shallowMount(LoginView, { store, localVue })
-      const loader = wrapper.find('[data-test="loader"]')
+      const store = new Vuex.Store(storeStructure);
+      const wrapper = shallowMount(LoginView, { store, localVue });
+      const loader = wrapper.find('[data-test="loader"]');
       expect(loader.isVisible()).toBeFalsy()
-    })
+    });
 
     it('should display login button', () => {
-      const store = new Vuex.Store(storeStructure)
-      const wrapper = shallowMount(LoginView, { store, localVue })
-      const loginButton = wrapper.find('[data-test="login-btn"]')
+      const store = new Vuex.Store(storeStructure);
+      const wrapper = shallowMount(LoginView, { store, localVue });
+      const loginButton = wrapper.find('[data-test="login-btn"]');
       expect(loginButton.isVisible()).toBeTruthy()
-    })
+    });
 
     it('should not display offline message', () => {
-      const store = new Vuex.Store(storeStructure)
-      const wrapper = shallowMount(LoginView, { store, localVue })
+      const store = new Vuex.Store(storeStructure);
+      const wrapper = shallowMount(LoginView, { store, localVue });
       const offlineInstruction = wrapper.find(
         '[data-test="offline-instruction"]'
-      )
+      );
       expect(offlineInstruction.isVisible()).toBeFalsy()
-    })
+    });
 
     describe('when app is offline', () => {
       beforeEach(() => {
         storeStructure.modules.app.state.networkOnLine = false
-      })
+      });
 
       it('should not display login button if app is offline', () => {
-        const store = new Vuex.Store(storeStructure)
-        const wrapper = shallowMount(LoginView, { store, localVue })
-        const loginButton = wrapper.find('[data-test="login-btn"]')
+        const store = new Vuex.Store(storeStructure);
+        const wrapper = shallowMount(LoginView, { store, localVue });
+        const loginButton = wrapper.find('[data-test="login-btn"]');
         expect(loginButton.isVisible()).toBeFalsy()
-      })
+      });
 
       it('should display offline message', () => {
-        const store = new Vuex.Store(storeStructure)
-        const wrapper = shallowMount(LoginView, { store, localVue })
+        const store = new Vuex.Store(storeStructure);
+        const wrapper = shallowMount(LoginView, { store, localVue });
         const offlineInstruction = wrapper.find(
           '[data-test="offline-instruction"]'
-        )
+        );
         expect(offlineInstruction.isVisible()).toBeTruthy()
       })
     })
-  })
+  });
 
   describe('when user is undefined', () => {
     it('should display loader', () => {
-      const store = new Vuex.Store(defaultStoreStructure)
-      const wrapper = shallowMount(LoginView, { store, localVue })
-      const loader = wrapper.find('[data-test="loader"]')
+      const store = new Vuex.Store(defaultStoreStructure);
+      const wrapper = shallowMount(LoginView, { store, localVue });
+      const loader = wrapper.find('[data-test="loader"]');
       expect(loader.isVisible()).toBeTruthy()
-    })
+    });
 
     it('should not display login button', () => {
-      const store = new Vuex.Store(defaultStoreStructure)
-      const wrapper = shallowMount(LoginView, { store, localVue })
-      const loginButton = wrapper.find('[data-test="login-btn"]')
+      const store = new Vuex.Store(defaultStoreStructure);
+      const wrapper = shallowMount(LoginView, { store, localVue });
+      const loginButton = wrapper.find('[data-test="login-btn"]');
       expect(loginButton.isVisible()).toBeFalsy()
-    })
+    });
 
     it('should not display offline message', () => {
-      const store = new Vuex.Store(defaultStoreStructure)
-      const wrapper = shallowMount(LoginView, { store, localVue })
+      const store = new Vuex.Store(defaultStoreStructure);
+      const wrapper = shallowMount(LoginView, { store, localVue });
       const offlineInstruction = wrapper.find(
         '[data-test="offline-instruction"]'
-      )
+      );
       expect(offlineInstruction.isVisible()).toBeFalsy()
     })
   })
-})
+});

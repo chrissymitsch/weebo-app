@@ -55,7 +55,7 @@ export default {
         if (!isNil(user)) {
           const redirectUrl = isNil(this.$route.query.redirectUrl)
             ? '/projects'
-            : this.$route.query.redirectUrl
+            : this.$route.query.redirectUrl;
           this.$router.push(redirectUrl)
         }
       },
@@ -65,9 +65,9 @@ export default {
   methods: {
     ...mapMutations('authentication', ['setUser']),
     async login() {
-      this.loginError = null
-      const provider = new firebase.auth.GoogleAuthProvider()
-      this.setUser(undefined)
+      this.loginError = null;
+      const provider = new firebase.auth.GoogleAuthProvider();
+      this.setUser(undefined);
 
       try {
         // Firebase signin with popup is faster than redirect
@@ -78,7 +78,7 @@ export default {
           ? await firebase.auth().signInWithPopup(provider)
           : await firebase.auth().signInWithRedirect(provider)
       } catch (err) {
-        this.loginError = err
+        this.loginError = err;
         this.setUser(null)
       }
     }

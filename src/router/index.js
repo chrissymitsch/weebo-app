@@ -6,13 +6,13 @@ import CheckLogin from '@/views/CheckLogin'
 import { isNil } from 'lodash'
 import store from '@/store'
 
-Vue.use(Router)
+Vue.use(Router);
 
 /* If you don't know about VueHead, please refer to https://github.com/ktquez/vue-head */
 
 Vue.use(Head, {
   complement: process.env.VUE_APP_TITLE
-})
+});
 
 /* If you don't know about VueRouter, please refer to https://router.vuejs.org/ */
 
@@ -60,7 +60,7 @@ const router = new Router({
     },
     { path: '*', redirect: '/home' }
   ]
-})
+});
 
 /**
  * Handle user redirections
@@ -72,10 +72,10 @@ router.beforeEach((to, from, next) => {
     isNil(store.state.authentication.user)
   ) {
     const path =
-      store.state.authentication.user === null ? '/login' : '/check-login'
+      store.state.authentication.user === null ? '/login' : '/check-login';
     return next(`${path}?redirectUrl=${to.path}`)
   }
   next()
-})
+});
 
 export default router

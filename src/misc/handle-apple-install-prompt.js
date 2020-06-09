@@ -3,17 +3,17 @@ import { isNil } from 'lodash'
 
 const isIosOnBrowser =
   ['iPhone', 'iPad', 'iPod'].includes(navigator.platform) &&
-  !window.navigator.standalone
+  !window.navigator.standalone;
 
 if (isIosOnBrowser) {
-  const now = Date.now()
-  let limitDate = null
+  const now = Date.now();
+  let limitDate = null;
   const addToHomeIosPromptLastDate = localStorage.getItem(
     'addToHomeIosPromptLastDate'
-  )
+  );
 
   if (!isNil(addToHomeIosPromptLastDate)) {
-    limitDate = new Date(parseInt(addToHomeIosPromptLastDate, 10))
+    limitDate = new Date(parseInt(addToHomeIosPromptLastDate, 10));
     limitDate.setMonth(limitDate.getMonth() + 1)
   }
 

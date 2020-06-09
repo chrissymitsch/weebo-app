@@ -13,7 +13,7 @@ export default {
   watch: {
     user: {
       handler(user) {
-        if (user === undefined) return
+        if (user === undefined) return;
 
         if (this.$route.query.redirectUrl === this.$route.path) {
           this.$router.push('/')
@@ -21,7 +21,7 @@ export default {
 
         const redirectUrl = isNil(user)
           ? `/login?redirectUrl=${this.$route.query.redirectUrl}`
-          : this.$route.query.redirectUrl
+          : this.$route.query.redirectUrl;
 
         this.$router.push(redirectUrl)
       },
