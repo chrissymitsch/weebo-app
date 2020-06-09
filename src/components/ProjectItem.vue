@@ -1,17 +1,17 @@
 <template>
-  <div class="product-item">
+  <div class="project-item">
     <router-link
-      class="product-link"
-      :to="{ name: 'product', params: { id: data.id } }"
+      class="project-link"
+      :to="{ name: 'project', params: { id: data.id } }"
     >
       #{{ index }} {{ data.name }}
     </router-link>
     <div
       v-if="!disableActions"
       class="delete-btn"
-      @click="$emit('deleteProduct', data.id)"
+      @click="$emit('deleteProject', data.id)"
     >
-      {{ isProductDeletionPending ? 'delete in progress...' : 'delete' }}
+      {{ isProjectDeletionPending ? 'delete in progress...' : 'delete' }}
     </div>
   </div>
 </template>
@@ -21,7 +21,7 @@ export default {
   props: {
     data: Object,
     index: Number,
-    isProductDeletionPending: Boolean,
+    isProjectDeletionPending: Boolean,
     disableActions: Boolean
   }
 }
@@ -30,13 +30,13 @@ export default {
 <style lang="scss" scoped>
 @import '@/theme/variables.scss';
 
-.product-item {
+.project-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
 
-  .product-link {
+  .project-link {
     color: $vue-color;
   }
 

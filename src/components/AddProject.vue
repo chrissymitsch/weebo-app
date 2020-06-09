@@ -1,19 +1,19 @@
 <template>
-  <div class="product-action-bar">
+  <div class="project-action-bar">
     <input
-      placeholder="product name..."
-      class="product-name-input"
+      placeholder="project name..."
+      class="project-name-input"
       type="text"
-      :value="productNameToCreate"
-      @input="setProductNameToCreate($event.target.value)"
-      @keypress.enter="triggerAddProductAction"
+      :value="projectNameToCreate"
+      @input="setProjectNameToCreate($event.target.value)"
+      @keypress.enter="triggerAddProjectAction"
     />
     <div
-      :class="{ disabled: productCreationPending }"
-      class="create-product-btn"
-      @click="triggerAddProductAction"
+      :class="{ disabled: projectCreationPending }"
+      class="create-project-btn"
+      @click="triggerAddProjectAction"
     >
-      add product
+      add project
     </div>
   </div>
 </template>
@@ -22,13 +22,13 @@
 import { mapMutations, mapState, mapActions } from 'vuex'
 
 export default {
-  computed: mapState('products', [
-    'productNameToCreate',
-    'productCreationPending'
+  computed: mapState('projects', [
+    'projectNameToCreate',
+    'projectCreationPending'
   ]),
   methods: {
-    ...mapMutations('products', ['setProductNameToCreate']),
-    ...mapActions('products', ['triggerAddProductAction'])
+    ...mapMutations('projects', ['setProjectNameToCreate']),
+    ...mapActions('projects', ['triggerAddProjectAction'])
   }
 }
 </script>
@@ -36,12 +36,12 @@ export default {
 <style lang="scss" scoped>
 @import '@/theme/variables.scss';
 
-.product-action-bar {
+.project-action-bar {
   display: flex;
   align-items: center;
   justify-content: center;
 
-  .product-name-input {
+  .project-name-input {
     padding-left: 5px;
     height: 30px;
     width: 150px;
@@ -52,7 +52,7 @@ export default {
     border-radius: 3px;
   }
 
-  .create-product-btn {
+  .create-project-btn {
     cursor: pointer;
     padding: 5px 10px;
     border: 1px solid;

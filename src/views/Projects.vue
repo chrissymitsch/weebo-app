@@ -1,18 +1,18 @@
 <template>
   <div class="page-wrapper">
-    <h1 class="products-page-title">Products page</h1>
-    <product-list class="product-list"></product-list>
-    <add-product v-if="networkOnLine"></add-product>
+    <h1 class="projects-page-title">Projects page</h1>
+    <project-list class="project-list"></project-list>
+    <add-project v-if="networkOnLine"></add-project>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import ProductList from '@/components/ProductList'
-import AddProduct from '@/components/AddProduct'
+import ProjectList from '@/components/ProjectList'
+import AddProject from '@/components/AddProject'
 
 export default {
-  components: { ProductList, AddProduct },
+  components: { ProjectList, AddProject },
   computed: mapState('app', ['networkOnLine'])
 }
 </script>
@@ -20,12 +20,12 @@ export default {
 <style lang="scss" scoped>
 @import '@/theme/variables.scss';
 
-.products-page-title {
+.projects-page-title {
   text-align: center;
   margin-bottom: 60px;
 }
 
-.product-list {
+.project-list {
   margin: 20px 0;
 }
 </style>

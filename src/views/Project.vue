@@ -1,25 +1,25 @@
 <template>
   <div class="page-wrapper">
-    <product-detail
-      v-if="currentProduct"
-      :product="currentProduct"
-    ></product-detail>
+    <project-detail
+      v-if="currentProject"
+      :project="currentProject"
+    ></project-detail>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import ProductDetail from '@/components/ProductDetail'
+import ProjectDetail from '@/components/ProjectDetail'
 
 export default {
-  components: { ProductDetail },
+  components: { ProjectDetail },
   props: {
     id: String
   },
   computed: {
-    ...mapGetters('products', ['getProductById']),
-    currentProduct() {
-      return this.getProductById(this.id)
+    ...mapGetters('projects', ['getProjectById']),
+    currentProject() {
+      return this.getProjectById(this.id)
     }
   }
 }

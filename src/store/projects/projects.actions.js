@@ -1,50 +1,50 @@
-import UserProductsDB from '@/firebase/user-products-db'
+import UserProjectsDB from '@/firebase/user-projects-db'
 
 export default {
   /**
-   * Fetch products of current loggedin user
+   * Fetch projects of current loggedin user
    */
-  getUserProducts: async ({ rootState, commit }) => {
-    const userProductDb = new UserProductsDB(rootState.authentication.user.id)
+  getUserProjects: async ({ rootState, commit }) => {
+    const userProjectDb = new UserProjectsDB(rootState.authentication.user.id)
 
-    const products = await userProductDb.readAll()
-    commit('setProducts', products)
+    const projects = await userProjectDb.readAll()
+    commit('setProjects', projects)
   },
 
   /**
-   * Create a product for current loggedin user
+   * Create a project for current loggedin user
    */
-  createUserProduct: async ({ commit, rootState }, product) => {
-    const userProductDb = new UserProductsDB(rootState.authentication.user.id)
+  createUserProject: async ({ commit, rootState }, project) => {
+    const userProjectDb = new UserProjectsDB(rootState.authentication.user.id)
 
-    commit('setProductCreationPending', true)
-    const createdProduct = await userProductDb.create(product)
-    commit('addProduct', createdProduct)
-    commit('setProductCreationPending', false)
+    commit('setProjectCreationPending', true)
+    const createdProject = await userProjectDb.create(project)
+    commit('addProject', createdProject)
+    commit('setProjectCreationPending', false)
   },
 
   /**
-   * Create a new product for current loggedin user and reset product name input
+   * Create a new project for current loggedin user and reset project name input
    */
-  triggerAddProductAction: ({ dispatch, state, commit }) => {
-    if (state.productNameToCreate === '') return
+  triggerAddProjectAction: ({ dispatch, state, commit }) => {
+    if (state.projectNameToCreate === '') return
 
-    const product = { name: state.productNameToCreate }
-    commit('setProductNameToCreate', '')
-    dispatch('createUserProduct', product)
+    const project = { name: state.projectNameToCreate }
+    commit('setProjectNameToCreate', '')
+    dispatch('createUserProject', project)
   },
 
   /**
-   * Delete a user product from its id
+   * Delete a user project from its id
    */
-  deleteUserProduct: async ({ rootState, commit, getters }, productId) => {
-    if (getters.isProductDeletionPending(productId)) return
+  deleteUserProject: async ({ rootState, commit, getters }, projectId) => {
+    if (getters.isProjectDeletionPending(projectId)) return
 
-    const userProductsDb = new UserProductsDB(rootState.authentication.user.id)
+    const userProjectsDb = new UserProjectsDB(rootState.authentication.user.id)
 
-    commit('addProductDeletionPending', productId)
-    await userProductsDb.delete(productId)
-    commit('removeProductById', productId)
-    commit('removeProductDeletionPending', productId)
+    commit('addProjectDeletionPending', projectId)
+    await userProjectsDb.delete(projectId)
+    commit('removeProjectById', projectId)
+    commit('removeProjectDeletionPending', projectId)
   }
 }

@@ -1,9 +1,9 @@
 import GenericDB from './generic-db'
 
-export default class UserProductsDB extends GenericDB {
+export default class UserProjectsDb extends GenericDB {
   constructor(userId) {
-    super(`users/${userId}/products`)
+    super(`users/${userId}/projects`)
   }
 
-  // Here you can extend UserProductsDB with custom methods
+  // Here you can extend UserProjectsDb with custom methods
 }

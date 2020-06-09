@@ -1,34 +1,34 @@
 <template>
   <div>
-    <p v-if="products === null" class="infos-label">Loading...</p>
-    <p v-if="products && !products.length" class="infos-label">
-      You don't have any product yet
+    <p v-if="projects === null" class="infos-label">Loading...</p>
+    <p v-if="projects && !projects.length" class="infos-label">
+      You don't have any project yet
     </p>
-    <product-item
-      v-for="(product, index) in products"
-      :key="product.id"
-      class="product-row"
+    <project-item
+      v-for="(project, index) in projects"
+      :key="project.id"
+      class="project-row"
       :index="index"
-      :is-product-deletion-pending="isProductDeletionPending(product.id)"
+      :is-project-deletion-pending="isProjectDeletionPending(project.id)"
       :disable-actions="!networkOnLine"
-      :data="product"
-      @deleteProduct="deleteUserProduct"
-    ></product-item>
+      :data="project"
+      @deleteProject="deleteUserProject"
+    ></project-item>
   </div>
 </template>
 
 <script>
-import ProductItem from '@/components/ProductItem'
+import ProjectItem from '@/components/ProjectItem'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
-  components: { ProductItem },
+  components: { ProjectItem },
   computed: {
-    ...mapGetters('products', ['isProductDeletionPending']),
-    ...mapState('products', ['products']),
+    ...mapGetters('projects', ['isProjectDeletionPending']),
+    ...mapState('projects', ['projects']),
     ...mapState('app', ['networkOnLine'])
   },
-  methods: mapActions('products', ['deleteUserProduct'])
+  methods: mapActions('projects', ['deleteUserProject'])
 }
 </script>
 
@@ -39,7 +39,7 @@ export default {
   text-align: center;
 }
 
-.product-row {
+.project-row {
   display: flex;
   align-items: center;
   width: 100%;

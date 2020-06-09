@@ -1,7 +1,7 @@
-import state from './products.state'
-import mutations from './products.mutations'
-import actions from './products.actions'
-import getters from './products.getters'
+import state from './projects.state'
+import mutations from './projects.mutations'
+import actions from './projects.actions'
+import getters from './projects.getters'
 
 export default {
   namespaced: true,

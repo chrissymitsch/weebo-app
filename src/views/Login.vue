@@ -54,7 +54,7 @@ export default {
       handler(user) {
         if (!isNil(user)) {
           const redirectUrl = isNil(this.$route.query.redirectUrl)
-            ? '/products'
+            ? '/projects'
             : this.$route.query.redirectUrl
           this.$router.push(redirectUrl)
         }

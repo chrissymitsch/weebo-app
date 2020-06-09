@@ -1,5 +1,4 @@
-# My bento-starter project
+# Weebo-App
 
-## Documentation
+## von Christine Mitsch
 
-Documentation available :point_right: [here](https://bento-starter.netlify.com/)

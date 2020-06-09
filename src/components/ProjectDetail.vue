@@ -1,13 +1,13 @@
 <template>
-  <div class="product-detail">
-    <h1>{{ product.name }}</h1>
+  <div class="project-detail">
+    <h1>{{ project.name }}</h1>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    product: Object
+    project: Object
   }
 }
 </script>
@@ -15,7 +15,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/theme/variables.scss';
 
-.product-detail {
+.project-detail {
   display: flex;
   flex-direction: column;
   justify-content: center;
