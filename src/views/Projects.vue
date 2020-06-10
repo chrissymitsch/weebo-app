@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrapper">
-    <h1 class="projects-page-title">Projects page</h1>
+    <h1 class="projects-page-title">Deine Projekte</h1>
     <project-list class="project-list"></project-list>
     <add-project v-if="networkOnLine"></add-project>
   </div>
@@ -16,16 +16,3 @@ export default {
   computed: mapState('app', ['networkOnLine'])
 }
 </script>
-
-<style lang="scss" scoped>
-@import '@/theme/variables.scss';
-
-.projects-page-title {
-  text-align: center;
-  margin-bottom: 60px;
-}
-
-.project-list {
-  margin: 20px 0;
-}
-</style>

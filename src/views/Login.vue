@@ -1,13 +1,16 @@
 <template>
   <div class="page-wrapper">
-    <h1 class="login-page-title">Login page</h1>
+    <h1 class="login-page-title">Anmelden</h1>
 
     <!-- Loader -->
-    <div v-show="user === undefined" data-test="loader">Authenticating...</div>
+    <p v-show="user === undefined" data-test="loader">
+      <md-progress-spinner class="md-accent" :md-diameter="20" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
+      Anmeldung läuft...
+    </p>
 
     <!-- Offline instruction -->
     <div v-show="!networkOnLine" data-test="offline-instruction">
-      Please check your connection, login feature is not available offline.
+      Bitte prüfe deine Internetverbindung. Anmelden ist offline nicht möglich.
     </div>
 
     <p v-if="loginError">{{ loginError }}</p>
@@ -18,7 +21,8 @@
       class="login-btn"
       @click="login"
     >
-      Login with google
+      <img src="../assets/img/g-logo.png" width="23" />
+      Mit Google anmelden
     </div>
   </div>
 </template>

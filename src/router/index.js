@@ -5,6 +5,7 @@ import Home from '@/views/Home'
 import CheckLogin from '@/views/CheckLogin'
 import { isNil } from 'lodash'
 import store from '@/store'
+import Onboarding from "@/views/Onboarding/Onboarding";
 
 Vue.use(Router);
 
@@ -27,6 +28,11 @@ const router = new Router({
       meta: {
         authNotRequired: true
       }
+    },
+    {
+      path: '/onboarding',
+      name: 'onboarding',
+      component: Onboarding
     },
     {
       path: '/check-login',
