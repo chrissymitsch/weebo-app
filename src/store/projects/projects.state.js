@@ -1,5 +1,6 @@
 export default {
-  projects: null,
+  currentProject: null,
+  userProjects: null,
   projectNameToCreate: '',
   projectDeletionPending: [],
   projectCreationPending: false

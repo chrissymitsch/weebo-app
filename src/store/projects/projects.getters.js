@@ -8,8 +8,8 @@ export default {
     state.projectDeletionPending.includes(projectId),
 
   /**
-   * Get project by id
+   * Get user's project by id
    */
-  getProjectById: state => projectId =>
-    find(state.projects, project => project.id === projectId)
+  getUserProjectByProjectId: state => projectId =>
+    find(state.userProjects, project => project.projectId === projectId),
 }

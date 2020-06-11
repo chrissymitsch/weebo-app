@@ -1,14 +1,14 @@
 <template>
   <div>
-    <p v-if="projects === null" class="infos-label">
+    <p v-if="userProjects === null" class="infos-label">
       <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
       Projekte werden geladen...
     </p>
-    <p v-if="projects && !projects.length" class="infos-label">
+    <p v-if="userProjects && !userProjects.length" class="infos-label">
       Noch keine Projekte verknüpft.
     </p>
 
-    <md-table v-if="projects && projects.length > 0">
+    <md-table v-if="userProjects && userProjects.length > 0">
       <md-table-row>
         <md-table-head>Name</md-table-head>
         <md-table-head class="md-xsmall-hide">Erstellt am</md-table-head>
@@ -17,10 +17,10 @@
       </md-table-row>
 
       <project-item
-              v-for="(project, index) in projects"
+              v-for="(project, index) in userProjects"
               :key="project.id"
               :index="index"
-              :is-project-deletion-pending="isProjectDeletionPending(project.id)"
+              :is-project-deletion-pending="isProjectDeletionPending(project.projectId)"
               :disable-actions="!networkOnLine"
               :data="project"
               @deleteProject="deleteUserProject"
@@ -37,7 +37,7 @@ export default {
   components: { ProjectItem },
   computed: {
     ...mapGetters('projects', ['isProjectDeletionPending']),
-    ...mapState('projects', ['projects']),
+    ...mapState('projects', ['userProjects']),
     ...mapState('app', ['networkOnLine'])
   },
   methods: mapActions('projects', ['deleteUserProject'])

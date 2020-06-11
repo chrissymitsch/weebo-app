@@ -1,4 +1,5 @@
 import UserProjectsDB from '@/firebase/user-projects-db'
+import ProjectsDB from '@/firebase/projects-db'
 
 export default {
   /**
@@ -8,7 +9,17 @@ export default {
     const userProjectDb = new UserProjectsDB(rootState.authentication.user.id);
 
     const projects = await userProjectDb.readAll();
-    commit('setProjects', projects)
+    commit('setUserProjects', projects)
+  },
+
+  /**
+   * Fetch projects
+   */
+  getProjectById: async ({ commit }, projectId) => {
+    const projectDb = new ProjectsDB();
+
+    const project = await projectDb.read(projectId);
+    commit('setCurrentProject', project)
   },
 
   /**
@@ -16,10 +27,19 @@ export default {
    */
   createUserProject: async ({ commit, rootState }, project) => {
     const userProjectDb = new UserProjectsDB(rootState.authentication.user.id);
+    const projectDb = new ProjectsDB();
 
     commit('setProjectCreationPending', true);
-    const createdProject = await userProjectDb.create(project);
-    commit('addProject', createdProject);
+    const createdProject = await projectDb.create(project);
+    const newProject = {
+      createTimestamp: createdProject.createTimestamp,
+      creator: createdProject.creator,
+      projectId: createdProject.id,
+      name: createdProject.name,
+      updateTimestamp: createdProject.updateTimestamp
+    };
+    const createdUserProject = await userProjectDb.create(newProject);
+    commit('addUserProject', createdUserProject);
     commit('setProjectCreationPending', false)
   },
 
@@ -29,7 +49,7 @@ export default {
   triggerAddProjectAction: ({ dispatch, state, commit }) => {
     if (state.projectNameToCreate === '') return;
 
-    const project = { name: state.projectNameToCreate };
+    const project = { name: state.projectNameToCreate, creator: 1 };
     commit('setProjectNameToCreate', '');
     dispatch('createUserProject', project)
   },
@@ -41,9 +61,11 @@ export default {
     if (getters.isProjectDeletionPending(projectId)) return;
 
     const userProjectsDb = new UserProjectsDB(rootState.authentication.user.id);
+    const projectsDb = new ProjectsDB();
 
     commit('addProjectDeletionPending', projectId);
-    await userProjectsDb.delete(projectId);
+    await userProjectsDb.delete(getters.getUserProjectByProjectId(projectId).id);
+    await projectsDb.delete(projectId);
     commit('removeProjectById', projectId);
     commit('removeProjectDeletionPending', projectId)
   }

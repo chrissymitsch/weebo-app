@@ -1,5 +1,5 @@
 <template>
-  <div class="project-detail  md-layout-row">
+  <div class="project-detail md-layout-row">
     <md-app>
       <md-app-toolbar class="md-primary">
         <router-link class="back-link" to="/projects">
@@ -14,39 +14,17 @@
 
       <md-app-drawer md-permanent="full">
         <md-list>
-          <md-list-item>
-            <md-icon>send</md-icon>
-            <ShareNetwork
-                  network="email"
-                  :url="`https://weebo-b37d8/invitation/${project.id}`"
-                  :title="`Einladung für Projekt ${project.name }!`"
-                  :description="`Du hast eine Einladung für das Projekt ${project.name} erhalten. Klicke auf den Link oder kopiere https://weebo-b37d8/invitation/${project.id } in den Browser!`">
+          <router-link :to="{ name: 'project-invitation', params: { id: project.id } }">
+            <md-list-item>
+              <md-icon>send</md-icon>
               <span class="md-list-item-text">Einladung verschicken</span>
-            </ShareNetwork>
-          </md-list-item>
-          <md-list-item>
-            <md-icon>move_to_inbox</md-icon>
-            <span class="md-list-item-text">Inbox</span>
-          </md-list-item>
-
-          <md-list-item>
-            <md-icon>send</md-icon>
-            <span class="md-list-item-text">Sent Mail</span>
-          </md-list-item>
-
-          <md-list-item>
-            <md-icon>delete</md-icon>
-            <span class="md-list-item-text">Trash</span>
-          </md-list-item>
-
-          <md-list-item>
-            <md-icon>error</md-icon>
-            <span class="md-list-item-text">Spam</span>
-          </md-list-item>
+            </md-list-item>
+          </router-link>
         </md-list>
       </md-app-drawer>
 
       <md-app-content>
+        <router-view></router-view>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quibusdam, non molestias et! Earum magnam, similique, quo recusandae placeat dicta asperiores modi sint ea repudiandae maxime? Quae non explicabo, neque.
       </md-app-content>
     </md-app>
@@ -54,16 +32,11 @@
 </template>
 
 <script>
-export default {
-  methods: {
-    getProjectLink() {
-      return null;
+  export default {
+    props: {
+      project: Object
     }
-  },
-  props: {
-    project: Object
   }
-}
 </script>
 
 <style lang="scss" scoped>

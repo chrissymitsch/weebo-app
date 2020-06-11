@@ -10,7 +10,7 @@
     <md-table-cell>
       <router-link
             class="md-accent project-link"
-            :to="{ name: 'project', params: { id: data.id } }"
+            :to="{ name: 'project', params: { id: data.projectId } }"
       >{{ data.name }}</router-link>
     </md-table-cell>
     <md-table-cell class="md-xsmall-hide">{{ format_date(data.createTimestamp) }}</md-table-cell>
@@ -33,7 +33,7 @@
     }),
     methods: {
       onConfirm () {
-        this.$emit('deleteProject', this.data.id);
+        this.$emit('deleteProject', this.data.projectId);
       },
       format_date(value){
         if (value) {

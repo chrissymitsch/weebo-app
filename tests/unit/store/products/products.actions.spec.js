@@ -19,10 +19,14 @@ const commit = jest.fn();
 const dispatch = jest.fn();
 const isProductDeletionPending = jest.fn();
 const userId = 11;
+const projects = [];
 const user = { id: userId };
 const product1 = { id: 1, name: 'product1' };
 const product2 = { id: 2, name: 'product2' };
 const rootState = {
+  projects: {
+    projects
+  },
   authentication: {
     user
   }

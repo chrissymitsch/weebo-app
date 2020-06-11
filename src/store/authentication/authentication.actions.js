@@ -15,7 +15,7 @@ export default {
       : userFromFirebase;
 
     commit('setUser', user);
-    dispatch('projects/getUserProjects', null, { root: true })
+    dispatch('projects/getUserProjects', null, { root: true });
   },
 
   /**
@@ -23,7 +23,6 @@ export default {
    */
   logout: ({ commit }) => {
     commit('setUser', null);
-    commit('projects/setProjects', null, { root: true });
 
     const currentRouter = router.app.$route;
     if (!(currentRouter.meta && currentRouter.meta.authNotRequired)) {

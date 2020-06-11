@@ -1,26 +1,29 @@
 <template>
   <div class="page-wrapper">
     <project-detail
-      v-if="currentProject"
-      :project="currentProject"
+      v-if="project"
+      :project="project"
     ></project-detail>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import ProjectDetail from '@/components/ProjectDetail'
 
 export default {
   components: { ProjectDetail },
-  props: {
-    id: String
-  },
   computed: {
-    ...mapGetters('projects', ['getProjectById']),
-    currentProject() {
-      return this.getProjectById(this.id)
-    }
+    ...mapActions('projects', ['getProjectById']),
+    ...mapState('projects', ['currentProject'])
+  },
+  data: () => ({
+    project: null
+  }),
+  created() {
+    this.$store.dispatch('projects/getProjectById', this.$route.params.id).then(() => {
+      this.project = this.currentProject;
+    });
   }
 }
 </script>

@@ -14,7 +14,7 @@
                 <md-input v-model="form.projectName" :disabled="projectCreationPending"
                           maxlength="30"
                           @input="setProjectNameToCreate"
-                          @keypress.enter="validate()" />
+                          @keypress.enter.prevent="validate()" />
                 <span class="md-error" v-if="!$v.form.projectName.required">Es muss ein Projektname angegeben werden!</span>
                 <span class="md-error" v-else-if="!$v.form.projectName.minlength || !$v.form.projectName.maxlength">Der Projektname ist ungültig!</span>
               </md-field>

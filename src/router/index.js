@@ -62,7 +62,16 @@ const router = new Router({
       name: 'project',
       props: true,
       component: () =>
-        import(/* webpackChunkName: "client-chunk-project-details" */ '@/views/Project.vue')
+        import(/* webpackChunkName: "client-chunk-project-details" */ '@/views/Project.vue'),
+      children: [
+        {
+          path: '/invitation',
+          name: 'project-invitation',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-invitation" */ '@/views/ProjectInvitation/ProjectInvitation.vue')
+        }
+      ]
     },
     { path: '*', redirect: '/home' }
   ]

@@ -4,18 +4,22 @@ export default {
     (state.projectNameToCreate = projectNameToCreate),
 
   /* Projects */
-  setProjects: (state, projects) => (state.projects = projects),
-  addProject: (state, project) => state.projects.push(project),
+  setUserProjects: (state, projects) => (state.userProjects = projects),
+  setCurrentProject: (state, project) => (state.currentProject = project),
+  addUserProject: (state, project) => state.userProjects.push(project),
   removeProjectById: (state, projectId) => {
-    const index = state.projects.findIndex(project => project.id === projectId);
-    state.projects.splice(index, 1)
+    const index = state.userProjects.findIndex(project => project.id === projectId);
+    state.userProjects.splice(index, 1);
+    if (state.currentProject && state.currentProject.id === projectId) {
+      state.currentProject = null;
+    }
   },
 
   /* Projects deletion */
   addProjectDeletionPending: (state, projectId) =>
     state.projectDeletionPending.push(projectId),
   removeProjectDeletionPending: (state, projectId) => {
-    const index = state.projects.findIndex(project => project.id === projectId);
+    const index = state.userProjects.findIndex(project => project.id === projectId);
     state.projectDeletionPending.splice(index, 1)
   },
 
