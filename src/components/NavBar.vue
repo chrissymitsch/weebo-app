@@ -76,34 +76,6 @@
         <router-view></router-view>
       </md-app-content>
     </md-app>
-
-
-<!--    <div class="links">-->
-<!--      <nav class="nav-links">-->
-<!--        <div class="nav-item">-->
-<!--          <router-link to="/projects">Projekte</router-link>-->
-<!--        </div>-->
-<!--        <div v-if="!isUserLoggedIn && networkOnLine" class="nav-item">-->
-<!--          <router-link to="/login">Anmelden</router-link>-->
-<!--        </div>-->
-<!--        <div-->
-<!--          v-if="isUserLoggedIn && networkOnLine"-->
-<!--          class="nav-item logout-item"-->
-<!--          @click="logout"-->
-<!--        >-->
-<!--          <a class="logout-link">Ausloggen</a>-->
-<!--        </div>-->
-<!--        <div v-if="!networkOnLine" class="nav-item offline-label">Offline</div>-->
-<!--      </nav>-->
-
-<!--      <md-avatar class="md-xsmall-hide">-->
-<!--        <img-->
-<!--          v-if="isUserLoggedIn && networkOnLine"-->
-<!--          :src="user.photoURL"-->
-<!--          :alt="user.displayName"-->
-<!--        />-->
-<!--      </md-avatar>-->
-<!--    </div>-->
   </header>
 </template>
 

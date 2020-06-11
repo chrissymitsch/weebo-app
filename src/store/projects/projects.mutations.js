@@ -23,7 +23,19 @@ export default {
     state.projectDeletionPending.splice(index, 1)
   },
 
+  /* Projects deletion */
+  addProjectUnsubscriptionPending: (state, projectId) =>
+    state.projectUnsubscriptionPending.push(projectId),
+  removeProjectUnsubscriptionPending: (state, projectId) => {
+    const index = state.userProjects.findIndex(project => project.id === projectId);
+    state.projectUnsubscriptionPending.splice(index, 1)
+  },
+
   /* Project creation */
   setProjectCreationPending: (state, value) =>
-    (state.projectCreationPending = value)
+    (state.projectCreationPending = value),
+
+  /* Project subscription */
+  setSubscriptionPending: (state, value) =>
+    (state.subscriptionPending = value)
 }

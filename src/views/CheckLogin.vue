@@ -31,9 +31,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.loading-title {
-  text-align: center;
-}
-</style>

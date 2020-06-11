@@ -3,5 +3,7 @@ export default {
   userProjects: null,
   projectNameToCreate: '',
   projectDeletionPending: [],
-  projectCreationPending: false
+  projectUnsubscriptionPending: [],
+  projectCreationPending: false,
+  subscriptionPending: false
 }

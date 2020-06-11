@@ -14,27 +14,56 @@
 
       <md-app-drawer md-permanent="full">
         <md-list>
-          <router-link :to="{ name: 'project-invitation', params: { id: project.id } }">
+          <router-link :to="{ name: 'project-dashboard', params: { id: project.id } }">
+            <md-list-item>
+              <md-icon>dashboard</md-icon>
+              <span class="md-list-item-text">Dashboard</span>
+            </md-list-item>
+          </router-link>
+          <router-link
+                  :to="{ name: 'project-invitation', params: { project: project } }"
+                  v-if="isCreator()">
             <md-list-item>
               <md-icon>send</md-icon>
               <span class="md-list-item-text">Einladung verschicken</span>
+            </md-list-item>
+          </router-link>
+          <router-link :to="{ name: 'project-members', params: { project: project } }">
+            <md-list-item>
+              <md-icon>group</md-icon>
+              <span class="md-list-item-text">Projektteilnehmer</span>
             </md-list-item>
           </router-link>
         </md-list>
       </md-app-drawer>
 
       <md-app-content>
-        <router-view></router-view>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quibusdam, non molestias et! Earum magnam, similique, quo recusandae placeat dicta asperiores modi sint ea repudiandae maxime? Quae non explicabo, neque.
+        <div class="md-layout md-gutter">
+          <div class="md-layout-item md-layout md-gutter">
+            <div class="md-layout-item">
+              <router-view></router-view>
+            </div>
+          </div>
+        </div>
       </md-app-content>
     </md-app>
   </div>
 </template>
 
 <script>
+  import {mapState} from "vuex";
+
   export default {
+    computed: {
+      ...mapState('authentication', ['user']),
+    },
     props: {
       project: Object
+    },
+    methods: {
+      isCreator() {
+        return this.project.creator === this.user.id;
+      }
     }
   }
 </script>
@@ -43,14 +72,19 @@
 @import '@/theme/variables.scss';
 
 .md-app {
+  width: 100%;
   min-height: 350px;
   border: 1px solid rgba(#000, .12);
 }
 
-// Demo purposes only
+.md-layout.md-gutter {
+  margin: 0;
+}
+
 .md-drawer {
   width: 230px;
   max-width: calc(100vw - 125px);
+  border-right: 1px solid rgba(#000, .12);
 }
 
 .project-detail {

@@ -67,6 +67,14 @@ body {
   align-items: center;
 }
 
+.loading-title {
+  text-align: center;
+}
+
+.md-button:not(.md-icon-button) .md-button-content .md-icon, .md-button:not(.md-icon-button) .md-button-content .button-logo {
+  height: 28px;
+  margin-right: 8px;
+}
 
 /** HOME PAGE **/
 

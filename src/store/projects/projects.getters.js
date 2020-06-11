@@ -8,6 +8,12 @@ export default {
     state.projectDeletionPending.includes(projectId),
 
   /**
+   * Check if a project has unsubscription pending
+   */
+  isProjectUnsubscriptionPending: state => projectId =>
+    state.projectUnsubscriptionPending.includes(projectId),
+
+  /**
    * Get user's project by id
    */
   getUserProjectByProjectId: state => projectId =>

@@ -3,10 +3,10 @@
     <h1 class="login-page-title">Anmelden</h1>
 
     <!-- Loader -->
-    <p v-show="user === undefined" data-test="loader">
+    <h1 class="loading-title" v-show="user === undefined" data-test="loader">
       <md-progress-spinner class="md-accent" :md-diameter="20" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
       Anmeldung läuft...
-    </p>
+    </h1>
 
     <!-- Offline instruction -->
     <div v-show="!networkOnLine" data-test="offline-instruction">

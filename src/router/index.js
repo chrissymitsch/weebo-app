@@ -55,21 +55,44 @@ const router = new Router({
       path: '/projects',
       name: 'projects',
       component: () =>
-        import(/* webpackChunkName: "client-chunk-projects" */ '@/views/Projects.vue')
+        import(/* webpackChunkName: "client-chunk-projects" */ '@/views/Projects/Projects.vue')
+    },
+    {
+      path: '/invitation/:id',
+      name: 'invitation',
+      component: () =>
+          import(/* webpackChunkName: "client-chunk-invitation" */ '@/views/Invitation/Invitation.vue'),
+      meta: {
+        authNotRequired: true
+      }
     },
     {
       path: '/projects/:id',
       name: 'project',
       props: true,
       component: () =>
-        import(/* webpackChunkName: "client-chunk-project-details" */ '@/views/Project.vue'),
+          import(/* webpackChunkName: "client-chunk-project" */ '@/views/Projects/Project.vue'),
       children: [
         {
-          path: '/invitation',
+          path: 'dashboard',
+          name: 'project-dashboard',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-dashboard" */ '@/views/Projects/Dashboard.vue')
+        },
+        {
+          path: 'invitation',
           name: 'project-invitation',
           props: true,
           component: () =>
-              import(/* webpackChunkName: "client-chunk-project-invitation" */ '@/views/ProjectInvitation/ProjectInvitation.vue')
+              import(/* webpackChunkName: "client-chunk-project-invitation" */ '@/views/Projects/ProjectInvitation.vue')
+        },
+        {
+          path: 'members',
+          name: 'project-members',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-members" */ '@/views/Projects/ProjectMembers.vue')
         }
       ]
     },
