@@ -58,7 +58,7 @@ const router = new Router({
         import(/* webpackChunkName: "client-chunk-projects" */ '@/views/Projects/Projects.vue')
     },
     {
-      path: '/invitation/:id',
+      path: '/invitation/:projectId',
       name: 'invitation',
       component: () =>
           import(/* webpackChunkName: "client-chunk-invitation" */ '@/views/Invitation/Invitation.vue'),

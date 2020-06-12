@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
+import Chat from 'vue-beautiful-chat'
 
 import App from './App.vue'
 import router from './router'
@@ -16,6 +17,7 @@ import 'pwacompat'
 Vue.config.productionTip = false;
 
 Vue.use(VueMaterial);
+Vue.use(Chat)
 
 new Vue({
   router,

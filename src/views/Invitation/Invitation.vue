@@ -45,7 +45,7 @@
             error: false
         }),
         created() {
-            this.$store.dispatch('projects/getProjectById', this.$route.params.id).then(() => {
+            this.$store.dispatch('projects/getProjectById', this.$route.params.projectId).then(() => {
                 this.project = this.currentProject;
                 this.error = false;
             }).finally(() => {

@@ -219,3 +219,29 @@ body {
   margin: 10px auto;
   justify-content: space-between;
 }
+
+
+.messenger {
+  position: fixed;
+  right: 8px;
+  bottom: 68px;
+  z-index: 100;
+  background-color: #F49463;
+  width: 300px;
+  max-height: 450px;
+  overflow: auto;
+}
+
+.btn-messenger {
+  position: fixed;
+  right: 8px;
+  bottom: 8px;
+  z-index: 100;
+  background-color: #F49463;
+  width: 52px;
+  height: 52px;
+
+  .md-icon {
+    color: #ffffff!important;
+  }
+}

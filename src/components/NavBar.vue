@@ -27,12 +27,8 @@
             </div>
             <div v-if="!networkOnLine" class="nav-item offline-label">Offline</div>
 
-            <md-avatar class="md-xsmall-hide">
-              <img
-                      v-if="isUserLoggedIn && networkOnLine"
-                      :src="user.photoURL"
-                      :alt="user.displayName"
-              />
+            <md-avatar v-if="isUserLoggedIn && networkOnLine" class="md-avatar-icon md-accent">
+              {{ avatarInitials() }}
             </md-avatar>
           </nav>
         </div>
@@ -90,11 +86,15 @@ export default {
     ...mapState('app', ['networkOnLine', 'appTitle', 'appShortTitle'])
   },
   data: () => ({
-    menuVisible: false
+    menuVisible: false,
   }),
   methods: {
     async logout() {
       await firebase.auth().signOut()
+    },
+    avatarInitials() {
+      const initials = this.user.displayName.split(" ");
+      return initials[0].charAt(0).toUpperCase() + initials[1].charAt(0).toUpperCase();
     }
   }
 }
