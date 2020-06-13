@@ -12,7 +12,7 @@ import ProjectList from '@/components/ProjectList'
 import AddProject from '@/components/AddProject'
 
 export default {
-  components: { ProjectList, AddProject },
+  components: {ProjectList, AddProject },
   computed: mapState('app', ['networkOnLine'])
 }
 </script>

@@ -14,11 +14,20 @@ export default {
   /**
    * Fetch badges for user
    */
-  getBadges: async ({ commit }, userId) => {
+  getUserBadges: async ({ commit }, userId) => {
     const userRewardsDb = new UserRewardsDb(userId);
 
     const badges = await userRewardsDb.readAll({type: "badge"});
-    commit('setBadges', badges)
+    commit('setUserBadges', badges)
   },
 
+  /**
+   * Created a badge to loggedin user
+   */
+  createUserBadge: async ({ commit, rootState }, badge) => {
+    const userRewardsDb = new UserRewardsDb(rootState.authentication.user.id);
+
+    const createdUserBadge = await userRewardsDb.create(badge);
+    commit('addUserBadge', createdUserBadge);
+  }
 }

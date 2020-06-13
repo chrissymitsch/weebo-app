@@ -97,10 +97,10 @@ export default {
 }
 
 .page-wrapper {
+  height: 100vh;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   flex-direction: column;
-  align-items: center;
 
   .login-btn {
     margin-top: 20px;

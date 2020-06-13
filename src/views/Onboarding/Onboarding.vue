@@ -1,6 +1,6 @@
 <template>
     <div class="Onboarding">
-        <md-steppers :md-active-step.sync="active" md-linear class="md-xsmall-hide">
+        <md-steppers :md-active-step.sync="active" md-linear>
             <md-step class="without-bg" id="first" md-label="Projekt anlegen" :md-done.sync="first">
                 <md-empty-state
                         md-icon="important_devices"
@@ -26,22 +26,40 @@
                         md-icon="emoji_events"
                         md-label="Projekt gemeinsam gestalten"
                         md-description="Erarbeite gemeinsam Lösungen, lade Dokumente hoch und hole Feedback ein. Feiert Projekterfolge!">
-                    <router-link to="/projects"><md-button class="button md-primary md-raised">Los geht's &rarr;</md-button></router-link>
+                    <md-button class="button md-primary md-raised" @click="triggerReward()">Los geht's &rarr;</md-button>
                 </md-empty-state>
             </md-step>
         </md-steppers>
+
+        <rewarding :showModal="rewardOnboarding" @closeModal="closeModal()">
+            <md-progress-spinner v-if="!rewardSaved" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
+            <div v-if="rewardSaved">
+                <h3 class="title">Bravo!</h3>
+                <p class="description">Du hast eine Trophäe erhalten!</p>
+                <p class="description"><img src="@/assets/img/pokal.png" /></p>
+            </div>
+        </rewarding>
     </div>
 </template>
 
 <script>
+    import {mapState} from "vuex"
+    import Rewarding from "../../components/Rewarding";
+
     export default {
         name: 'StepperHorizontal',
+        components: {Rewarding},
+        computed: {
+            ...mapState('rewards', ['userBadges'])
+        },
         data: () => ({
             active: 'first',
             first: false,
             second: false,
             third: false,
-            secondStepError: null
+            secondStepError: null,
+            rewardOnboarding: false,
+            rewardSaved: false
         }),
         methods: {
             setDone (id, index) {
@@ -52,6 +70,27 @@
                 if (index) {
                     this.active = index
                 }
+            },
+            triggerReward() {
+                const checkIfUserHasBadge = this.userBadges.filter(function(elem) {
+                    if(elem.name === "Onboarding") return elem;
+                    return null;
+                });
+                if (checkIfUserHasBadge.length > 0) {
+                    this.closeModal();
+                } else {
+                    const badge = {
+                        name: "Onboarding",
+                        type: "badge"
+                    }
+                    this.$store.dispatch('rewards/createUserBadge', badge).then(() => {
+                        this.rewardSaved = true;
+                    });
+                    this.rewardOnboarding = true;
+                }
+            },
+            closeModal() {
+                this.$router.push("/projects");
             }
         }
     }
