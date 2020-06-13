@@ -21,14 +21,9 @@ service cloud.firestore {
        allow update, delete: if authenticated();
     }
 
-    match /projects/{projectId}/tasks {
-       allow get: if authenticated();
-       allow create: if authenticated();
-       allow update, delete: if authenticated();
-    }
-
     match /projects/{projectId}/tasks/{taskId} {
        allow get: if authenticated();
+	        allow list: if authenticated();
        allow create: if authenticated();
        allow update, delete: if authenticated();
     }

@@ -1,21 +1,22 @@
 <template>
-  <div class="bg-white shadow rounded px-3 pt-3 pb-5 border border-white">
+  <div v-if="finishedLoading" class="bg-white shadow rounded px-3 pt-3 pb-5 border border-white">
     <div class="flex justify-between">
       <p class="text-gray-700 font-semibold font-sans tracking-wide text-sm">{{task.title}}</p>
 
       <img
               class="w-6 h-6 rounded-full ml-3"
-              src="https://pickaface.net/gallery/avatar/unr_sample_161118_2054_ynlrg.png"
+              :src="creator.photoURL"
               alt="Avatar"
       >
     </div>
     <div class="flex mt-4 justify-between items-center">
-      <span class="text-sm text-gray-600">{{task.date}}</span>
+      <span class="text-sm text-gray-600">{{format_date(task.createTimestamp)}}</span>
       <badge v-if="task.type" :color="badgeColor">{{task.type}}</badge>
     </div>
   </div>
 </template>
 <script>
+  import moment from 'moment';
   import Badge from "./Badge.vue";
 
   export default {
@@ -38,6 +39,25 @@
           default: "teal"
         };
         return mappings[this.task.type] || mappings.default;
+      }
+    },
+    data: () => ({
+      creator: null,
+      finishedLoading: false
+    }),
+    created() {
+      this.$store.dispatch('projects/getProjectMember', this.task.creator).then(data => {
+        this.creator = data;
+      }).finally(() => {
+        this.finishedLoading = true;
+      });
+    },
+    methods: {
+      format_date(value){
+        if (value) {
+          return moment(value).format('DD.MM.YYYY')
+        }
+        return '';
       }
     }
   };

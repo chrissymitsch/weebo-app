@@ -1,4 +1,4 @@
-import ProjectsTasksDB from '@/firebase/user-projects-db'
+import ProjectsTasksDB from '@/firebase/project-tasks-db'
 
 export default {
   /**
@@ -14,7 +14,7 @@ export default {
   /**
    * Create a task for current project
    */
-  createProjectTask: async ({ rootState }, task, projectId) => {
+  createProjectTask: async ({ rootState }, task) => {
     const newTask = {
       title: task.title,
       creator: rootState.authentication.user.id,
@@ -22,24 +22,8 @@ export default {
       column: task.column
     };
 
-    const projectsTasksDB = new ProjectsTasksDB(projectId);
-
+    const projectsTasksDB = new ProjectsTasksDB(task.projectId);
     await projectsTasksDB.create(newTask);
-  },
-
-  /**
-   * Create a new task for current project
-   */
-  triggerAddTaskAction: ({ dispatch, rootState }, projectId, task) => {
-    console.log(projectId, task)
-    const newTask = {
-      projectId,
-      title: task.title,
-      creator: rootState.authentication.user.id,
-      type: task.type,
-      column: task.column
-    };
-    dispatch('createProjectTask', newTask)
   },
 
 }

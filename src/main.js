@@ -17,7 +17,7 @@ import 'pwacompat'
 Vue.config.productionTip = false;
 
 Vue.use(VueMaterial);
-Vue.use(Chat)
+Vue.use(Chat);
 
 new Vue({
   router,

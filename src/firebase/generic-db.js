@@ -1,4 +1,4 @@
-import { isNil, keys, cloneDeep } from 'lodash'
+import {cloneDeep, isNil, keys} from 'lodash'
 import firebase from 'firebase/app'
 
 import firestore from './async-firestore'
@@ -65,8 +65,7 @@ export default class GenericDB {
    * @param constraints
    */
   async readAll(constraints = null) {
-    const collectionRef = (await firestore()).collection(this.collectionPath);
-    let query = collectionRef;
+    let query = (await firestore()).collection(this.collectionPath);
 
     if (constraints) {
       constraints.forEach(constraint => {

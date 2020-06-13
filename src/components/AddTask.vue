@@ -1,6 +1,6 @@
 <template>
   <div class="AddTask">
-    <modal v-if="active">
+    <div class="modal" v-if="active">
       <div class="modal-mask">
         <div class="modal-wrapper">
           <div class="modal-container">
@@ -45,7 +45,7 @@
           </div>
         </div>
       </div>
-    </modal>
+    </div>
 
     <md-button @click="active = true"><md-icon>add</md-icon> Aufgabe hinzufügen</md-button>
   </div>
@@ -56,7 +56,7 @@
   export default {
     props: {
       column: String,
-      projectId: String
+      id: String
     },
     data: () => ({
       active: false,
@@ -73,7 +73,8 @@
       addTask () {
         if (this.form.title != null) {
           this.form.column = this.column;
-          this.$store.dispatch('tasks/createProjectTask', this.form, this.projectId).then(() => {
+          this.form.projectId = this.id;
+          this.$store.dispatch('tasks/createProjectTask', this.form).then(() => {
             this.taskSaved = true;
             this.active = false;
           });

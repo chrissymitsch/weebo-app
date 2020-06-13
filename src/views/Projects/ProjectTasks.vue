@@ -8,7 +8,7 @@
         <p v-if="finishedLoading && (!columns || columns.length === 0)" class="infos-label">
             Keine Aufgaben.
         </p>
-        <add-task :project-id="$route.params.id" :column="null"></add-task>
+        <add-task :id="project.id" :column="null"></add-task>
         <div class="flex justify-start" v-if="finishedLoading && columns && columns.length > 0">
             <div class="min-h-screen flex overflow-x-scroll">
                 <div
@@ -28,7 +28,7 @@
                         ></task-card>
                         <!-- </transition-group> -->
                     </draggable>
-                    <add-task></add-task>
+                    <add-task :id="project.id" :column="column.title"></add-task>
                 </div>
             </div>
         </div>
@@ -50,7 +50,8 @@
             draggable
         },
         computed: {
-            ...mapState('app', ['networkOnLine'])
+            ...mapState('app', ['networkOnLine']),
+            ...mapState('tasks', ['tasks'])
         },
         props: {
             project: Object
@@ -61,128 +62,43 @@
                 columns: [
                     {
                         title: "Backlog",
-                        tasks: [
-                            {
-                                id: 1,
-                                title: "Add discount code to checkout page",
-                                date: "Sep 14",
-                                type: "Feature Request"
-                            },
-                            {
-                                id: 2,
-                                title: "Provide documentation on integrations",
-                                date: "Sep 12"
-                            },
-                            {
-                                id: 3,
-                                title: "Design shopping cart dropdown",
-                                date: "Sep 9",
-                                type: "Design"
-                            },
-                            {
-                                id: 4,
-                                title: "Add discount code to checkout page",
-                                date: "Sep 14",
-                                type: "Feature Request"
-                            },
-                            {
-                                id: 5,
-                                title: "Test checkout flow",
-                                date: "Sep 15",
-                                type: "QA"
-                            }
-                        ]
+                        tasks: []
                     },
                     {
                         title: "In Progress",
-                        tasks: [
-                            {
-                                id: 6,
-                                title: "Design shopping cart dropdown",
-                                date: "Sep 9",
-                                type: "Design"
-                            },
-                            {
-                                id: 7,
-                                title: "Add discount code to checkout page",
-                                date: "Sep 14",
-                                type: "Feature Request"
-                            },
-                            {
-                                id: 8,
-                                title: "Provide documentation on integrations",
-                                date: "Sep 12",
-                                type: "Backend"
-                            }
-                        ]
+                        tasks: []
                     },
                     {
                         title: "Review",
-                        tasks: [
-                            {
-                                id: 9,
-                                title: "Provide documentation on integrations",
-                                date: "Sep 12"
-                            },
-                            {
-                                id: 10,
-                                title: "Design shopping cart dropdown",
-                                date: "Sep 9",
-                                type: "Design"
-                            },
-                            {
-                                id: 11,
-                                title: "Add discount code to checkout page",
-                                date: "Sep 14",
-                                type: "Feature Request"
-                            },
-                            {
-                                id: 12,
-                                title: "Design shopping cart dropdown",
-                                date: "Sep 9",
-                                type: "Design"
-                            },
-                            {
-                                id: 13,
-                                title: "Add discount code to checkout page",
-                                date: "Sep 14",
-                                type: "Feature Request"
-                            }
-                        ]
+                        tasks: []
                     },
                     {
                         title: "Done",
-                        tasks: [
-                            {
-                                id: 14,
-                                title: "Add discount code to checkout page",
-                                date: "Sep 14",
-                                type: "Feature Request"
-                            },
-                            {
-                                id: 15,
-                                title: "Design shopping cart dropdown",
-                                date: "Sep 9",
-                                type: "Design"
-                            },
-                            {
-                                id: 16,
-                                title: "Add discount code to checkout page",
-                                date: "Sep 14",
-                                type: "Feature Request"
-                            }
-                        ]
+                        tasks: []
                     }
                 ]
             };
         },
         created() {
-            this.$store.dispatch('tasks/getTasks', this.project.id).then(data => {
-                console.log(data);
-            }).finally(() => {
-                this.finishedLoading = true;
-            });
+            if (this.project) {
+                this.$store.dispatch('tasks/getTasks', this.project.id).then(() => {
+                    for (let i = 0; i < this.columns.length; i += 1) {
+                        for (let j = 0; j < this.tasks.length; j += 1) {
+                            if (this.tasks[j].column === this.columns[i].title || this.tasks[j].column === null && i === 0) {
+                                this.columns[i].tasks.push(this.tasks[j]);
+                            }
+                        }
+                    }
+                }).finally(() => {
+                    this.finishedLoading = true;
+                });
+            }
         },
+        watch: {
+            columns(newVal, oldVal) {
+                console.log(newVal, oldVal)
+            }
+        }
     };
 </script>
 
