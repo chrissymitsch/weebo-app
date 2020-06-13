@@ -72,6 +72,11 @@
         <router-view></router-view>
       </md-app-content>
     </md-app>
+    <md-card class="md-primary">
+      <md-card-content>
+        &copy; Doofenshmirtz Evil Incorporated
+      </md-card-content>
+    </md-card>
   </header>
 </template>
 

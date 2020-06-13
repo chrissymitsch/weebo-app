@@ -1,10 +1,10 @@
 <template>
     <div class="Invitation">
-        <h1 class="loading-title" v-if="isUserLoggedIn && project === null && !error">
+        <h1 class="title" v-if="isUserLoggedIn && project === null && !error">
             <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
             Laden...
         </h1>
-        <p class="loading-title" v-if="isUserLoggedIn && error">
+        <p class="title" v-if="isUserLoggedIn && error">
             <md-icon>mood_bad</md-icon> Da ist leider etwas schief gelaufen.
         </p>
 

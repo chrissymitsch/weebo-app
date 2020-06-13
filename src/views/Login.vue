@@ -1,9 +1,9 @@
 <template>
   <div class="page-wrapper">
-    <h1 class="login-page-title">Anmelden</h1>
+    <h1 class="title">Anmelden</h1>
 
     <!-- Loader -->
-    <h1 class="loading-title" v-show="user === undefined" data-test="loader">
+    <h1 class="title" v-show="user === undefined" data-test="loader">
       <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
     </h1>
 
@@ -92,15 +92,15 @@ export default {
 <style lang="scss" scoped>
 @import '@/theme/variables.scss';
 
+.title {
+  text-align: center;
+}
+
 .page-wrapper {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
-
-  .login-page-title {
-    text-align: center;
-  }
 
   .login-btn {
     margin-top: 20px;

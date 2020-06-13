@@ -1,7 +1,7 @@
 <template>
     <div class="Onboarding">
         <md-steppers :md-active-step.sync="active" md-linear class="md-xsmall-hide">
-            <md-step id="first" md-label="Projekt anlegen" :md-done.sync="first">
+            <md-step class="without-bg" id="first" md-label="Projekt anlegen" :md-done.sync="first">
                 <md-empty-state
                         md-icon="important_devices"
                         md-label="Erstelle dein Projekt"
@@ -11,7 +11,7 @@
                 </md-empty-state>
             </md-step>
 
-            <md-step id="second" md-label="Stakeholder einladen" :md-done.sync="second">
+            <md-step class="without-bg" id="second" md-label="Stakeholder einladen" :md-done.sync="second">
                 <md-empty-state
                         md-icon="group_add"
                         md-label="Stakeholder einladen"
@@ -21,7 +21,7 @@
                 </md-empty-state>
             </md-step>
 
-            <md-step id="third" md-label="Projekt gemeinsam gestalten" :md-done.sync="third">
+            <md-step class="without-bg" id="third" md-label="Projekt gemeinsam gestalten" :md-done.sync="third">
                 <md-empty-state
                         md-icon="emoji_events"
                         md-label="Projekt gemeinsam gestalten"
@@ -56,3 +56,17 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    .md-steppers {
+        background: url("~@/assets/img/1800w/background2.jpg") fixed;
+        background-size: 100% 100%;
+    }
+    .without-bg {
+        background: #ffffff;
+    }
+    .md-stepper-editable {
+        height: 14px;
+        width: 14px;
+    }
+</style>

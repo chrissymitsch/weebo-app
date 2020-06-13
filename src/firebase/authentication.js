@@ -1,4 +1,4 @@
-import firebase from 'firebase/app'
+import * as firebase from 'firebase'
 import { isNil } from 'lodash'
 
 import store from '@/store'

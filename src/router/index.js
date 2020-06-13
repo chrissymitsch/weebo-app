@@ -74,6 +74,10 @@ const router = new Router({
           import(/* webpackChunkName: "client-chunk-project" */ '@/views/Projects/Project.vue'),
       children: [
         {
+          path: '',
+          redirect: 'dashboard'
+        },
+        {
           path: 'dashboard',
           name: 'project-dashboard',
           props: true,

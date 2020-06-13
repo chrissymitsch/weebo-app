@@ -23,7 +23,7 @@
     <md-table-cell>
       <router-link
             class="md-accent project-link"
-            :to="{ name: 'project', params: { id: data.projectId } }"
+            :to="{ name: 'project-dashboard', params: { id: data.projectId } }"
       >{{ data.name }}</router-link>
     </md-table-cell>
     <md-table-cell class="md-xsmall-hide">{{ format_date(data.createTimestamp) }}</md-table-cell>

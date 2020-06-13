@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrapper">
-    <h1 class="projects-page-title">Deine Projekte</h1>
+    <h1 class="title">Deine Projekte</h1>
     <project-list class="project-list"></project-list>
     <add-project v-if="networkOnLine"></add-project>
   </div>

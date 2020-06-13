@@ -1,6 +1,5 @@
 import {cloneDeep, isNil, keys} from 'lodash'
-import firebase from 'firebase/app'
-
+import * as firebase from 'firebase'
 import firestore from './async-firestore'
 
 export default class GenericDB {
@@ -113,6 +112,16 @@ export default class GenericDB {
       .collection(this.collectionPath)
       .doc(id)
       .delete()
+  }
+
+  /**
+   * Snapshot Test
+   * @param id
+   */
+  async snapshot(id) {
+    return (await firestore())
+      .collection(this.collectionPath)
+      .doc(id)
   }
 
   /**

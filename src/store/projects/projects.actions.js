@@ -3,6 +3,13 @@ import ProjectsDB from '@/firebase/projects-db'
 import UsersDB from "@/firebase/users-db";
 
 export default {
+  snapshotProject: async({ rootState }, projectId) => {
+    console.log(rootState.authentication.user.id);
+    const projectsDb = new ProjectsDB();
+
+    return projectsDb.snapshot(projectId);
+  },
+
   /**
    * Fetch project member
    */

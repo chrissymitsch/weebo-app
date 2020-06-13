@@ -11,10 +11,13 @@
 import { mapActions, mapState } from 'vuex'
 import ProjectDetail from '@/components/ProjectDetail'
 
+import fire from "../../firebase/init";
+
 export default {
+
   components: { ProjectDetail },
   computed: {
-    ...mapActions('projects', ['getProjectById']),
+    ...mapActions('projects', ['getProjectById', 'snapshotProject']),
     ...mapState('projects', ['currentProject'])
   },
   data: () => ({
@@ -24,6 +27,10 @@ export default {
     this.$store.dispatch('projects/getProjectById', this.$route.params.id).then(() => {
       this.project = this.currentProject;
     });
+    fire.collection("projects").doc(this.$route.params.id).onSnapshot(snap => {
+      this.project = snap.data();
+    });
+
   }
 }
 </script>

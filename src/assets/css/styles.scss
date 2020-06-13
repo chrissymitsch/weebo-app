@@ -1,8 +1,8 @@
 @import "~vue-material/dist/theme/engine"; // Import the theme engine
 
 @include md-register-theme("default", (
-        primary: #5d6788,
-        accent: #48BEB4
+        primary: #0e2861,
+        accent: #17b2e8
 ));
 
 @import "~vue-material/dist/theme/all"; // Apply the theme
@@ -65,11 +65,11 @@ body {
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  height: 100vh;
 }
 
-.loading-title {
+.title {
   text-align: center;
+  font-size: 26px;
 }
 
 .md-button:not(.md-icon-button) .md-button-content .md-icon, .md-button:not(.md-icon-button) .md-button-content .button-logo {
@@ -196,11 +196,6 @@ body {
 
 
 /** PROJECTS PAGE **/
-.projects-page-title {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
 .project-list {
   margin: 20px 0;
 }

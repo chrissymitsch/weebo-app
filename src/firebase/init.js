@@ -1,4 +1,4 @@
-import firebase from 'firebase/app'
+import * as firebase from 'firebase';
 import 'firebase/auth'
 
 // The configuration below is not sensitive data.
@@ -14,3 +14,5 @@ const config = {
 };
 
 firebase.initializeApp(config);
+const fire = firebase.firestore();
+export default fire;

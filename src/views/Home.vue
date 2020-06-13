@@ -1,6 +1,6 @@
 <template>
   <div class="page-wrapper">
-    <h1 class="home-page-title">Willkommen bei Weebo</h1>
+    <h1 class="title">Willkommen bei Weebo</h1>
     <img alt="logo-bento" src="@/assets/img/bento-starter.svg" />
     <md-empty-state
             md-label="Erstelle dein Projekt"
@@ -32,3 +32,10 @@ export default {
   computed: mapState('app', ['appTitle'])
 }
 </script>
+
+<style lang="scss" scoped>
+  .page-wrapper {
+    background: url("~@/assets/img/1800w/background2.jpg") fixed;
+    background-size: 100% 100%;
+  }
+</style>

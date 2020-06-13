@@ -50,6 +50,12 @@
       <md-app-content>
         <md-app-toolbar>
           <div class="md-toolbar-row">
+            <router-link :to="{ name: 'project-dashboard', params: { project: project } }">
+              <md-button class="md-icon-button">
+                <md-icon>dashboard</md-icon>
+                <md-tooltip md-direction="top">Dashboard</md-tooltip>
+              </md-button>
+            </router-link>
             <router-link :to="{ name: 'project-members', params: { project: project } }">
               <md-button class="md-icon-button">
                 <md-icon>group</md-icon>
@@ -70,14 +76,26 @@
             </router-link>
             <router-link :to="{ name: 'project-schedules', params: { project: project } }">
               <md-button class="md-icon-button">
-                <md-icon>schedule</md-icon>
+                <md-icon>calendar_today</md-icon>
                 <md-tooltip md-direction="top">Terminplaner</md-tooltip>
+              </md-button>
+            </router-link>
+            <router-link :to="{ name: 'project-schedules', params: { project: project } }">
+              <md-button class="md-icon-button">
+                <md-icon>history</md-icon>
+                <md-tooltip md-direction="top">History</md-tooltip>
+              </md-button>
+            </router-link>
+            <router-link :to="{ name: 'project-schedules', params: { project: project } }">
+              <md-button class="md-icon-button">
+                <md-icon>cloud</md-icon>
+                <md-tooltip md-direction="top">Dateien und Dokumente</md-tooltip>
               </md-button>
             </router-link>
           </div>
         </md-app-toolbar>
 
-        <div class="md-layout md-gutter">
+        <div class="md-layout md-gutter with-bg">
           <div class="md-layout-item md-layout md-gutter">
             <div class="md-layout-item">
               <router-view></router-view>
@@ -114,8 +132,7 @@
 @import '@/theme/variables.scss';
 
 .md-app {
-  width: 100%;
-  height: 100vh;
+  min-width: 100%;
   border: 1px solid rgba(#000, .12);
 }
 
@@ -138,7 +155,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  min-width: 100%;
 }
 
 @mixin activatedLink() {
