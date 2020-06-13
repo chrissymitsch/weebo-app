@@ -7,6 +7,8 @@ export default {
   setUserProjects: (state, projects) => (state.userProjects = projects),
   setCurrentProject: (state, project) => (state.currentProject = project),
   addUserProject: (state, project) => state.userProjects.push(project),
+  setProjectMembers: (state, members) => (state.projectMembers =  members),
+  updateProject: (state, project) => (state.currentProject = project),
   removeProjectById: (state, projectId) => {
     const index = state.userProjects.findIndex(project => project.id === projectId);
     state.userProjects.splice(index, 1);

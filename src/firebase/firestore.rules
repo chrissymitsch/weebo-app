@@ -3,19 +3,31 @@ service cloud.firestore {
   function authenticated() { return request.auth.uid != null }
   
     match /users/{userId} {
-       allow get: if authenticated() && request.auth.uid == userId;
+       allow get: if authenticated();
        allow create: if authenticated() && request.auth.uid == userId;
        allow update, delete: if authenticated() && request.auth.uid == userId;
     }
 
     match /users/{userId}/projects/{projectId} {
-      allow get: if authenticated() && request.auth.uid == userId;
-			allow list: if authenticated() && request.auth.uid == userId;
+      allow get: if authenticated();
+			allow list: if authenticated();
       allow create: if authenticated() && request.auth.uid == userId;
       allow update, delete: if authenticated() && request.auth.uid == userId;
     }
 
     match /projects/{projectId} {
+       allow get: if authenticated();
+       allow create: if authenticated();
+       allow update, delete: if authenticated();
+    }
+
+    match /projects/{projectId}/tasks {
+       allow get: if authenticated();
+       allow create: if authenticated();
+       allow update, delete: if authenticated();
+    }
+
+    match /projects/{projectId}/tasks/{taskId} {
        allow get: if authenticated();
        allow create: if authenticated();
        allow update, delete: if authenticated();

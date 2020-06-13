@@ -1,7 +1,18 @@
 import UserProjectsDB from '@/firebase/user-projects-db'
 import ProjectsDB from '@/firebase/projects-db'
+import UsersDB from "@/firebase/users-db";
 
 export default {
+  /**
+   * Fetch project member
+   */
+  getProjectMember: async ({ rootState }, userId) => {
+    console.log(rootState.authentication.user.id);
+    const userDb = new UsersDB();
+
+    return userDb.read(userId);
+  },
+
   /**
    * Fetch projects of current loggedin user
    */
@@ -30,6 +41,7 @@ export default {
     const projectDb = new ProjectsDB();
 
     commit('setProjectCreationPending', true);
+    project.members = [rootState.authentication.user.id];
     const createdProject = await projectDb.create(project);
     const newProject = {
       createTimestamp: createdProject.createTimestamp,
@@ -48,6 +60,7 @@ export default {
    */
   subscribeUserToProject: async ({ commit, rootState, getters }, project) => {
     const userProjectDb = new UserProjectsDB(rootState.authentication.user.id);
+    const projectDb = new ProjectsDB();
 
     commit('setSubscriptionPending', true);
     if (!getters.getUserProjectByProjectId(project.id)) {
@@ -59,7 +72,10 @@ export default {
         updateTimestamp: project.updateTimestamp
       };
       const createdUserProject = await userProjectDb.create(newProject);
+      const newMembers = project.members.add(rootState.authentication.user.id);
+      const updatedProject = await projectDb.update({members: newMembers});
       commit('addUserProject', createdUserProject);
+      commit('updateProject', updatedProject);
     }
     commit('setSubscriptionPending', false)
   },

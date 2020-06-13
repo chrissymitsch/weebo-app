@@ -1,8 +1,10 @@
 <template>
-  <h1 class="loading-title">
-    <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
-    Laden...
-  </h1>
+  <div class="page-wrapper">
+    <h1 class="loading-title">
+      <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
+      Laden...
+    </h1>
+  </div>
 </template>
 
 <script>

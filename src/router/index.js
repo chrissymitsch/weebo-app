@@ -93,6 +93,27 @@ const router = new Router({
           props: true,
           component: () =>
               import(/* webpackChunkName: "client-chunk-project-members" */ '@/views/Projects/ProjectMembers.vue')
+        },
+        {
+          path: 'tasks',
+          name: 'project-tasks',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-tasks" */ '@/views/Projects/ProjectTasks.vue')
+        },
+        {
+          path: 'creativemode',
+          name: 'project-creativemode',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-creativemode" */ '@/views/Projects/ProjectMembers.vue')
+        },
+        {
+          path: 'schedules',
+          name: 'project-schedules',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-schedules" */ '@/views/Projects/ProjectMembers.vue')
         }
       ]
     },

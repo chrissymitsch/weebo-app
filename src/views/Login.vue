@@ -4,8 +4,7 @@
 
     <!-- Loader -->
     <h1 class="loading-title" v-show="user === undefined" data-test="loader">
-      <md-progress-spinner class="md-accent" :md-diameter="20" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
-      Anmeldung läuft...
+      <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
     </h1>
 
     <!-- Offline instruction -->
@@ -21,7 +20,7 @@
       class="login-btn"
       @click="login"
     >
-      <img src="../assets/img/g-logo.png" width="23" />
+      <img src="@/assets/img/g-logo.png" width="23" />
       Mit Google anmelden
     </div>
   </div>

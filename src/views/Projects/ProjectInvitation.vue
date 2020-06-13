@@ -64,59 +64,58 @@
             <md-button @click.stop.prevent="copyLink">Kopieren</md-button>
         </md-field>
 
-        <md-card-header-text>
-            <div class="md-title">Funktionen</div>
-        </md-card-header-text>
-
         <div class="md-layout md-gutter">
             <div class="md-layout-item md-layout md-gutter">
                 <div class="md-layout-item">
                     <md-card class="md-accent">
-                        <md-list class="md-accent">
-                            <md-subheader>Du (Admin)</md-subheader>
+                        <md-card-content>
+                            <md-list class="md-accent">
+                                <md-subheader>Du (Admin)</md-subheader>
 
-                            <md-list-item>
-                                <md-checkbox v-model="permissionsAdmin" disabled value="pa1" />
-                                <span class="md-list-item-text">Projekte anlegen / bearbeiten / löschen</span>
-                            </md-list-item>
-                            <md-list-item>
-                                <md-checkbox v-model="permissionsAdmin" disabled value="pa2" />
-                                <span class="md-list-item-text">Einladungslink versenden</span>
-                            </md-list-item>
-                            <md-list-item>
-                                <md-checkbox v-model="permissionsAdmin" disabled value="pa3" />
-                                <span class="md-list-item-text">Teilnehmer verwalten</span>
-                            </md-list-item>
-                            <md-list-item>
-                                <md-checkbox v-model="permissionsAdmin" disabled value="pa4" />
-                                <span class="md-list-item-text">Dokumente hochladen</span>
-                            </md-list-item>
-                        </md-list>
+                                <md-list-item>
+                                    <md-icon class="md-accent">check_box</md-icon>
+                                    <span class="md-list-item-text">Projekte anlegen / bearbeiten / löschen</span>
+                                </md-list-item>
+                                <md-list-item>
+                                    <md-icon class="md-accent">check_box</md-icon>
+                                    <span class="md-list-item-text">Einladungslink versenden</span>
+                                </md-list-item>
+                                <md-list-item>
+                                    <md-icon class="md-accent">check_box</md-icon>
+                                    <span class="md-list-item-text">Teilnehmer verwalten</span>
+                                </md-list-item>
+                                <md-list-item>
+                                    <md-icon class="md-accent">check_box</md-icon>
+                                    <span class="md-list-item-text">Dokumente hochladen</span>
+                                </md-list-item>
+                            </md-list>
+                        </md-card-content>
                     </md-card>
                 </div>
                 <div class="md-layout-item">
                     <md-card class="md-accent">
-                        <md-list class="md-accent">
-                            <md-subheader>Eingeladene Projektteilnehmer</md-subheader>
+                        <md-card-content>
+                            <md-list class="md-accent">
+                                <md-subheader>Eingeladene Projektteilnehmer</md-subheader>
 
-                            <md-list-item>
-                                <md-checkbox v-model="permissionsMember" disabled value="pm1" />
-                                <span class="md-list-item-text">Projekte anlegen / bearbeiten / löschen</span>
-                            </md-list-item>
-                            <md-list-item>
-                                <md-checkbox v-model="permissionsMember" disabled value="pm2" />
-                                <span class="md-list-item-text">Einladungslink versenden</span>
-                            </md-list-item>
-                            <md-list-item>
-                                <md-checkbox v-model="permissionsMember" disabled value="pm3" />
-                                <span class="md-list-item-text">Teilnehmer verwalten</span>
-                            </md-list-item>
-                            <md-list-item>
-                                <md-checkbox v-model="permissionsMember" disabled value="pm4" />
-                                <span class="md-list-item-text">Dokumente hochladen</span>
-                            </md-list-item>
-
-                        </md-list>
+                                <md-list-item>
+                                    <md-icon class="md-accent">check_box_outline_blank</md-icon>
+                                    <span class="md-list-item-text">Projekte anlegen / bearbeiten / löschen</span>
+                                </md-list-item>
+                                <md-list-item>
+                                    <md-icon class="md-accent">check_box_outline_blank</md-icon>
+                                    <span class="md-list-item-text">Einladungslink versenden</span>
+                                </md-list-item>
+                                <md-list-item>
+                                    <md-icon class="md-accent">check_box_outline_blank</md-icon>
+                                    <span class="md-list-item-text">Teilnehmer verwalten</span>
+                                </md-list-item>
+                                <md-list-item>
+                                    <md-icon class="md-accent">check_box</md-icon>
+                                    <span class="md-list-item-text">Dokumente hochladen</span>
+                                </md-list-item>
+                            </md-list>
+                        </md-card-content>
                     </md-card>
                 </div>
             </div>
@@ -129,9 +128,7 @@
     export default {
         data: () => ({
             invitationLink: null,
-            copied: false,
-            permissionsAdmin: ['pa1','pa2','pa3','pa4'],
-            permissionsMember: ['pm4']
+            copied: false
         }),
         props: {
             project: Object
@@ -160,6 +157,14 @@
     .md-card {
         display: inline-block;
         vertical-align: top;
+
+        .md-card-content .md-list-item-container {
+            font-size: 12px;
+        }
+    }
+
+    .md-list-item-content {
+        min-height: 12px;
     }
 
     .md-button {

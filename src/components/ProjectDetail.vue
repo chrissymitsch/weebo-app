@@ -6,19 +6,13 @@
           <span class="md-title">
             <md-avatar class="md-avatar-icon md-accent">{{ project.name.charAt(0) }}</md-avatar>
            {{ project.name }}
-        </span>
+          </span>
         </md-app-toolbar>
         <md-list>
           <router-link :to="{ name: 'project-dashboard', params: { id: project.id } }">
             <md-list-item>
               <md-icon>dashboard</md-icon>
               <span class="md-list-item-text">Dashboard</span>
-            </md-list-item>
-          </router-link>
-          <router-link :to="{ name: 'project-members', params: { project: project } }">
-            <md-list-item>
-              <md-icon>group</md-icon>
-              <span class="md-list-item-text">Projektteilnehmer</span>
             </md-list-item>
           </router-link>
           <router-link
@@ -29,6 +23,19 @@
               <span class="md-list-item-text">Einladung verschicken</span>
             </md-list-item>
           </router-link>
+          <md-list :md-expand-single="true">
+            <md-list-item md-expand :md-expanded.sync="expandProcess">
+              <md-icon>forward</md-icon>
+              <span class="md-list-item-text">Prozess</span>
+
+              <md-list slot="md-expand">
+                <md-list-item class="md-inset">1. Analyse</md-list-item>
+                <md-list-item class="md-inset">2. Spezifikation</md-list-item>
+                <md-list-item class="md-inset">3. Modellierung</md-list-item>
+                <md-list-item class="md-inset">4. Evaluation</md-list-item>
+              </md-list>
+            </md-list-item>
+          </md-list>
           <router-link
                   :to="{ name: 'project-invitation', params: { project: project } }"
                   v-if="isCreator()">
@@ -37,26 +44,38 @@
               <span class="md-list-item-text">Einstellungen</span>
             </md-list-item>
           </router-link>
-          <router-link
-                  :to="{ name: 'project-invitation', params: { project: project } }"
-                  v-if="isCreator()">
-            <md-list-item>
-              <md-icon>forward</md-icon>
-              <span class="md-list-item-text">Prozess</span>
-            </md-list-item>
-          </router-link>
-          <router-link
-                  :to="{ name: 'project-invitation', params: { project: project } }"
-                  v-if="isCreator()">
-            <md-list-item>
-              <md-icon>playlist_add_check</md-icon>
-              <span class="md-list-item-text">Aufgaben</span>
-            </md-list-item>
-          </router-link>
         </md-list>
       </md-app-drawer>
 
       <md-app-content>
+        <md-app-toolbar>
+          <div class="md-toolbar-row">
+            <router-link :to="{ name: 'project-members', params: { project: project } }">
+              <md-button class="md-icon-button">
+                <md-icon>group</md-icon>
+                <md-tooltip md-direction="top">Projektteilnehmer</md-tooltip>
+              </md-button>
+            </router-link>
+            <router-link :to="{ name: 'project-tasks', params: { project: project } }">
+              <md-button class="md-icon-button">
+                <md-icon>playlist_add_check</md-icon>
+                <md-tooltip md-direction="top">Aufgaben</md-tooltip>
+              </md-button>
+            </router-link>
+            <router-link :to="{ name: 'project-creativemode', params: { project: project } }">
+              <md-button class="md-icon-button">
+                <md-icon>category</md-icon>
+                <md-tooltip md-direction="top">Kreativmodus</md-tooltip>
+              </md-button>
+            </router-link>
+            <router-link :to="{ name: 'project-schedules', params: { project: project } }">
+              <md-button class="md-icon-button">
+                <md-icon>schedule</md-icon>
+                <md-tooltip md-direction="top">Terminplaner</md-tooltip>
+              </md-button>
+            </router-link>
+          </div>
+        </md-app-toolbar>
 
         <div class="md-layout md-gutter">
           <div class="md-layout-item md-layout md-gutter">
@@ -80,6 +99,9 @@
     props: {
       project: Object
     },
+    data: () => ({
+      expandProcess: true
+    }),
     methods: {
       isCreator() {
         return this.project.creator === this.user.id;
@@ -93,7 +115,7 @@
 
 .md-app {
   width: 100%;
-  min-height: 350px;
+  height: 100vh;
   border: 1px solid rgba(#000, .12);
 }
 
@@ -118,4 +140,14 @@
   align-items: center;
   width: 100%;
 }
+
+@mixin activatedLink() {
+  margin-bottom: -2px;
+  border: 2px solid $vue-color;
+}
+
+.router-link-active .md-button {
+  @include activatedLink;
+}
+
 </style>
