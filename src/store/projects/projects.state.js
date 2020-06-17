@@ -6,5 +6,6 @@ export default {
   projectDeletionPending: [],
   projectUnsubscriptionPending: [],
   projectCreationPending: false,
+  projectUpdatePending: [],
   subscriptionPending: false
 }

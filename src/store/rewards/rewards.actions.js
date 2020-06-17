@@ -17,17 +17,37 @@ export default {
   getUserBadges: async ({ commit }, userId) => {
     const userRewardsDb = new UserRewardsDb(userId);
 
-    const badges = await userRewardsDb.readAll({type: "badge"});
+    const badges = await userRewardsDb.readAll([['type', '==', 'badge']]);
     commit('setUserBadges', badges)
   },
 
   /**
-   * Created a badge to loggedin user
+   * Fetch finished tutorials for user
+   */
+  getFinishedTutorials: async ({ commit }, userId) => {
+    const userRewardsDb = new UserRewardsDb(userId);
+
+    const tutorials = await userRewardsDb.readAll([['type', '==', 'tutorial']]);
+    commit('setFinishedTutorials', tutorials)
+  },
+
+  /**
+   * Creates a badge to loggedin user
    */
   createUserBadge: async ({ commit, rootState }, badge) => {
     const userRewardsDb = new UserRewardsDb(rootState.authentication.user.id);
 
     const createdUserBadge = await userRewardsDb.create(badge);
     commit('addUserBadge', createdUserBadge);
+  },
+
+  /**
+   * Creates a tutorial object to loggedin user
+   */
+  createFinishedTutorial: async ({ commit, rootState }, tutorial) => {
+    const userRewardsDb = new UserRewardsDb(rootState.authentication.user.id);
+
+    const createdFinishedTutorial = await userRewardsDb.create(tutorial);
+    commit('addFinishedTutorial', createdFinishedTutorial);
   }
 }

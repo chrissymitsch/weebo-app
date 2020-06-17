@@ -123,6 +123,24 @@ export default {
   },
 
   /**
+   * Update a user project from its id
+   */
+  updateUserProject: async ({ rootState, commit, getters }, project) => {
+    if (getters.isProjectUpdatePending(project.id)) return;
+
+    const userProjectsDb = new UserProjectsDB(rootState.authentication.user.id);
+    const projectsDb = new ProjectsDB();
+
+    commit('addProjectUpdatePending', project.id);
+    const userProjectId = getters.getUserProjectByProjectId(project.id).id;
+    console.log(userProjectId)
+    await userProjectsDb.update({id: userProjectId});
+    await projectsDb.update(project);
+    commit('updateProject', project);
+    commit('removeProjectUpdatePending', project)
+  },
+
+  /**
    * Unsubscribe a user project from its id
    */
   unsubscribeUserProject: async ({ rootState, commit, getters }, projectId) => {
@@ -133,5 +151,12 @@ export default {
     await userProjectsDb.delete(getters.getUserProjectByProjectId(projectId).id);
     commit('removeProjectById', getters.getUserProjectByProjectId(projectId).id);
     commit('removeProjectUnsubscriptionPending', projectId)
+  },
+
+  /**
+   * Subscribes to finish phase of an existing project.
+   */
+  triggerFinishPhaseAction: ({ dispatch }, project) => {
+    dispatch('updateUserProject', project)
   }
 }

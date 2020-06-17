@@ -1,26 +1,31 @@
 <template>
-  <div v-if="finishedLoading" class="bg-white shadow rounded px-3 pt-3 pb-5 border border-white">
-    <div class="flex justify-between">
-      <p class="text-gray-700 font-semibold font-sans tracking-wide text-sm">{{task.title}}</p>
+  <div>
+    <md-card v-if="task">
+      <md-card-content class="task-card">
+        <p>{{task.title}}</p>
 
-      <img
-              class="w-6 h-6 rounded-full ml-3"
-              :src="creator.photoURL"
-              alt="Avatar"
-      >
-    </div>
-    <div class="flex mt-4 justify-between items-center">
-      <span class="text-sm text-gray-600">{{format_date(task.createTimestamp)}}</span>
-      <badge v-if="task.type" :color="badgeColor">{{task.type}}</badge>
-    </div>
+        <avatar :user-id="task.creator"></avatar>
+      </md-card-content>
+      <md-divider></md-divider>
+      <md-card-content class="task-card">
+        <span class="md-caption">{{format_date(task.createTimestamp)}}</span>
+        <badge v-if="task.type" :color="badgeColor">{{task.type}}</badge>
+      </md-card-content>
+    </md-card>
+    <md-card v-if="!task" class="empty-task md-accent">
+      <md-card-content>
+      </md-card-content>
+    </md-card>
   </div>
 </template>
 <script>
   import moment from 'moment';
   import Badge from "./Badge.vue";
+  import Avatar from "./Avatar";
 
   export default {
     components: {
+      Avatar,
       Badge
     },
     props: {
@@ -41,17 +46,6 @@
         return mappings[this.task.type] || mappings.default;
       }
     },
-    data: () => ({
-      creator: null,
-      finishedLoading: false
-    }),
-    created() {
-      this.$store.dispatch('projects/getProjectMember', this.task.creator).then(data => {
-        this.creator = data;
-      }).finally(() => {
-        this.finishedLoading = true;
-      });
-    },
     methods: {
       format_date(value){
         if (value) {
@@ -64,11 +58,22 @@
 </script>
 
 <style lang="scss" scoped>
-  .w-6 {
-    height: 1.5rem;
+  .task-card {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    padding: 8px;
+    align-items: center;
+
+    .md-avatar {
+      margin: 0;
+    }
   }
-  /* Unfortunately @apply cannot be setup in codesandbox,
-  but you'd use "@apply border opacity-50 border-blue-500 bg-gray-200" here */
+
+  .empty-task {
+    opacity: 0.2;
+  }
+
   .ghost-card {
     opacity: 0.5;
     background: #F7FAFC;

@@ -2,14 +2,14 @@
   <div class="project-detail md-layout-row">
     <md-app>
       <md-app-drawer md-permanent="full">
-        <md-app-toolbar class="md-primary">
+        <md-app-toolbar md-elevation="0" class="md-accent">
           <span class="md-title">
-            <md-avatar class="md-avatar-icon md-accent">{{ project.name.charAt(0) }}</md-avatar>
+            <md-avatar class="md-avatar-icon md-primary">{{ project.name.charAt(0) }}</md-avatar>
            {{ project.name }}
           </span>
         </md-app-toolbar>
         <md-list>
-          <router-link :to="{ name: 'project-dashboard', params: { id: project.id } }">
+          <router-link :to="{ name: 'project-dashboard', params: { project: project } }">
             <md-list-item>
               <md-icon>dashboard</md-icon>
               <span class="md-list-item-text">Dashboard</span>
@@ -48,47 +48,47 @@
       </md-app-drawer>
 
       <md-app-content>
-        <md-app-toolbar>
+        <md-app-toolbar md-elevation="0" class="md-primary">
           <div class="md-toolbar-row">
             <router-link :to="{ name: 'project-dashboard', params: { project: project } }">
-              <md-button class="md-icon-button">
-                <md-icon>dashboard</md-icon>
+              <md-button class="md-icon-button md-primary">
+                <md-icon class="navigation-icon">dashboard</md-icon>
                 <md-tooltip md-direction="top">Dashboard</md-tooltip>
               </md-button>
             </router-link>
             <router-link :to="{ name: 'project-members', params: { project: project } }">
               <md-button class="md-icon-button">
-                <md-icon>group</md-icon>
+                <md-icon class="navigation-icon">group</md-icon>
                 <md-tooltip md-direction="top">Projektteilnehmer</md-tooltip>
               </md-button>
             </router-link>
             <router-link :to="{ name: 'project-tasks', params: { project: project } }">
               <md-button class="md-icon-button">
-                <md-icon>playlist_add_check</md-icon>
+                <md-icon class="navigation-icon">playlist_add_check</md-icon>
                 <md-tooltip md-direction="top">Aufgaben</md-tooltip>
               </md-button>
             </router-link>
             <router-link :to="{ name: 'project-creativemode', params: { project: project } }">
               <md-button class="md-icon-button">
-                <md-icon>category</md-icon>
+                <md-icon class="navigation-icon">category</md-icon>
                 <md-tooltip md-direction="top">Kreativmodus</md-tooltip>
               </md-button>
             </router-link>
             <router-link :to="{ name: 'project-schedules', params: { project: project } }">
               <md-button class="md-icon-button">
-                <md-icon>calendar_today</md-icon>
+                <md-icon class="navigation-icon">calendar_today</md-icon>
                 <md-tooltip md-direction="top">Terminplaner</md-tooltip>
               </md-button>
             </router-link>
             <router-link :to="{ name: 'project-schedules', params: { project: project } }">
               <md-button class="md-icon-button">
-                <md-icon>history</md-icon>
+                <md-icon class="navigation-icon">history</md-icon>
                 <md-tooltip md-direction="top">History</md-tooltip>
               </md-button>
             </router-link>
             <router-link :to="{ name: 'project-schedules', params: { project: project } }">
               <md-button class="md-icon-button">
-                <md-icon>cloud</md-icon>
+                <md-icon class="navigation-icon">cloud</md-icon>
                 <md-tooltip md-direction="top">Dateien und Dokumente</md-tooltip>
               </md-button>
             </router-link>
@@ -136,6 +136,10 @@
   border: 1px solid rgba(#000, .12);
 }
 
+.md-app-content {
+  background: #eeeeee;
+}
+
 .md-layout.md-gutter {
   margin: 0;
 }
@@ -148,6 +152,10 @@
   .md-title .md-avatar {
     margin: 0;
   }
+}
+
+.navigation-icon {
+  color: #17b2e8!important;
 }
 
 .project-detail {

@@ -60,6 +60,10 @@ body {
   }
 }
 
+.md-avatar.md-accent {
+  color: #ffffff!important;
+}
+
 .page-wrapper {
   display: flex;
   flex-direction: column;
@@ -70,6 +74,10 @@ body {
 .title {
   text-align: center;
   font-size: 26px;
+}
+
+.md-display-1, .align-center {
+  text-align: center;
 }
 
 .md-button:not(.md-icon-button) .md-button-content .md-icon, .md-button:not(.md-icon-button) .md-button-content .button-logo {
@@ -133,7 +141,7 @@ body {
       .nav-item {
         position: relative;
         display: inline-block;
-        margin-left: 1.5rem;
+        margin-right: 1.5rem;
         line-height: 2.2rem;
 
         &:first-child {
@@ -149,10 +157,6 @@ body {
           line-height: 1.4rem;
           display: inline-block;
           cursor: pointer;
-        }
-
-        a.logout-link {
-          color: $danger-color;
         }
 
         @mixin activatedLink() {
@@ -181,10 +185,6 @@ body {
     }
   }
 
-  .md-avatar {
-    margin-left: 1.5rem;
-  }
-
   .offline-label {
     padding: 0px 10px;
     border: 1px solid white;
@@ -194,10 +194,19 @@ body {
   }
 }
 
+.md-menu-content-container .md-list a.logout-link {
+  color: $danger-color;
+}
+
 
 /** PROJECTS PAGE **/
 .project-list {
-  margin: 20px 0;
+
+  .md-card {
+    width: 200px;
+    display: inline-block;
+    margin: 8px;
+  }
 }
 
 
@@ -315,5 +324,13 @@ body {
       max-width: 15px;
       margin: 0 10px;
     }
+  }
+}
+
+.modal-wrapper.large {
+  vertical-align: top;
+  .modal-container {
+    width: 600px;
+    margin-top: 80px;
   }
 }

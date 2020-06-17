@@ -1,5 +1,7 @@
 <template>
     <div class="ProjectMembers" v-if="project">
+        <md-chip>{{ project.name }} / Projektteilnehmer</md-chip>
+
         <p v-if="finishedLoading === 0" class="infos-label">
             <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
             Projektteilnehmer werden geladen...

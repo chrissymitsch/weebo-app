@@ -33,3 +33,17 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+  @import '@/theme/variables.scss';
+
+  .title {
+    text-align: center;
+  }
+
+  .page-wrapper {
+    height: 100vh;
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+  }
+</style>

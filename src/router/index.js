@@ -52,6 +52,12 @@ const router = new Router({
       }
     },
     {
+      path: '/profile',
+      name: 'profile',
+      component: () =>
+        import(/* webpackChunkName: "client-chunk-profile" */ '@/views/Profile.vue')
+    },
+    {
       path: '/projects',
       name: 'projects',
       component: () =>
@@ -118,6 +124,41 @@ const router = new Router({
           props: true,
           component: () =>
               import(/* webpackChunkName: "client-chunk-project-schedules" */ '@/views/Projects/ProjectMembers.vue')
+        },
+        {
+          path: 'phase1',
+          name: 'project-phase1',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-phase1" */ '@/components/Phase1.vue')
+        },
+        {
+          path: 'phase2',
+          name: 'project-phase2',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-phase2" */ '@/components/Phase2.vue')
+        },
+        {
+          path: 'phase3',
+          name: 'project-phase3',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-phase3" */ '@/components/Phase3.vue')
+        },
+        {
+          path: 'phase4',
+          name: 'project-phase4',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-phase4" */ '@/components/Phase4.vue')
+        },
+        {
+          path: 'phase5',
+          name: 'project-phase5',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-phase5" */ '@/components/Phase5.vue')
         }
       ]
     },

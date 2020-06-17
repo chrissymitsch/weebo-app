@@ -11,6 +11,7 @@ export const createNewUserFromFirebaseAuthUser = async firebaseAuthUser => {
   const user = {
     displayName,
     photoURL,
+    customAvatar: null,
     email
   };
 

@@ -1,10 +1,25 @@
 <template>
     <div class="ProjectInvitation">
+        <rewarding :showModal="rewardModalActive" @closeModal="rewardModalActive=false" size="large">
+            <md-progress-spinner v-if="!tutorialSaved" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
+            <div v-if="tutorialSaved">
+                <div class="md-display-1">Nimm alle mit an Board!</div>
+                <p class="description"><img src="@/assets/img/rakete.png" width="200" /></p>
+                <p class="description md-body-2">
+                    Lade alle Beteiligten zur Zusammenarbeit ein, indem du eine Einladung per E-Mail, SMS, WhatsApp,
+                    Telegram oder per Direktlink verschickst! Sobald eine Einladung angenommen wurde, wird die Liste
+                    der Projektteilnehmer aktualisiert.
+                </p>
+            </div>
+        </rewarding>
+
+        <md-chip>{{ project.name }} / Einladung verschicken</md-chip>
+
         <md-empty-state
-                md-icon="directions_boat"
-                md-label="Nimm alle mit ins Boot!"
+                md-label="Nimm alle mit an Board!"
                 md-description="Teile dein Projekt mit Team-Mitgliedern, Kunden, Auftraggebern, usw., damit du
                 Weebo als Kollaborations-Tool für dein Projekt nutzen kannst.">
+            <md-avatar class="md-large md-accent"><img src="@/assets/img/rakete.png" /></md-avatar>
         </md-empty-state>
         <div class="md-layout md-gutter">
             <div class="md-layout-item md-layout md-gutter">
@@ -125,16 +140,26 @@
 </template>
 
 <script>
+    import {mapState} from "vuex";
+    import Rewarding from "../../components/Rewarding";
+
     export default {
+        computed: {
+            ...mapState('rewards', ['tutorials'])
+        },
+        components: {Rewarding},
         data: () => ({
             invitationLink: null,
-            copied: false
+            copied: false,
+            tutorialSaved: false,
+            rewardModalActive: false
         }),
         props: {
             project: Object
         },
         created() {
             this.makeInvitationLink(this.project.id);
+            setTimeout(function () { this.triggerReward() }.bind(this), 1000);
         },
         methods: {
             makeInvitationLink(projectId) {
@@ -148,6 +173,24 @@
 
                 document.execCommand("copy");
                 this.copied = true;
+            },
+            triggerReward() {
+                const checkIfUserHasTutorialFinished = this.tutorials.filter(function(elem) {
+                    if(elem.name === "Invitation") return elem;
+                    return null;
+                });
+                if (checkIfUserHasTutorialFinished.length > 0) {
+                    this.rewardModalActive = false;
+                } else {
+                    this.rewardModalActive = true;
+                    const tutorial = {
+                        name: "Invitation",
+                        type: "tutorial"
+                    };
+                    this.$store.dispatch('rewards/createFinishedTutorial', tutorial).then(() => {
+                        this.tutorialSaved = true;
+                    });
+                }
             }
         }
     };

@@ -1,7 +1,7 @@
 <template>
   <div class="Rewarding">
     <div class="modal-mask" v-if="modalActive">
-      <div class="modal-wrapper">
+      <div :class="`modal-wrapper ${size}`">
         <div class="modal-container">
           <div class="close">
             <md-button class="md-icon-button" @click="$emit('closeModal')"><md-icon>close</md-icon></md-button>
@@ -19,7 +19,8 @@
   export default {
     name: 'Rewarding',
     props: {
-      showModal: Boolean
+      showModal: Boolean,
+      size: String
     },
     data: () => ({
       modalActive: false

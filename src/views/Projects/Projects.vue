@@ -1,8 +1,12 @@
 <template>
   <div class="page-wrapper">
-    <h1 class="title">Deine Projekte</h1>
-    <project-list class="project-list"></project-list>
-    <add-project v-if="networkOnLine"></add-project>
+    <div class="md-layout md-gutter">
+      <div class="md-layout-item">
+        <p class="md-display-1">Deine Projekte</p>
+        <project-list class="project-list"></project-list>
+        <add-project v-if="networkOnLine"></add-project>
+      </div>
+    </div>
   </div>
 </template>
 

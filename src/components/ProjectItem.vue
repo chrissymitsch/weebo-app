@@ -1,5 +1,5 @@
 <template>
-  <md-table-row>
+  <md-card>
     <md-dialog-confirm
             :md-active.sync="deletionDialogActive"
             :md-title="`Möchtest du ${data.name} wirklich löschen?`"
@@ -14,21 +14,23 @@
             md-cancel-text="Nein!"
             @md-confirm="onConfirmUnsubscription" />
 
-    <md-table-cell>
+    <router-link
+            class="md-accent md-title project-link"
+            :to="{ name: 'project-dashboard', params: { id: data.projectId, project: data } }"
+    >
+      <md-card-content>
+        <md-avatar class="md-avatar-icon md-primary"><img :src="`https://avatars.dicebear.com/api/jdenticon/${data.id}.svg`" alt="" /></md-avatar>
+        {{ data.name }}
+      </md-card-content>
+    </router-link>
+    <md-card-actions class="md-caption">
+      {{ format_date(data.createTimestamp) }}
+    </md-card-actions>
+    <md-card-actions>
       <md-tooltip md-direction="left">Du bist Admin</md-tooltip>
       <md-icon class="md-primary" v-if="isCreator()">
         star_border
       </md-icon>
-    </md-table-cell>
-    <md-table-cell>
-      <router-link
-            class="md-accent project-link"
-            :to="{ name: 'project-dashboard', params: { id: data.projectId } }"
-      >{{ data.name }}</router-link>
-    </md-table-cell>
-    <md-table-cell class="md-xsmall-hide">{{ format_date(data.createTimestamp) }}</md-table-cell>
-    <md-table-cell class="md-xsmall-hide">1</md-table-cell>
-    <md-table-cell>
       <div v-if="!disableActions && isCreator()" class="delete-btn" @click="deletionDialogActive = true">
         <md-progress-spinner class="md-accent" v-if="isProjectDeletionPending" :md-diameter="20" :md-stroke="2" md-mode="indeterminate"></md-progress-spinner>
         <md-icon class="md-accent" v-if="!isProjectDeletionPending">delete</md-icon>
@@ -37,8 +39,8 @@
         <md-progress-spinner class="md-accent" v-if="isProjectUnsubscriptionPending" :md-diameter="20" :md-stroke="2" md-mode="indeterminate"></md-progress-spinner>
         <md-icon class="md-accent" v-if="!isProjectUnsubscriptionPending">notifications_off</md-icon>
       </div>
-    </md-table-cell>
-  </md-table-row>
+    </md-card-actions>
+  </md-card>
 </template>
 
 <script>
@@ -53,6 +55,13 @@
       deletionDialogActive: false,
       unsubscriptionDialogActive: false
     }),
+    props: {
+      data: Object,
+      index: Number,
+      isProjectDeletionPending: Boolean,
+      isProjectUnsubscriptionPending: Boolean,
+      disableActions: Boolean
+    },
     methods: {
       onConfirmDeletion () {
         this.$emit('deleteProject', this.data.projectId);
@@ -68,15 +77,8 @@
       },
       isCreator(){
         return this.data.creator === this.user.id;
-      }
+      },
     },
-    props: {
-      data: Object,
-      index: Number,
-      isProjectDeletionPending: Boolean,
-      isProjectUnsubscriptionPending: Boolean,
-      disableActions: Boolean
-    }
   }
 </script>
 
@@ -89,4 +91,5 @@
   display: inline-block;
   margin-left: 10px;
 }
+
 </style>

@@ -32,6 +32,15 @@
         </md-card-actions>
       </md-card>
 
+      <rewarding :showModal="rewardModalActive" @closeModal="rewardModalActive=false">
+        <md-progress-spinner v-if="!rewardSaved" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
+        <div v-if="rewardSaved">
+          <div class="md-display-1">Bravo!</div>
+          <p class="description md-body-2">Für dein erstes Projekt hast du eine Trophäe erhalten!</p>
+          <p class="description"><img src="@/assets/img/pokal.png" /></p>
+        </div>
+      </rewarding>
+
       <md-snackbar :md-active.sync="projectSaved">Das Projekt wurde erfolgreich erstellt.</md-snackbar>
     </form>
   </div>
@@ -45,18 +54,23 @@
     maxLength
   } from 'vuelidate/lib/validators'
   import { mapMutations, mapState, mapActions } from 'vuex'
+  import Rewarding from "./Rewarding";
 
   export default {
     name: 'FormValidation',
-    computed: mapState('projects', [
-      'projectCreationPending'
-    ]),
+    components: {Rewarding},
+    computed: {
+      ...mapState('projects', ['projectCreationPending']),
+      ...mapState('rewards', ['userBadges'])
+    },
     mixins: [validationMixin],
     data: () => ({
       form: {
         projectName: null
       },
-      projectSaved: false
+      projectSaved: false,
+      rewardModalActive: false,
+      rewardSaved: false
     }),
     validations: {
       form: {
@@ -80,6 +94,24 @@
         }
         return null;
       },
+      triggerReward() {
+        const checkIfUserHasBadge = this.userBadges.filter(function(elem) {
+          if(elem.name === "NewProject") return elem;
+          return null;
+        });
+        if (checkIfUserHasBadge.length > 0) {
+          this.rewardModalActive = false;
+        } else {
+          const badge = {
+            name: "NewProject",
+            type: "badge"
+          };
+          this.$store.dispatch('rewards/createUserBadge', badge).then(() => {
+            this.rewardSaved = true;
+          });
+          this.rewardModalActive = true;
+        }
+      },
       clearForm () {
         this.$v.$reset();
         this.form.projectName = null;
@@ -90,6 +122,7 @@
           this.triggerAddProjectAction(this.$store.navigator);
           this.projectSaved = true;
           this.clearForm();
+          this.triggerReward();
         }
       }
     }

@@ -8,7 +8,11 @@ export default {
   setCurrentProject: (state, project) => (state.currentProject = project),
   addUserProject: (state, project) => state.userProjects.push(project),
   setProjectMembers: (state, members) => (state.projectMembers =  members),
-  updateProject: (state, project) => (state.currentProject = project),
+  updateProject: (state, updatedProject) => {
+    const index = state.userProjects.findIndex(project => project.id === updatedProject.id);
+    state.userProjects[index] = updatedProject;
+    state.currentProject = updatedProject;
+  },
   removeProjectById: (state, projectId) => {
     const index = state.userProjects.findIndex(project => project.id === projectId);
     state.userProjects.splice(index, 1);
@@ -25,12 +29,20 @@ export default {
     state.projectDeletionPending.splice(index, 1)
   },
 
-  /* Projects deletion */
+  /* Projects unsubscription */
   addProjectUnsubscriptionPending: (state, projectId) =>
     state.projectUnsubscriptionPending.push(projectId),
   removeProjectUnsubscriptionPending: (state, projectId) => {
     const index = state.userProjects.findIndex(project => project.id === projectId);
     state.projectUnsubscriptionPending.splice(index, 1)
+  },
+
+  /* Projects update */
+  addProjectUpdatePending: (state, project) =>
+    state.projectUpdatePending.push(project),
+  removeProjectUpdatePending: (state, updatedProject) => {
+    const index = state.userProjects.findIndex(project => project.id === updatedProject.id);
+    state.projectUpdatePending.splice(index, 1)
   },
 
   /* Project creation */

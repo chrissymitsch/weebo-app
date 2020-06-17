@@ -18,18 +18,24 @@
             <div v-if="!isUserLoggedIn && networkOnLine" class="nav-item">
               <router-link to="/login">Anmelden</router-link>
             </div>
-            <div
-                    v-if="isUserLoggedIn && networkOnLine"
-                    class="nav-item logout-item"
-                    @click="logout"
-            >
-              <a class="logout-link">Ausloggen</a>
-            </div>
+
             <div v-if="!networkOnLine" class="nav-item offline-label">Offline</div>
 
-            <md-avatar v-if="isUserLoggedIn && networkOnLine" class="md-avatar-icon md-accent">
-              {{ avatarInitials() }}
-            </md-avatar>
+            <md-menu v-if="isUserLoggedIn && networkOnLine" md-size="medium" md-align-trigger>
+              <avatar md-menu-trigger></avatar>
+
+              <md-menu-content md-size="auto">
+                <md-menu-item><h3>{{ user.displayName }}</h3></md-menu-item>
+                <md-menu-item @click="openProfile()">Profil</md-menu-item>
+                <md-menu-item
+                          class="nav-item logout-item"
+                          @click="logout"
+                >
+                  <a class="logout-link">Ausloggen</a>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+
           </nav>
         </div>
       </md-app-toolbar>
@@ -83,6 +89,7 @@
 <script>
 import firebase from 'firebase/app'
 import { mapGetters, mapState } from 'vuex'
+import Avatar from '@/components/Avatar'
 
 export default {
   computed: {
@@ -90,6 +97,7 @@ export default {
     ...mapState('authentication', ['user']),
     ...mapState('app', ['networkOnLine', 'appTitle', 'appShortTitle'])
   },
+  components: {Avatar},
   data: () => ({
     menuVisible: false,
   }),
@@ -97,9 +105,8 @@ export default {
     async logout() {
       await firebase.auth().signOut()
     },
-    avatarInitials() {
-      const initials = this.user.displayName.split(" ");
-      return initials[0].charAt(0).toUpperCase() + initials[1].charAt(0).toUpperCase();
+    openProfile() {
+      this.$router.push("/profile")
     }
   }
 }

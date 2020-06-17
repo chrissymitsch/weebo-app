@@ -3,6 +3,8 @@ import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
 import Chat from 'vue-beautiful-chat'
+import zircle from 'zircle'
+import 'zircle/dist/zircle.css'
 
 import App from './App.vue'
 import router from './router'
@@ -18,6 +20,7 @@ Vue.config.productionTip = false;
 
 Vue.use(VueMaterial);
 Vue.use(Chat);
+Vue.use(zircle);
 
 new Vue({
   router,

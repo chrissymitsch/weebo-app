@@ -8,15 +8,7 @@
       Noch keine Projekte verknüpft.
     </p>
 
-    <md-table v-if="userProjects && userProjects.length > 0">
-      <md-table-row>
-        <md-table-head></md-table-head>
-        <md-table-head>Name</md-table-head>
-        <md-table-head class="md-xsmall-hide">Erstellt am</md-table-head>
-        <md-table-head class="md-xsmall-hide">Teilnehmer</md-table-head>
-        <md-table-head></md-table-head>
-      </md-table-row>
-
+    <div class="project-list">
       <project-item
               v-for="(project, index) in userProjects"
               :key="project.id"
@@ -28,7 +20,7 @@
               @deleteProject="deleteUserProject"
               @unsubscribeProject="unsubscribeUserProject"
       ></project-item>
-    </md-table>
+    </div>
   </div>
 </template>
 

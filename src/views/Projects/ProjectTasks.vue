@@ -1,6 +1,6 @@
 <template>
     <div class="ProjectMembers" v-if="project">
-        <h1>Task-Board</h1>
+        <p class="md-display-1">Task-Board</p>
         <p v-if="!finishedLoading" class="infos-label">
             <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
             Aufgaben werden geladen...
@@ -9,14 +9,10 @@
             Keine Aufgaben.
         </p>
         <add-task :id="project.id" :column="null"></add-task>
-        <div class="flex justify-start" v-if="finishedLoading && columns && columns.length > 0">
-            <div class="min-h-screen flex overflow-x-scroll">
-                <div
-                        v-for="column in columns"
-                        :key="column.title"
-                        class="bg-gray-100 rounded-lg px-3 py-3 column-width rounded mr-4"
-                >
-                    <p class="text-gray-700 font-semibold font-sans tracking-wide text-sm">{{column.title}}</p>
+        <div class="md-layout" v-if="finishedLoading && columns && columns.length > 0">
+            <div class="md-layout-item column-width" v-for="column in columns" :key="column.title">
+                <div>
+                    <p class="md-subheading">{{column.title}}</p>
                     <!-- Draggable component comes from vuedraggable. It provides drag & drop functionality -->
                     <draggable :list="column.tasks" :animation="200" ghost-class="ghost-card" group="tasks">
                         <!-- Each element from here will be draggable and animated. Note :key is very important here to be unique both for draggable and animations to be smooth & consistent. -->
@@ -24,10 +20,10 @@
                                 v-for="(task) in column.tasks"
                                 :key="task.id"
                                 :task="task"
-                                class="mt-3 cursor-move"
                         ></task-card>
                         <!-- </transition-group> -->
                     </draggable>
+                    <task-card :task="null"></task-card>
                     <add-task :id="project.id" :column="column.title"></add-task>
                 </div>
             </div>
@@ -39,7 +35,6 @@
     import draggable from "vuedraggable";
     import TaskCard from "@/components/TaskCard.vue";
     import AddTask from "@/components/AddTask.vue";
-    import '@/assets/css/tailwind.css'
     import {mapState} from "vuex";
 
     export default {
@@ -61,19 +56,15 @@
                 finishedLoading: false,
                 columns: [
                     {
-                        title: "Backlog",
+                        title: "Neu",
                         tasks: []
                     },
                     {
-                        title: "In Progress",
+                        title: "In Bearbeitung",
                         tasks: []
                     },
                     {
-                        title: "Review",
-                        tasks: []
-                    },
-                    {
-                        title: "Done",
+                        title: "Geschafft!",
                         tasks: []
                     }
                 ]
@@ -104,8 +95,6 @@
 
 <style scoped>
     .column-width {
-        min-width: 320px;
-        width: 320px;
     }
     /* Unfortunately @apply cannot be setup in codesandbox,
     but you'd use "@apply border opacity-50 border-blue-500 bg-gray-200" here */

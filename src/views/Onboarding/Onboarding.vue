@@ -31,11 +31,11 @@
             </md-step>
         </md-steppers>
 
-        <rewarding :showModal="rewardOnboarding" @closeModal="closeModal()">
+        <rewarding :showModal="rewardModalActive" @closeModal="closeModal()">
             <md-progress-spinner v-if="!rewardSaved" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
             <div v-if="rewardSaved">
-                <h3 class="title">Bravo!</h3>
-                <p class="description">Du hast eine Trophäe erhalten!</p>
+                <div class="md-display-1">Bravo!</div>
+                <p class="description md-body-2">Du hast eine Trophäe erhalten!</p>
                 <p class="description"><img src="@/assets/img/pokal.png" /></p>
             </div>
         </rewarding>
@@ -58,7 +58,7 @@
             second: false,
             third: false,
             secondStepError: null,
-            rewardOnboarding: false,
+            rewardModalActive: false,
             rewardSaved: false
         }),
         methods: {
@@ -82,11 +82,11 @@
                     const badge = {
                         name: "Onboarding",
                         type: "badge"
-                    }
+                    };
                     this.$store.dispatch('rewards/createUserBadge', badge).then(() => {
                         this.rewardSaved = true;
                     });
-                    this.rewardOnboarding = true;
+                    this.rewardModalActive = true;
                 }
             },
             closeModal() {
