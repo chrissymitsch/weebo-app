@@ -133,7 +133,6 @@ export default {
 
     commit('addProjectUpdatePending', project.id);
     const userProjectId = getters.getUserProjectByProjectId(project.id).id;
-    console.log(userProjectId)
     await userProjectsDb.update({id: userProjectId});
     await projectsDb.update(project);
     commit('updateProject', project);

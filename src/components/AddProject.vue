@@ -28,7 +28,7 @@
           <md-button
                   class="md-raised md-primary create-project-btn"
                   @click="validate()"
-                  :disabled="$v.$invalid && projectCreationPending">Projekt anlegen</md-button>
+                  :disabled="$v.$invalid || projectCreationPending">Projekt anlegen</md-button>
         </md-card-actions>
       </md-card>
 

@@ -3,7 +3,8 @@
     <div class="md-layout md-gutter">
       <div class="md-layout-item align-center">
         <p class="md-display-1">{{user.displayName}}</p>
-        <avatar size="md-large"></avatar>
+        <md-progress-spinner v-if="userUpdatePending" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
+        <avatar v-if="!userUpdatePending" size="md-large" :key="rerenderAvatar"></avatar>
         <p class="md-caption">{{user.email}}</p>
         <md-button>Google-Konto verwalten</md-button>
       </div>
@@ -24,11 +25,13 @@
     <div class="md-layout md-gutter">
       <div class="md-layout-item align-center">
         <p class="md-title">Profilbild ändern</p>
-        <md-avatar :class="`md-large md-accent ${isActivated(!this.user.customAvatar)}`">
+        <md-avatar :class="`md-large md-accent ${isActivated(!this.user.customAvatar)}`"
+                   @click.native="updateCustomAvatar('')">
           <md-ripple><img :src="`${user.photoURL}`" /></md-ripple>
         </md-avatar>
-        <md-avatar v-for="(avatar) in avatars" :key="avatar" :class="`md-large md-accent ${isActivated(user.customAvatar === avatar)}`">
-          <md-ripple><img :src="avatar" /></md-ripple>
+        <md-avatar v-for="(avatar) in avatars" :key="avatar" @click.native="updateCustomAvatar(avatar)"
+                   :class="`md-large md-accent ${isActivated(user.customAvatar === avatar)}`">
+          <md-ripple @click="updateCustomAvatar(avatar)"><img :src="avatar" /></md-ripple>
         </md-avatar>
       </div>
     </div>
@@ -36,21 +39,21 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+  import {mapState} from 'vuex'
 import Avatar from "../components/Avatar";
 
 export default {
   components: {Avatar},
   computed: {
-    ...mapState('authentication', ['user']),
+    ...mapState('authentication', ['user', 'userUpdatePending']),
     ...mapState('rewards', ['userBadges'])
   },
   data: () => ({
     badges: null,
-    avatars: null
+    avatars: null,
+    rerenderAvatar: 0,
   }),
   created() {
-    console.log(this.userBadges);
     this.avatars = [
       `https://avatars.dicebear.com/api/initials/${this.user.displayName}.svg`,
       `https://api.adorable.io/avatars/100/${this.user.id}.png`,
@@ -80,6 +83,15 @@ export default {
         return "activated-avatar";
       }
       return "not-activated";
+    },
+    updateCustomAvatar(avatar) {
+      if (!this.userUpdatePending) {
+        const userUpdate = JSON.parse(JSON.stringify(this.user));
+        userUpdate.customAvatar = avatar;
+        this.$store.dispatch('authentication/updateUser', userUpdate).then(() => {
+          this.rerenderAvatar += 1;
+        });
+      }
     }
   }
 }

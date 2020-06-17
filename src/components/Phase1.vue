@@ -9,7 +9,7 @@
                 @md-confirm="onConfirm" />
 
         <p><md-button class="md-icon-button" @click="goBack()"><md-icon>close</md-icon></md-button></p>
-        <p class="md-title">Phase 1: Analyse</p>
+        <p class="md-title">{{$zircle.getParams().test}}Phase 1: Analyse</p>
         <p class="md-caption">Bereits in Phase 1 können alle Projektteilnehmer einbezogen werden.</p>
         <p v-if="currentProject.phase === 0">
             <md-button class="md-accent" @click="finishPhaseDialogActive = true">
@@ -30,6 +30,9 @@
         data: () => ({
             finishPhaseDialogActive: false
         }),
+        props: {
+            test: Boolean
+        },
         methods: {
             ...mapActions('projects', ['triggerFinishPhaseAction']),
             goBack() {

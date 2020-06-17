@@ -21,7 +21,12 @@
               label="Spezifikation"
               label-pos="right"
               style="border-width: 7px"
-              to-view="Phase2">
+              :to-view="{
+	name: 'Phase1',
+	params: {
+		test: true,
+	}
+}">
         <md-avatar :class="`md-avatar-icon ${getPhaseColor(1)}`">2</md-avatar>
       </z-spot>
       <z-spot

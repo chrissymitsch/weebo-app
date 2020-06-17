@@ -30,5 +30,19 @@ export default {
     if (!(currentRouter.meta && currentRouter.meta.authNotRequired)) {
       router.push('/login')
     }
-  }
+  },
+
+  /**
+   * Update a user from its id
+   */
+  updateUser: async ({ commit, state }, user) => {
+    if (state.userUpdatePending) return;
+
+    const userDb = new UsersDB();
+
+    commit('setUserUpdatePending', true);
+    await userDb.update(user);
+    commit('setUser', user);
+    commit('setUserUpdatePending', false)
+  },
 }
