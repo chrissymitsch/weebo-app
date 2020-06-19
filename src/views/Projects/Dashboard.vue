@@ -17,22 +17,22 @@
 
         <md-chip>{{ currentProject.name }} / Dashboard</md-chip>
 
-        <md-card md-with-hover>
-            <md-card-content>
-                <z-canvas :views="$options.components"></z-canvas>
-            </md-card-content>
-        </md-card>
-
-        <md-card class="process-step" md-with-hover>
+        <md-card class="project-status margin8" md-with-hover>
             <md-ripple>
                 <md-card-header>
                     <div class="md-title">Projektstatus</div>
                 </md-card-header>
 
                 <md-card-content>
-                    Level 1
+                    <p class="md-body-2">Level 1</p>
                 </md-card-content>
             </md-ripple>
+        </md-card>
+
+        <md-card md-with-hover>
+            <md-card-content>
+                <z-canvas :views="$options.components"></z-canvas>
+            </md-card-content>
         </md-card>
 
         <p></p>
@@ -177,6 +177,8 @@
 </script>
 
 <style lang="scss" scoped>
+    @import '@/theme/variables.scss';
+
     .z-canvas {
         position: relative;
         width: 100%;
@@ -227,5 +229,9 @@
                 max-width: 50%;
             }
         }
+    }
+
+    .project-status .md-card-header {
+        background: $vue-color;
     }
 </style>

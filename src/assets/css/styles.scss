@@ -95,6 +95,13 @@ body {
   margin-right: 8px;
 }
 
+.show-for-small {
+  display: none;
+  @media (max-width: 600px) {
+    display: flex;
+  }
+}
+
 /** NAVBAR **/
 
 .navbar {

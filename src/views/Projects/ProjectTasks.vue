@@ -1,6 +1,6 @@
 <template>
     <div class="ProjectMembers" v-if="currentProject">
-        <p class="md-display-1">Task-Board</p>
+        <md-chip>{{ currentProject.name }} / Aufgaben-Board</md-chip>
         <p v-if="!finishedLoading" class="text-center">
             <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
             Aufgaben werden geladen...

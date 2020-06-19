@@ -9,14 +9,14 @@
           </span>
         </md-app-toolbar>
         <md-list>
-          <router-link :to="{ name: 'project-dashboard', params: { project: project } }">
+          <router-link :to="{ name: 'project-dashboard' }">
             <md-list-item>
               <md-icon>dashboard</md-icon>
               <span class="md-list-item-text">Dashboard</span>
             </md-list-item>
           </router-link>
           <router-link
-                  :to="{ name: 'project-invitation', params: { project: project } }"
+                  :to="{ name: 'project-invitation' }"
                   v-if="isCreator()">
             <md-list-item>
               <md-icon>send</md-icon>
@@ -37,7 +37,7 @@
             </md-list-item>
           </md-list>
           <router-link
-                  :to="{ name: 'project-invitation', params: { project: project } }"
+                  :to="{ name: 'project-settings' }"
                   v-if="isCreator()">
             <md-list-item>
               <md-icon>settings</md-icon>

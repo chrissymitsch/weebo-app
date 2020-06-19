@@ -2,8 +2,8 @@
   <header class="navbar" :class="{ offline: !networkOnLine }">
     <md-app>
       <md-app-toolbar>
-        <md-button class="md-icon-button md-small-size-0" @click="menuVisible = true">
-          <md-icon>menu</md-icon>
+        <md-button class="md-icon-button show-for-small" @click="menuVisible = true">
+          <md-icon class="navigation-icon">menu</md-icon>
         </md-button>
         <router-link to="/home">
           <img alt="logo-bento" class="logo" src="@/assets/img/bento-starter.svg" />
@@ -40,37 +40,54 @@
         </div>
       </md-app-toolbar>
 
-      <md-app-drawer :md-active.sync="menuVisible" md-swipeable>
-        <md-toolbar class="md-transparent" md-elevation="0">
-          <span>Navigation</span>
-
+      <md-app-drawer v-if="currentProject" :md-active.sync="menuVisible" md-swipeable>
+        <md-app-toolbar md-elevation="0" class="md-accent">
+          <span class="md-title">
+            <md-avatar class="md-avatar-icon md-primary">{{ currentProject.name.charAt(0) }}</md-avatar>
+           {{ currentProject.name }}
+          </span>
           <div class="md-toolbar-section-end">
             <md-button class="md-icon-button md-dense" @click="menuVisible = false">
               <md-icon>keyboard_arrow_left</md-icon>
             </md-button>
           </div>
-        </md-toolbar>
-
+        </md-app-toolbar>
         <md-list>
-          <md-list-item>
-            <md-icon>move_to_inbox</md-icon>
-            <span class="md-list-item-text">Inbox</span>
-          </md-list-item>
+          <router-link :to="{ name: 'project-dashboard' }">
+            <md-list-item>
+              <md-icon>dashboard</md-icon>
+              <span class="md-list-item-text">Dashboard</span>
+            </md-list-item>
+          </router-link>
+          <router-link
+                  :to="{ name: 'project-invitation' }"
+                  v-if="isCreator()">
+            <md-list-item>
+              <md-icon>send</md-icon>
+              <span class="md-list-item-text">Einladung verschicken</span>
+            </md-list-item>
+          </router-link>
+          <md-list :md-expand-single="true">
+            <md-list-item md-expand :md-expanded.sync="expandProcess">
+              <md-icon>forward</md-icon>
+              <span class="md-list-item-text">Prozess</span>
 
-          <md-list-item>
-            <md-icon>send</md-icon>
-            <span class="md-list-item-text">Sent Mail</span>
-          </md-list-item>
-
-          <md-list-item>
-            <md-icon>delete</md-icon>
-            <span class="md-list-item-text">Trash</span>
-          </md-list-item>
-
-          <md-list-item>
-            <md-icon>error</md-icon>
-            <span class="md-list-item-text">Spam</span>
-          </md-list-item>
+              <md-list slot="md-expand">
+                <md-list-item class="md-inset">1. Analyse</md-list-item>
+                <md-list-item class="md-inset">2. Spezifikation</md-list-item>
+                <md-list-item class="md-inset">3. Modellierung</md-list-item>
+                <md-list-item class="md-inset">4. Evaluation</md-list-item>
+              </md-list>
+            </md-list-item>
+          </md-list>
+          <router-link
+                  :to="{ name: 'project-settings' }"
+                  v-if="isCreator()">
+            <md-list-item>
+              <md-icon>settings</md-icon>
+              <span class="md-list-item-text">Einstellungen</span>
+            </md-list-item>
+          </router-link>
         </md-list>
       </md-app-drawer>
 
@@ -95,11 +112,13 @@ export default {
   computed: {
     ...mapGetters('authentication', ['isUserLoggedIn']),
     ...mapState('authentication', ['user']),
-    ...mapState('app', ['networkOnLine', 'appTitle', 'appShortTitle'])
+    ...mapState('app', ['networkOnLine', 'appTitle', 'appShortTitle']),
+    ...mapState('projects', ['currentProject'])
   },
   components: {Avatar},
   data: () => ({
     menuVisible: false,
+    expandProcess: false
   }),
   methods: {
     async logout() {
@@ -107,6 +126,9 @@ export default {
     },
     openProfile() {
       this.$router.push("/profile")
+    },
+    isCreator() {
+      return this.currentProject.creator === this.user.id;
     }
   }
 }

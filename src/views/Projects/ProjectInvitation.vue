@@ -13,7 +13,7 @@
             </div>
         </rewarding>
 
-        <md-chip>{{ project.name }} / Einladung verschicken</md-chip>
+        <md-chip>{{ currentProject.name }} / Einladung verschicken</md-chip>
 
         <md-empty-state
                 md-label="Nimm alle mit an Board!"
@@ -27,8 +27,8 @@
                     <ShareNetwork
                             network="email"
                             :url="invitationLink"
-                            :title="`Einladung für Projekt ${ project.name }!`"
-                            :description="`Du hast eine Einladung für das Projekt ${ project.name } erhalten. Klicke auf den Link oder kopiere ${ invitationLink } in den Browser!`">
+                            :title="`Einladung für Projekt ${ currentProject.name }!`"
+                            :description="`Du hast eine Einladung für das Projekt ${ currentProject.name } erhalten. Klicke auf den Link oder kopiere ${ invitationLink } in den Browser!`">
                         <md-button class="md-raised md-primary">
                             <md-icon>mail_outline</md-icon>
                             <span>E-Mail</span>
@@ -39,8 +39,8 @@
                     <ShareNetwork
                             network="sms"
                             :url="invitationLink"
-                            :title="`Einladung für Projekt ${ project.name }!`"
-                            :description="`Du hast eine Einladung für das Projekt ${ project.name } erhalten.`">
+                            :title="`Einladung für Projekt ${ currentProject.name }!`"
+                            :description="`Du hast eine Einladung für das Projekt ${ currentProject.name } erhalten.`">
                         <md-button class="md-raised md-primary">
                             <md-icon>sms</md-icon>
                             <span>SMS</span>
@@ -51,8 +51,8 @@
                     <ShareNetwork
                             network="whatsapp"
                             :url="invitationLink"
-                            :title="`Einladung für Projekt ${ project.name }!`"
-                            :description="`Du hast eine Einladung für das Projekt ${ project.name } erhalten.`">
+                            :title="`Einladung für Projekt ${ currentProject.name }!`"
+                            :description="`Du hast eine Einladung für das Projekt ${ currentProject.name } erhalten.`">
                         <md-button class="md-raised md-primary btn-whatsapp">
                             <img class="button-logo" alt="" src="@/assets/img/WhatsApp.svg" />
                             <span>WhatsApp</span>
@@ -63,8 +63,8 @@
                     <ShareNetwork
                             network="telegram"
                             :url="invitationLink"
-                            :title="`Einladung für Projekt ${ project.name }!`"
-                            :description="`Du hast eine Einladung für das Projekt ${ project.name } erhalten.`">
+                            :title="`Einladung für Projekt ${ currentProject.name }!`"
+                            :description="`Du hast eine Einladung für das Projekt ${ currentProject.name } erhalten.`">
                         <md-button class="md-raised md-primary btn-telegram">
                             <img class="button-logo" alt="" src="@/assets/img/Telegram_logo.svg" />
                             <span>Telegram</span>
@@ -145,7 +145,8 @@
 
     export default {
         computed: {
-            ...mapState('rewards', ['tutorials'])
+            ...mapState('rewards', ['tutorials']),
+            ...mapState('projects', ['currentProject'])
         },
         components: {Rewarding},
         data: () => ({
@@ -154,11 +155,8 @@
             tutorialSaved: false,
             rewardModalActive: false
         }),
-        props: {
-            project: Object
-        },
         created() {
-            this.makeInvitationLink(this.project.id);
+            this.makeInvitationLink(this.currentProject.id);
             setTimeout(function () { this.triggerReward() }.bind(this), 1000);
         },
         methods: {

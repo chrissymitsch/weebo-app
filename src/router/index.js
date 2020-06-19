@@ -98,6 +98,13 @@ const router = new Router({
               import(/* webpackChunkName: "client-chunk-project-invitation" */ '@/views/Projects/ProjectInvitation.vue')
         },
         {
+          path: 'settings',
+          name: 'project-settings',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-settings" */ '@/views/Projects/ProjectSettings.vue')
+        },
+        {
           path: 'members',
           name: 'project-members',
           props: true,
