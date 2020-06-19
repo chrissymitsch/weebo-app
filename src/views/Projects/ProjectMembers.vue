@@ -1,15 +1,15 @@
 <template>
-    <div class="ProjectMembers" v-if="project">
-        <md-chip>{{ project.name }} / Projektteilnehmer</md-chip>
+    <div class="ProjectMembers" v-if="currentProject">
+        <md-chip>{{ currentProject.name }} / Projektteilnehmer</md-chip>
 
-        <p v-if="finishedLoading === 0" class="infos-label">
+        <p v-if="currentProject.members && finishedLoading === 0" class="text-center">
             <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
             Projektteilnehmer werden geladen...
         </p>
-        <p v-if="finishedLoading === project.members.length && (!members || members.length === 0)" class="infos-label">
+        <p v-if="!currentProject.members || (finishedLoading === currentProject.members.length && (!members || members.length === 0))" class="text-center">
             Keine Projektteilnehmer.
         </p>
-        <md-list v-if="finishedLoading === project.members.length && members && members.length > 0" class="md-triple-line md-dense">
+        <md-list v-if="currentProject.members && finishedLoading === currentProject.members.length && members && members.length > 0" class="md-triple-line md-dense">
             <div v-for="(member) in members" :key="member.id">
                 <md-list-item>
                     <md-avatar>
@@ -38,22 +38,22 @@
 
     export default {
         computed: {
-            ...mapState('app', ['networkOnLine'])
-        },
-        props: {
-            project: Object
+            ...mapState('app', ['networkOnLine']),
+            ...mapState('projects', ['currentProject'])
         },
         data: () => ({
             members: [],
             finishedLoading: 0
         }),
         created() {
-            for (let i = 0; i < this.project.members.length; i += 1) {
-                this.$store.dispatch('projects/getProjectMember', this.project.members[i]).then(data => {
-                    this.members.push(data);
-                }).finally(() => {
-                    this.finishedLoading = i + 1;
-                });
+            if (this.currentProject.members) {
+                for (let i = 0; i < this.currentProject.members.length; i += 1) {
+                    this.$store.dispatch('projects/getProjectMember', this.currentProject.members[i]).then(data => {
+                        this.members.push(data);
+                    }).finally(() => {
+                        this.finishedLoading = i + 1;
+                    });
+                }
             }
         }
     }

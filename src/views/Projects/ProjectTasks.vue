@@ -1,14 +1,14 @@
 <template>
-    <div class="ProjectMembers" v-if="project">
+    <div class="ProjectMembers" v-if="currentProject">
         <p class="md-display-1">Task-Board</p>
-        <p v-if="!finishedLoading" class="infos-label">
+        <p v-if="!finishedLoading" class="text-center">
             <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
             Aufgaben werden geladen...
         </p>
-        <p v-if="finishedLoading && (!columns || columns.length === 0)" class="infos-label">
+        <p v-if="finishedLoading && (!columns || columns.length === 0)" class="text-center">
             Keine Aufgaben.
         </p>
-        <add-task :id="project.id" :column="null"></add-task>
+        <add-task :id="currentProject.id" :column="null"></add-task>
         <div class="md-layout" v-if="finishedLoading && columns && columns.length > 0">
             <div class="md-layout-item column-width" v-for="column in columns" :key="column.title">
                 <div>
@@ -24,7 +24,7 @@
                         <!-- </transition-group> -->
                     </draggable>
                     <task-card :task="null"></task-card>
-                    <add-task :id="project.id" :column="column.title"></add-task>
+                    <add-task :id="currentProject.id" :column="column.title"></add-task>
                 </div>
             </div>
         </div>
@@ -46,10 +46,8 @@
         },
         computed: {
             ...mapState('app', ['networkOnLine']),
-            ...mapState('tasks', ['tasks'])
-        },
-        props: {
-            project: Object
+            ...mapState('tasks', ['tasks']),
+            ...mapState('projects', ['currentProject'])
         },
         data() {
             return {
@@ -71,8 +69,8 @@
             };
         },
         created() {
-            if (this.project) {
-                this.$store.dispatch('tasks/getTasks', this.project.id).then(() => {
+            if (this.currentProject) {
+                this.$store.dispatch('tasks/getTasks', this.currentProject.id).then(() => {
                     for (let i = 0; i < this.columns.length; i += 1) {
                         for (let j = 0; j < this.tasks.length; j += 1) {
                             if (this.tasks[j].column === this.columns[i].title || this.tasks[j].column === null && i === 0) {

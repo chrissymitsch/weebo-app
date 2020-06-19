@@ -1,17 +1,23 @@
 <template>
-    <z-view class="Phase1">
+    <z-view class="Phase">
         <md-dialog-confirm
                 :md-active.sync="finishPhaseDialogActive"
-                md-title="Möchtest du Phase 1 wirklich beenden?"
+                :md-title="`Möchtest du Phase ${$zircle.getParams().currentPhase + 1} wirklich beenden?`"
                 md-content="Alle Dateien, Diskussionen etc. werden weiterhin abrufbar sein."
                 md-confirm-text="Okay"
                 md-cancel-text="Abbrechen!"
                 @md-confirm="onConfirm" />
 
         <p><md-button class="md-icon-button" @click="goBack()"><md-icon>close</md-icon></md-button></p>
-        <p class="md-title">{{$zircle.getParams().test}}Phase 1: Analyse</p>
-        <p class="md-caption">Bereits in Phase 1 können alle Projektteilnehmer einbezogen werden.</p>
-        <p v-if="currentProject.phase === 0">
+        <div class="phase1" v-if="$zircle.getParams().currentPhase == null || $zircle.getParams().currentPhase === 0">
+            <p class="md-title">Phase 1: Analyse</p>
+            <p class="md-caption">Bereits in Phase 1 können alle Projektteilnehmer einbezogen werden.</p>
+        </div>
+        <div class="phase2" v-if="$zircle.getParams().currentPhase === 1">
+            <p class="md-title">Phase 2: Analyse</p>
+            <p class="md-caption">Bereits in Phase 1 können alle Projektteilnehmer einbezogen werden.</p>
+        </div>
+        <p v-if="!currentProject.phase || currentProject.phase === $zircle.getParams().currentPhase">
             <md-button class="md-accent" @click="finishPhaseDialogActive = true">
                 <md-icon>check</md-icon> Phase abschließen
             </md-button>
@@ -23,24 +29,21 @@
     import { mapActions, mapState } from 'vuex'
 
     export default {
-        name: "Phase1",
+        name: "Phase",
         computed: {
             ...mapState('projects', ['currentProject'])
         },
         data: () => ({
             finishPhaseDialogActive: false
         }),
-        props: {
-            test: Boolean
-        },
         methods: {
             ...mapActions('projects', ['triggerFinishPhaseAction']),
             goBack() {
                 this.$zircle.goBack();
             },
             onConfirm () {
-                const projectToUpdate = this.currentProject;
-                projectToUpdate.phase = 1;
+                const projectToUpdate = JSON.parse(JSON.stringify(this.currentProject));
+                projectToUpdate.phase = this.$zircle.getParams().currentPhase + 1;
                 this.triggerFinishPhaseAction(projectToUpdate);
                 this.finishPhaseDialogActive = false;
             }

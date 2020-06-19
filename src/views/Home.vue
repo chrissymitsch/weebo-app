@@ -3,7 +3,7 @@
     <div class="md-layout md-gutter">
       <div class="md-layout-item">
         <p class="md-display-1">Willkommen bei Weebo</p>
-        <div class="align-center"><img alt="logo-bento" src="@/assets/img/bento-starter.svg" /></div>
+        <div class="text-center"><img alt="logo-bento" src="@/assets/img/bento-starter.svg" /></div>
         <md-empty-state
                 md-label="Erstelle dein Projekt"
                 md-description="Verwalte den Gestaltungsprozess deines Projekts und arbeite gemeinsam mit allen Stakeholdern am Projekterfolg!">

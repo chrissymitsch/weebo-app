@@ -1,7 +1,7 @@
 <template>
   <div class="page-wrapper">
     <div class="md-layout md-gutter">
-      <div class="md-layout-item align-center">
+      <div class="md-layout-item text-center">
         <p class="md-display-1">{{user.displayName}}</p>
         <md-progress-spinner v-if="userUpdatePending" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
         <avatar v-if="!userUpdatePending" size="md-large" :key="rerenderAvatar"></avatar>
@@ -11,7 +11,7 @@
     </div>
 
     <div class="md-layout md-gutter">
-      <div class="md-layout-item align-center">
+      <div class="md-layout-item text-center">
         <p class="md-title">Deine Auszeichnungen</p>
         <span class="badge">
           <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('Onboarding')" />
@@ -23,7 +23,7 @@
     </div>
 
     <div class="md-layout md-gutter">
-      <div class="md-layout-item align-center">
+      <div class="md-layout-item text-center">
         <p class="md-title">Profilbild ändern</p>
         <md-avatar :class="`md-large md-accent ${isActivated(!this.user.customAvatar)}`"
                    @click.native="updateCustomAvatar('')">

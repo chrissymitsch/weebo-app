@@ -15,7 +15,7 @@
             </div>
         </rewarding>
 
-        <md-chip>{{ project.name }} / Dashboard</md-chip>
+        <md-chip>{{ currentProject.name }} / Dashboard</md-chip>
 
         <md-card md-with-hover>
             <md-card-content>
@@ -47,7 +47,7 @@
                         </md-card-header>
 
                         <md-card-actions>
-                            <router-link :to="{ name: 'project-phase1' }">
+                            <router-link :to="{ name: 'project-phase' }">
                                 <md-button class="md-icon-button"><md-icon>search</md-icon></md-button>
                             </router-link>
                             <md-button class="md-icon-button"><md-icon>done</md-icon></md-button>
@@ -128,19 +128,14 @@
 
     export default {
         computed: {
-            ...mapState('rewards', ['tutorials'])
+            ...mapState('rewards', ['tutorials']),
+            ...mapState('projects', ['currentProject'])
         },
         components: {
             Rewarding,
             /* eslint-disable vue/no-unused-components */
             ProcessCircle: () => import('../../components/ProcessCircle'),
-            Phase1: ()  => import('../../components/Phase1'),
-            Phase2: ()  => import('../../components/Phase2'),
-            Phase3: ()  => import('../../components/Phase3'),
-            Phase4: ()  => import('../../components/Phase4'),
-        },
-        props: {
-            project: Object
+            Phase: ()  => import('../../components/Phase')
         },
         data: () => ({
             tutorialSaved: false,

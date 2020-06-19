@@ -38,4 +38,5 @@ export default {
 </script>
 <style lang="scss">
   @import 'src/assets/css/styles.scss';
+  @import 'src/assets/css/positioning.scss';
 </style>

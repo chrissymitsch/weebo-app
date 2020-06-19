@@ -10,8 +10,10 @@
               :distance="140"
               label="Analyse"
               label-pos="left"
-              style="border-width: 7px"
-              to-view="Phase1">
+              :style="`border-width: 7px; border-color: ${getBorderColor(0)};`"
+              :to-view="{name: 'Phase',
+              params: {currentPhase: 0,}
+              }">
         <md-avatar :class="`md-avatar-icon ${getPhaseColor(0)}`">1</md-avatar>
       </z-spot>
       <z-spot
@@ -20,13 +22,10 @@
               :distance="140"
               label="Spezifikation"
               label-pos="right"
-              style="border-width: 7px"
-              :to-view="{
-	name: 'Phase1',
-	params: {
-		test: true,
-	}
-}">
+              :style="`border-width: 7px; border-color: ${getBorderColor(1)};`"
+              :to-view="{name: 'Phase',
+              params: {currentPhase: 1,}
+              }">
         <md-avatar :class="`md-avatar-icon ${getPhaseColor(1)}`">2</md-avatar>
       </z-spot>
       <z-spot
@@ -35,9 +34,11 @@
               :distance="140"
               label="Modellierung"
               label-pos="right"
-              style="border-width: 7px"
-              to-view="Phase3">
-        <md-avatar :class="`md-avatar-icon ${getPhaseColor(3)}`">3</md-avatar>
+              :style="`border-width: 7px; border-color: ${getBorderColor(2)};`"
+              :to-view="{name: 'Phase',
+              params: {currentPhase: 2,}
+              }">
+        <md-avatar :class="`md-avatar-icon ${getPhaseColor(2)}`">3</md-avatar>
       </z-spot>
       <z-spot
               :angle="135"
@@ -45,9 +46,11 @@
               :distance="140"
               label="Evaluation"
               label-pos="left"
-              style="border-width: 7px"
-              to-view="Phase4">
-        <md-avatar :class="`md-avatar-icon ${getPhaseColor(4)}`">4</md-avatar>
+              :style="`border-width: 7px; border-color: ${getBorderColor(3)};`"
+              :to-view="{name: 'Phase',
+              params: {currentPhase: 3,}
+              }">
+        <md-avatar :class="`md-avatar-icon ${getPhaseColor(3)}`">4</md-avatar>
       </z-spot>
     </div>
   </z-view>
@@ -75,6 +78,12 @@
           return "md-primary";
         }
         return "";
+      },
+      getBorderColor(phase) {
+        if (phase < this.currentProject.phase) {
+          return "#4EBC57";
+        }
+        return "";
       }
     },
     mounted () {
@@ -91,11 +100,20 @@
           vm.go += 1;
         }
       }, 10)
+    },
+    watch: {
+      currentProject(newValue, oldValue) {
+        if (newValue.phase !== oldValue.phase) {
+          this.go = newValue.phase * 25
+        }
+      }
     }
   };
 </script>
 
 <style lang="scss">
+  @import '@/theme/variables.scss';
+
   .z-slider circle {
     transform: rotate(-135deg)!important;
   }

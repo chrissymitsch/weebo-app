@@ -1,10 +1,10 @@
 <template>
   <div>
-    <p v-if="userProjects === null" class="infos-label">
+    <p v-if="userProjects === null" class="text-center">
       <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
       Projekte werden geladen...
     </p>
-    <p v-if="userProjects && !userProjects.length" class="infos-label">
+    <p v-if="userProjects && !userProjects.length" class="text-center">
       Noch keine Projekte verknüpft.
     </p>
 

@@ -60,9 +60,19 @@ body {
   }
 }
 
+/** HOME PAGE **/
+
+.md-app-content {
+  padding: 0;
+}
+
+/** AVATAR **/
+
 .md-avatar.md-accent {
   color: #ffffff!important;
 }
+
+/** GENERAL **/
 
 .page-wrapper {
   display: flex;
@@ -76,7 +86,7 @@ body {
   font-size: 26px;
 }
 
-.md-display-1, .align-center {
+.md-display-1 {
   text-align: center;
 }
 
@@ -85,11 +95,7 @@ body {
   margin-right: 8px;
 }
 
-/** HOME PAGE **/
-
-.md-app-content {
-  padding: 0;
-}
+/** NAVBAR **/
 
 .navbar {
   a {
@@ -198,7 +204,6 @@ body {
   color: $danger-color;
 }
 
-
 /** PROJECTS PAGE **/
 .project-list {
 
@@ -212,10 +217,6 @@ body {
 
 /** PROJECT LIST **/
 
-.infos-label {
-  text-align: center;
-}
-
 .project-row {
   display: flex;
   align-items: center;
@@ -225,6 +226,7 @@ body {
   justify-content: space-between;
 }
 
+/** MESSENGER **/
 
 .messenger {
   position: fixed;
@@ -250,6 +252,8 @@ body {
     color: #ffffff!important;
   }
 }
+
+/** MODAL **/
 
 .modal-mask {
   position: fixed;
