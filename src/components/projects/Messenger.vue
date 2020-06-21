@@ -1,8 +1,7 @@
 <template>
-  <div v-if="$route.params.id && project">
+  <div v-if="$route.params.id && currentProject">
     <beautiful-chat
             :participants="participants"
-            :titleImageUrl="titleImageUrl"
             :onMessageWasSent="onMessageWasSent"
             :messageList="messageList"
             :newMessagesCount="newMessagesCount"
@@ -22,8 +21,14 @@
             @edit="editMessage">
       <template v-slot:header>
         <div class="sc-header--title">
-          {{ project.name }}-Gruppenchat
+          {{ currentProject.name }}-Gruppenchat
         </div>
+      </template>
+      <template v-slot:user-avatar="{ message }">
+        <avatar :user-id="message.author"></avatar>
+      </template>
+      <template v-slot:text-message-body="{ message }">
+        {{message.data.text}}
       </template>
     </beautiful-chat>
   </div>
@@ -34,16 +39,19 @@
   import OpenIcon from 'vue-beautiful-chat/src/assets/logo-no-bg.svg'
   import FileIcon from 'vue-beautiful-chat/src/assets/file.svg'
   import CloseIconSvg from 'vue-beautiful-chat/src/assets/close.svg'
-  import {mapState} from "vuex";
+  import {mapActions, mapState} from "vuex";
+  import Avatar from "../users/Avatar";
 
   export default {
     name: 'app',
+    components: {Avatar},
     computed: {
-      ...mapState('projects', ['currentProject'])
+      ...mapState('authentication', ['user']),
+      ...mapState('projects', ['currentProject']),
+      ...mapState('messages', ['messages'])
     },
     data() {
       return {
-        project: null,
         icons: {
           open: {
             img: OpenIcon,
@@ -62,23 +70,8 @@
             name: 'default',
           },
         },
-        participants: [
-          {
-            id: 'user1',
-            name: 'Matteo',
-            imageUrl: 'https://avatars3.githubusercontent.com/u/1915989?s=230&v=4'
-          },
-          {
-            id: 'user2',
-            name: 'Support',
-            imageUrl: 'https://avatars3.githubusercontent.com/u/37018832?s=200&v=4'
-          }
-        ], // the list of all the participant of the conversation. `name` is the user name, `id` is used to establish the author of a message, `imageUrl` is supposed to be the user avatar.
-        titleImageUrl: 'https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png',
-        messageList: [
-          {type: 'text', author: `me`, data: {text: `Say yes!`}},
-          {type: 'text', author: `user1`, data: {text: `No.`}}
-        ], // the list of the messages to show, can be paginated and adjusted dynamically
+        participants: [], // the list of all the participant of the conversation. `name` is the user name, `id` is used to establish the author of a message, `imageUrl` is supposed to be the user avatar.
+        messageList: [], // the list of the messages to show, can be paginated and adjusted dynamically
         newMessagesCount: 0,
         isChatOpen: false, // to determine whether the chat window should be open or closed
         showTypingIndicator: '', // when set to a value matching the participant.id it shows the typing indicator for the specific user
@@ -107,10 +100,12 @@
           }
         }, // specifies the color scheme for the component
         alwaysScrollToBottom: false, // when set to true always scrolls the chat to the bottom when new events are in (new message, user starts typing...)
-        messageStyling: true // enables *bold* /emph/ _underline_ and such (more info at github.com/mattezza/msgdown)
+        messageStyling: true, // enables *bold* /emph/ _underline_ and such (more info at github.com/mattezza/msgdown)
+        finishedLoading: false
       }
     },
     methods: {
+      ...mapActions('messages', ['createMessage']),
       sendMessage(text) {
         if (text.length > 0) {
           this.newMessagesCount = this.isChatOpen ? this.newMessagesCount : this.newMessagesCount + 1;
@@ -119,7 +114,12 @@
       },
       onMessageWasSent(message) {
         // called when the user sends a message
-        this.messageList = [...this.messageList, message]
+        this.messageList = [...this.messageList, message];
+        message.projectId = this.currentProject.id;
+        message.author = this.user.id;
+        this.$store.dispatch('messages/createMessage', message).then(() => {
+          console.log("messageSaved");
+        });
       },
       openChat() {
         // called when the user clicks on the fab button to open the chat
@@ -143,10 +143,20 @@
         msg.data.text = message.data.text;
       }
     },
+    created() {
+      console.log(this.currentProject)
+      if (this.currentProject) {
+        this.$store.dispatch('messages/getMessages', this.currentProject.id).then(() => {
+          this.messageList = this.messages;
+        }).finally(() => {
+          this.finishedLoading = true;
+        });
+      }
+    },
     watch: {
       currentProject(newValue, oldValue) {
         if (newValue !== oldValue) {
-          this.project = newValue;
+          console.log(newValue);
         }
       }
     }
@@ -161,6 +171,10 @@
   }
   .sc-chat-window {
     border: 1px solid rgba(#000, .12);
+
+    .md-avatar {
+      margin: 0 8px 0 0;
+    }
 
     .sc-message--text-content {
       margin: 0;

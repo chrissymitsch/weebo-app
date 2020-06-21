@@ -4,7 +4,7 @@
       <div class="md-display-1">Neue Aufgabe hinzufügen</div>
       <md-field>
         <label>Was gibt's zu tun?</label>
-        <md-input v-model="form.title"
+        <md-input v-model="form.title" ref="title"
                   maxlength="60"
         />
       </md-field>
@@ -22,7 +22,7 @@
       <md-button @click="onCancel()">Abbrechen</md-button>
       <md-button class="md-raised md-primary" @click="addTask()">Aufgabe erstellen</md-button>
     </Modal>
-    <md-button @click="active = true"><md-icon>add</md-icon> Aufgabe hinzufügen</md-button>
+    <md-button @click="openModal()"><md-icon>add</md-icon> Aufgabe hinzufügen</md-button>
   </div>
 </template>
 <script>
@@ -47,6 +47,13 @@
     }),
     methods: {
       ...mapActions('tasks', ['createProjectTask']),
+      ...mapActions('rewards', ['triggerScoreAction']),
+      openModal() {
+        this.active = true;
+        this.$nextTick(() => {
+          this.$refs.title.$el.focus();
+        });
+      },
       addTask () {
         if (this.form.title != null) {
           this.form.column = this.column;
@@ -54,7 +61,14 @@
           this.$store.dispatch('tasks/createProjectTask', this.form).then(() => {
             this.taskSaved = true;
             this.active = false;
-          }).finally(() => this.$emit('taskCreated'));
+          }).finally(() => {
+            this.triggerScoreAction({name: "addTask", score: 1, type: "score"});
+            this.$toast.success('+1 Punkt für Aufgabe erstellen', {
+              position: 'top-right',
+              duration: 60000 // 1 minute
+            });
+            this.$emit('taskCreated');
+          });
         }
       },
       onCancel () {

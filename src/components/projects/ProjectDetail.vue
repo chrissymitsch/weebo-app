@@ -15,6 +15,12 @@
               <span class="md-list-item-text">Dashboard</span>
             </md-list-item>
           </router-link>
+          <router-link :to="{ name: 'project-members', params: { project: project } }">
+            <md-list-item>
+              <md-icon>group</md-icon>
+              <span class="md-list-item-text">Projektteilnehmer</span>
+            </md-list-item>
+          </router-link>
           <router-link
                   :to="{ name: 'project-invitation' }"
                   v-if="isCreator()">
@@ -26,7 +32,7 @@
           <md-list :md-expand-single="true">
             <md-list-item md-expand :md-expanded.sync="expandProcess">
               <md-icon>forward</md-icon>
-              <span class="md-list-item-text">Prozess</span>
+              <span class="md-list-item-text">Prozesshistorie</span>
 
               <md-list slot="md-expand">
                 <md-list-item class="md-inset">
@@ -58,19 +64,31 @@
       <md-app-content>
         <md-app-toolbar md-elevation="0" class="md-primary">
           <div class="md-toolbar-row">
-            <router-link :to="{ name: 'project-members', params: { project: project } }">
-              <md-button class="md-icon-button">
-                <md-icon class="navigation-icon">group</md-icon>
-                <md-tooltip md-direction="top">Projektteilnehmer</md-tooltip>
-              </md-button>
-            </router-link>
+            <p v-if="project.phase === 0 || !project.phase">Analysephase:</p>
+            <p v-if="project.phase === 1">Spezifikationsphase:</p>
+            <p v-if="project.phase === 2">Modellierungsphase:</p>
+            <p v-if="project.phase === 3">Evaluationsphase:</p>
+            <p v-if="project.phase === 4">Softwareeinführung:</p>
+
             <router-link :to="{ name: 'project-tasks', params: { project: project } }">
               <md-button class="md-icon-button">
                 <md-icon class="navigation-icon">playlist_add_check</md-icon>
                 <md-tooltip md-direction="top">Aufgaben</md-tooltip>
               </md-button>
             </router-link>
-            <router-link :to="{ name: 'project-creativemode', params: { project: project } }">
+            <router-link :to="{ name: 'project-schedules', params: { project: project } }">
+              <md-button class="md-icon-button">
+                <md-icon class="navigation-icon">cloud_upload</md-icon>
+                <md-tooltip md-direction="top">Dateien und Dokumente</md-tooltip>
+              </md-button>
+            </router-link>
+            <router-link :to="{ name: 'project-discussion', params: { project: project } }">
+              <md-button class="md-icon-button">
+                <md-icon class="navigation-icon">message</md-icon>
+                <md-tooltip md-direction="top">Diskussion</md-tooltip>
+              </md-button>
+            </router-link>
+            <router-link v-if="project.level && project.level > 0" :to="{ name: 'project-creativemode', params: { project: project } }">
               <md-button class="md-icon-button">
                 <md-icon class="navigation-icon">category</md-icon>
                 <md-tooltip md-direction="top">Kreativmodus</md-tooltip>
@@ -82,18 +100,10 @@
                 <md-tooltip md-direction="top">Terminplaner</md-tooltip>
               </md-button>
             </router-link>
-            <router-link :to="{ name: 'project-schedules', params: { project: project } }">
-              <md-button class="md-icon-button">
-                <md-icon class="navigation-icon">history</md-icon>
-                <md-tooltip md-direction="top">History</md-tooltip>
-              </md-button>
-            </router-link>
-            <router-link :to="{ name: 'project-schedules', params: { project: project } }">
-              <md-button class="md-icon-button">
-                <md-icon class="navigation-icon">cloud</md-icon>
-                <md-tooltip md-direction="top">Dateien und Dokumente</md-tooltip>
-              </md-button>
-            </router-link>
+            <md-button class="md-icon-button">
+              <md-icon class="navigation-icon">help</md-icon>
+              <md-tooltip md-direction="top">Hilfe?</md-tooltip>
+            </md-button>
           </div>
         </md-app-toolbar>
 

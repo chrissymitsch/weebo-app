@@ -21,7 +21,7 @@
 
     components: { ProjectDetail },
     computed: {
-      ...mapActions('projects', ['getProjectById', 'snapshotProject']),
+      ...mapActions('projects', ['getProjectById']),
       ...mapState('projects', ['currentProject', 'userProjects']),
       ...mapMutations('projects', ['setCurrentProject'])
     },
@@ -44,7 +44,9 @@
           fire.collection("projects").doc(this.$route.params.id).onSnapshot(snap => {
             if (this.currentProject) {
               this.project = snap.data();
+              console.log(this.currentProject)
               console.log(this.currentProject.updateTimestamp.seconds)
+              console.log(snap.data())
               console.log(snap.data().updateTimestamp.seconds)
               if (snap.data().updateTimestamp.seconds > this.currentProject.updateTimestamp.seconds) {
                 this.$toast.success('message string', {

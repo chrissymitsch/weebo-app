@@ -10,11 +10,11 @@
         </p>
         <add-task :id="currentProject.id" :column="null" @taskCreated="taskCreated"></add-task>
         <div class="md-layout" v-if="finishedLoading && columns && columns.length > 0">
-            <div class="md-layout-item column-width" v-for="(column) in columns" :key="column.title">
+            <div class="md-layout-item column-width" v-for="(column, index) in columns" :index="index" :key="column.title">
                 <div>
                     <p class="md-subheading">{{column.title}}</p>
                     <!-- Draggable component comes from vuedraggable. It provides drag & drop functionality -->
-                    <draggable :list="column.tasks" :animation="200" ghost-class="ghost-card" group="tasks" @change="change(column)">
+                    <draggable :list="column.tasks" :animation="200" ghost-class="ghost-card" group="tasks" @change="change(column, index)">
                         <!-- Each element from here will be draggable and animated. Note :key is very important here to be unique both for draggable and animations to be smooth & consistent. -->
                         <task-card
                                 v-for="(task) in column.tasks"
@@ -52,6 +52,7 @@
         data() {
             return {
                 finishedLoading: false,
+                originalColumns: [],
                 columns: [
                     {
                         title: "Neu",
@@ -78,6 +79,7 @@
                             }
                         }
                     }
+                    this.originalColumns = JSON.parse(JSON.stringify(this.columns));
                 }).finally(() => {
                     this.finishedLoading = true;
                 });
@@ -85,6 +87,7 @@
         },
         methods: {
             ...mapActions('tasks', ['updateProjectTask']),
+            ...mapActions('rewards', ['triggerScoreAction']),
             taskCreated() {
                 if (this.currentProject) {
                     this.finishedLoading = false;
@@ -102,11 +105,19 @@
                     });
                 }
             },
-            change(column) {
+            change(column, index) {
                 for (let i = 0; i < column.tasks.length; i += 1) {
                     const updatedTask = JSON.parse(JSON.stringify(column.tasks[i]));
                     updatedTask.column = column.title;
                     this.updateProjectTask({projectId: this.currentProject.id, task: updatedTask});
+                }
+                // new finished Task for user
+                if (index === 2 && this.originalColumns[2].tasks.length < column.tasks.length) {
+                    this.triggerScoreAction({name: "finishTask", score: 1, type: "score"});
+                    this.$toast.success('+1 Punkt für Aufgabe abschließen', {
+                        position: 'top-right',
+                        duration: 60000 // 1 minute
+                    });
                 }
             }
         }

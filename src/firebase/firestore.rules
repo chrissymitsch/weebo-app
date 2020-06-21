@@ -34,5 +34,12 @@ service cloud.firestore {
        allow create: if authenticated();
        allow update, delete: if authenticated();
     }
+
+    match /projects/{projectId}/messages/{messageId} {
+       allow get: if authenticated();
+	        allow list: if authenticated();
+       allow create: if authenticated();
+       allow update, delete: if authenticated();
+    }
   }
 }

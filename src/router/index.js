@@ -119,6 +119,13 @@ const router = new Router({
               import(/* webpackChunkName: "client-chunk-project-tasks" */ '@/views/Projects/ProjectTasks.vue')
         },
         {
+          path: 'discussion',
+          name: 'project-discussion',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-discussion" */ '@/views/Projects/ProjectDiscussion.vue')
+        },
+        {
           path: 'creativemode',
           name: 'project-creativemode',
           props: true,

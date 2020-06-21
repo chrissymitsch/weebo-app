@@ -4,7 +4,7 @@ export default {
   /**
    * Fetch scores for user
    */
-  getScore: async ({ commit }, userId) => {
+  getUserScore: async ({ commit }, userId) => {
     const userRewardsDb = new UserRewardsDb(userId);
 
     const score = await userRewardsDb.readAll([['type', '==', 'score']]);
@@ -69,5 +69,23 @@ export default {
 
     const createdFinishedTutorial = await userRewardsDb.create(tutorial);
     commit('addFinishedTutorial', createdFinishedTutorial);
-  }
+  },
+
+  /**
+   * Creates or Updates a user's score
+   */
+  triggerScoreAction: ({ dispatch, state }, score) => {
+    const checkIfUserHasScore = state.userScore.filter(function(elem) {
+      if(elem.name === score.name) return elem;
+      return null;
+    });
+    if (checkIfUserHasScore.length > 0) {
+      const updateScore = JSON.parse(JSON.stringify(checkIfUserHasScore[0]));;
+      updateScore.score += 1;
+      dispatch('updateUserScore', updateScore)
+    } else {
+      dispatch('createUserScore', score)
+    }
+  },
+
 }

@@ -221,6 +221,43 @@ body {
   }
 }
 
+/** PROFILE PAGE **/
+.badge-list {
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+
+  .md-card {
+    max-width: 45%;
+    min-width: 220px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+
+    .md-card-content {
+      min-width: 120px;
+      max-width: 120px;
+    }
+
+    .md-card-media {
+      width: 100px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .md-card {
+      max-width: 90%;
+      min-width: 90%;
+
+      .md-card-content {
+        min-width: auto;
+        max-width: 50%;
+      }
+    }
+  }
+}
+
 
 /** PROJECTS PAGE **/
 .project-list {

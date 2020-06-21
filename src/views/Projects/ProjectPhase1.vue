@@ -21,6 +21,11 @@
         </Modal>
 
         <md-chip>{{ currentProject.name }} / Prozess / 1. Analyse</md-chip>
+        <p class="md-body-2">2. Nutzungskontext verstehen</p>
+        <p class="md-body-1">
+            Denn für eine gute Lösung muss man zuhören und beobachten können. Der Nutzungskontext besteht aus den Informationen zum Benutzer, seinen Aufgaben und verbundenen Zielen, seiner verfügbaren Ausrüstung und seiner Umgebung (physisch und sozial), in der er sich befindet. Um diese Nutzungskontextinformation zu erfassen, werden Repräsentaten einer Benutzergruppe interviewt und / oder bei ihrer Arbeit beobachtet. Aus der Analyse der Kontextdaten ergeben sich die Aufgaben, Erfordernisse und Nutzungsprobleme der Benutzer sowie zu klärende Fragen.
+        </p>
+        <p class="md-caption">Quelle: https://www.procontext.de/methodik-und-wissen/human-centered-design.html</p>
     </div>
 </template>
 
