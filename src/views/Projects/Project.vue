@@ -15,7 +15,6 @@
 <script>
   import {mapActions, mapMutations, mapState} from 'vuex'
   import ProjectDetail from '@/components/projects/ProjectDetail'
-  import fire from "../../firebase/init";
 
   export default {
 
@@ -40,23 +39,6 @@
           this.$store.dispatch('projects/getProjectById', projectId).then(() => {
             this.project = this.currentProject;
           }).finally(() => this.settingCurrentProject = false);
-
-          fire.collection("projects").doc(this.$route.params.id).onSnapshot(snap => {
-            if (this.currentProject) {
-              this.project = snap.data();
-              console.log(this.currentProject)
-              console.log(this.currentProject.updateTimestamp.seconds)
-              console.log(snap.data())
-              console.log(snap.data().updateTimestamp.seconds)
-              if (snap.data().updateTimestamp.seconds > this.currentProject.updateTimestamp.seconds) {
-                this.$toast.success('message string', {
-                  // override the global option
-                  position: 'top-right',
-                  duration: 60000 // 1 minute
-                });
-              }
-            }
-          });
         } else {
           this.settingCurrentProject = false;
         }

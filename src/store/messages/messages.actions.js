@@ -1,4 +1,5 @@
 import MessagesDb from '@/firebase/messages-db'
+import ProjectsDB from "@/firebase/projects-db";
 
 export default {
   /**
@@ -14,8 +15,10 @@ export default {
    * Create a message for current project
    */
   createMessage: async ({ rootState }, message) => {
-    console.log(message.projectId, rootState)
+    console.log(rootState.authentication.user.id);
     const messagesDb = new MessagesDb(message.projectId);
-    await messagesDb.create(message);
+    const projectsDb = new ProjectsDB();
+    const newMessage = await messagesDb.create(message);
+    await projectsDb.update({id: message.projectId, newMessage: newMessage.id});
   },
 }

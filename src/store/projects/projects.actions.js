@@ -26,11 +26,19 @@ export default {
   /**
    * Fetch projects
    */
-  getProjectById: async ({ commit }, projectId) => {
+  getProjectById: async ({ commit, dispatch }, projectId) => {
     const projectDb = new ProjectsDB();
 
     const project = await projectDb.read(projectId);
-    commit('setCurrentProject', project)
+    commit('setCurrentProject', project);
+
+    const members = [];
+
+    for (let i = 0; i < project.members.length; i += 1) {
+      const member = dispatch('getProjectMember', project.members[i]);
+      members.push(member);
+    }
+    commit('setProjectMembers', members);
   },
 
   /**

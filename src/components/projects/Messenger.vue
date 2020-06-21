@@ -31,6 +31,8 @@
         {{message.data.text}}
       </template>
     </beautiful-chat>
+    <md-badge class="md-primary" v-if="!isChatOpen && newMessagesCount > 0" :md-content="newMessagesCount">
+    </md-badge>
   </div>
 </template>
 
@@ -41,13 +43,14 @@
   import CloseIconSvg from 'vue-beautiful-chat/src/assets/close.svg'
   import {mapActions, mapState} from "vuex";
   import Avatar from "../users/Avatar";
+  import fire from "../../firebase/init";
 
   export default {
     name: 'app',
     components: {Avatar},
     computed: {
       ...mapState('authentication', ['user']),
-      ...mapState('projects', ['currentProject']),
+      ...mapState('projects', ['currentProject', 'projectMembers']),
       ...mapState('messages', ['messages'])
     },
     data() {
@@ -99,16 +102,15 @@
             text: '#565867'
           }
         }, // specifies the color scheme for the component
-        alwaysScrollToBottom: false, // when set to true always scrolls the chat to the bottom when new events are in (new message, user starts typing...)
+        alwaysScrollToBottom: true, // when set to true always scrolls the chat to the bottom when new events are in (new message, user starts typing...)
         messageStyling: true, // enables *bold* /emph/ _underline_ and such (more info at github.com/mattezza/msgdown)
-        finishedLoading: false
+        finishedLoading: false,
       }
     },
     methods: {
       ...mapActions('messages', ['createMessage']),
       sendMessage(text) {
         if (text.length > 0) {
-          this.newMessagesCount = this.isChatOpen ? this.newMessagesCount : this.newMessagesCount + 1;
           this.onMessageWasSent({author: 'support', type: 'text', data: {text}})
         }
       },
@@ -124,11 +126,12 @@
       openChat() {
         // called when the user clicks on the fab button to open the chat
         this.isChatOpen = true;
-        this.newMessagesCount = 0
+        this.newMessagesCount = 0;
       },
       closeChat() {
         // called when the user clicks on the botton to close the chat
-        this.isChatOpen = false
+        this.isChatOpen = false;
+        this.newMessagesCount = 0;
       },
       handleScrollToTop() {
         // called when the user scrolls message list to top
@@ -141,22 +144,39 @@
         const msg = this.messageList.find(m => m.id === message.id);
         msg.isEdited = true;
         msg.data.text = message.data.text;
-      }
-    },
-    created() {
-      console.log(this.currentProject)
-      if (this.currentProject) {
-        this.$store.dispatch('messages/getMessages', this.currentProject.id).then(() => {
-          this.messageList = this.messages;
-        }).finally(() => {
-          this.finishedLoading = true;
-        });
+      },
+      sortMessageList(list) {
+        function compare(a, b) {
+          if (a.createTimestamp < b.createTimestamp)
+            return -1;
+          if (a.createTimestamp > b.createTimestamp)
+            return 1;
+          return 0;
+        }
+        return list.sort(compare);
+      },
+      getAllMessages() {
+        if (this.currentProject) {
+          this.$store.dispatch('messages/getMessages', this.currentProject.id).then(() => {
+            const messageToSort = JSON.parse(JSON.stringify(this.messages));
+            this.messageList = this.sortMessageList(messageToSort);
+          }).finally(() => {
+            this.finishedLoading = true;
+          });
+        }
       }
     },
     watch: {
       currentProject(newValue, oldValue) {
         if (newValue !== oldValue) {
-          console.log(newValue);
+          this.getAllMessages();
+
+          if (this.currentProject) {
+            fire.collection("projects").doc(this.currentProject.id).onSnapshot(() => {
+              this.newMessagesCount += 1;
+              this.getAllMessages();
+            });
+          }
         }
       }
     }
@@ -166,8 +186,15 @@
 <style lang="scss">
   @import '@/theme/variables.scss';
 
-  .sc-launcher, .sc-chat-window {
+  .md-badge {
+    position: fixed;
+    right: 22px;
+    bottom: 66px;
     z-index: 100;
+  }
+
+  .sc-launcher, .sc-chat-window {
+    z-index: 99;
   }
   .sc-chat-window {
     border: 1px solid rgba(#000, .12);

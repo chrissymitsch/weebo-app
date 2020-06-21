@@ -1,5 +1,5 @@
 <template>
-    <md-avatar :class="`md-accent ${size}`" v-if="finishedLoading">
+    <md-avatar :class="`md-accent ${size}`" v-if="finishedLoading && userForAvatar">
         <md-ripple>
             <img v-if="!userForAvatar.customAvatar && userForAvatar.photoURL" :src="userForAvatar.photoURL" alt="Avatar">
             <img v-if="userForAvatar.customAvatar" :src="userForAvatar.customAvatar" alt="Avatar">
