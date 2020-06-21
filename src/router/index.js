@@ -137,8 +137,36 @@ const router = new Router({
           name: 'project-phase',
           props: true,
           component: () =>
-              import(/* webpackChunkName: "client-chunk-project-phase" */ '@/components/Phase.vue')
+              import(/* webpackChunkName: "client-chunk-project-phase" */ '@/views/Projects/Phase.vue')
         },
+        {
+          path: 'phase1',
+          name: 'project-phase-1',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-phase-1" */ '@/views/Projects/ProjectPhase1.vue')
+        },
+        {
+          path: 'phase2',
+          name: 'project-phase-2',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-phase-2" */ '@/views/Projects/ProjectPhase2.vue')
+        },
+        {
+          path: 'phase3',
+          name: 'project-phase-3',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-phase-3" */ '@/views/Projects/ProjectPhase3.vue')
+        },
+        {
+          path: 'phase4',
+          name: 'project-phase-4',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-phase-4" */ '@/views/Projects/ProjectPhase4.vue')
+        }
       ]
     },
     { path: '*', redirect: '/home' }

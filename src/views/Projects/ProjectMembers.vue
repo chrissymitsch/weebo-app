@@ -9,34 +9,20 @@
         <p v-if="!currentProject.members || (finishedLoading === currentProject.members.length && (!members || members.length === 0))" class="text-center">
             Keine Projektteilnehmer.
         </p>
-        <md-list v-if="currentProject.members && finishedLoading === currentProject.members.length && members && members.length > 0" class="md-triple-line md-dense">
-            <div v-for="(member) in members" :key="member.id">
-                <md-list-item>
-                    <md-avatar>
-                        <img :src="member.photoURL" alt="People">
-                    </md-avatar>
-
-                    <div class="md-list-item-text">
-                        <span>{{ member.displayName }}</span>
-                        <span>Brunch this weekend?</span>
-                        <p>I'll be in your neighborhood doing errands this week. Do you want to meet?</p>
-                    </div>
-
-                    <md-button class="md-icon-button md-list-action">
-                        <md-icon class="md-primary">star</md-icon>
-                    </md-button>
-                </md-list-item>
-
-                <md-divider class="md-inset"></md-divider>
+        <div v-if="currentProject.members && finishedLoading === currentProject.members.length && members && members.length > 0">
+            <div class="member-list">
+                <project-member v-for="(member) in members" :key="member.id" :data="member"></project-member>
             </div>
-        </md-list>
+        </div>
     </div>
 </template>
 
 <script>
     import { mapState } from 'vuex'
+    import ProjectMember from "../../components/projects/ProjectMember";
 
     export default {
+        components: {ProjectMember},
         computed: {
             ...mapState('app', ['networkOnLine']),
             ...mapState('projects', ['currentProject'])

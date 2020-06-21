@@ -21,7 +21,7 @@
 import NavBar from '@/components/NavBar'
 import NewContentAvailableToastr from '@/components/NewContentAvailableToastr'
 import AppleAddToHomeScreenModal from '@/components/AppleAddToHomeScreenModal'
-import Messenger from '@/components/Messenger'
+import Messenger from '@/components/projects/Messenger'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {

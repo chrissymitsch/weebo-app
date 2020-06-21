@@ -1,6 +1,6 @@
 <template>
     <div class="Dashboard">
-        <rewarding :showModal="rewardModalActive" @closeModal="rewardModalActive=false" size="large">
+        <Modal :showModal="rewardModalActive" @closeModal="rewardModalActive=false" size="large">
             <md-progress-spinner v-if="!tutorialSaved" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
             <div v-if="tutorialSaved">
                 <div class="md-display-1">Verwalte dein Projekt</div>
@@ -13,7 +13,7 @@
                     Sammle Punkte und Auszeichnungen, um mehr Funktionen freizuschalten!
                 </p>
             </div>
-        </rewarding>
+        </Modal>
 
         <md-chip>{{ currentProject.name }} / Dashboard</md-chip>
 
@@ -24,7 +24,18 @@
                 </md-card-header>
 
                 <md-card-content>
-                    <p class="md-body-2">Level 1</p>
+                    <div class="md-layout md-gutter">
+                        <div class="md-layout-item">
+                            <p class="md-body-2" v-if="currentProject.level">Level {{currentProject.level}}</p>
+                            <p class="md-body-2" v-if="!currentProject.level">Level 1</p>
+                            <md-progress-bar class="md-accent" md-mode="determinate" :md-value="currentProject.phase * 25"></md-progress-bar>
+                        </div>
+                        <div class="md-layout-item">
+                            <p class="md-body-2">Letzte Aktivität: {{format_unix_date(currentProject.updateTimestamp.seconds)}}</p>
+                            <p class="md-body-2">Teilnehmer: {{currentProject.members.length}}</p>
+                            <p class="md-body-2">Offene Aufgaben: XYZ</p>
+                        </div>
+                    </div>
                 </md-card-content>
             </md-ripple>
         </md-card>
@@ -35,96 +46,14 @@
             </md-card-content>
         </md-card>
 
-        <p></p>
 
-        <div class="md-layout">
-            <div class="md-layout-item">
-                <md-card class="process-step md-accent" md-with-hover>
-                    <md-ripple>
-                        <md-card-header>
-                            <div class="md-title">Phase 1</div>
-                            <div class="md-subhead">Analyse</div>
-                        </md-card-header>
-
-                        <md-card-actions>
-                            <router-link :to="{ name: 'project-phase' }">
-                                <md-button class="md-icon-button"><md-icon>search</md-icon></md-button>
-                            </router-link>
-                            <md-button class="md-icon-button"><md-icon>done</md-icon></md-button>
-                        </md-card-actions>
-                    </md-ripple>
-                </md-card>
-            </div>
-            <div class="md-layout-item">
-                <md-card class="process-step" md-with-hover>
-                    <md-ripple>
-                        <md-card-header>
-                            <div class="md-title">Phase 2</div>
-                            <div class="md-subhead">Spezifikation</div>
-                        </md-card-header>
-
-                        <md-card-actions>
-                            <md-button class="md-icon-button"><md-icon>search</md-icon></md-button>
-                            <md-button class="md-icon-button"><md-icon>done</md-icon></md-button>
-                        </md-card-actions>
-                    </md-ripple>
-                </md-card>
-            </div>
-            <div class="md-layout-item">
-                <md-card class="process-step" md-with-hover>
-                    <md-ripple>
-                        <md-card-header>
-                            <div class="md-title">Phase 3</div>
-                            <div class="md-subhead">Modellierung</div>
-                        </md-card-header>
-
-                        <md-card-actions>
-                            <md-button class="md-icon-button"><md-icon>search</md-icon></md-button>
-                            <md-button class="md-icon-button"><md-icon>done</md-icon></md-button>
-                        </md-card-actions>
-                    </md-ripple>
-                </md-card>
-            </div>
-            <div class="md-layout-item">
-                <md-card class="process-step" md-with-hover>
-                    <md-ripple>
-                        <md-card-header>
-                            <div class="md-title">Phase 4</div>
-                            <div class="md-subhead">Evaluation</div>
-                        </md-card-header>
-
-                        <md-card-actions>
-                            <md-button class="md-icon-button"><md-icon>search</md-icon></md-button>
-                            <md-button class="md-icon-button"><md-icon>done</md-icon></md-button>
-                        </md-card-actions>
-                    </md-ripple>
-                </md-card>
-            </div>
-        </div>
-        <p></p>
-        <md-card class="process-step" md-with-hover>
-            <md-ripple>
-                <md-card-media md-small>
-                    <img src="@/assets/img/pokal.png" alt="Pokal">
-                </md-card-media>
-
-                <md-card-header>
-                    <div class="md-title">ENDGAME</div>
-                    <div class="md-subhead">Softwareeinführung</div>
-                </md-card-header>
-
-                <md-card-actions>
-                    <md-button class="md-icon-button"><md-icon>search</md-icon></md-button>
-                    <md-button class="md-icon-button"><md-icon>done</md-icon></md-button>
-                </md-card-actions>
-            </md-ripple>
-        </md-card>
     </div>
 </template>
 
 <script>
     import {mapState} from "vuex";
-    import Rewarding from "../../components/Rewarding";
+    import moment from 'moment';
+    import Modal from "../../components/Modal";
 
     export default {
         computed: {
@@ -132,10 +61,10 @@
             ...mapState('projects', ['currentProject'])
         },
         components: {
-            Rewarding,
+            Modal,
             /* eslint-disable vue/no-unused-components */
-            ProcessCircle: () => import('../../components/ProcessCircle'),
-            Phase: ()  => import('../../components/Phase')
+            ProcessCircle: () => import('../../components/projects/ProcessCircle'),
+            Phase: ()  => import('./Phase')
         },
         data: () => ({
             tutorialSaved: false,
@@ -159,6 +88,12 @@
                         this.tutorialSaved = true;
                     });
                 }
+            },
+            format_unix_date(value){
+                if (value) {
+                    return (moment.unix(value).format('DD.MM.YYYY, HH:mm')).concat(" Uhr");
+                }
+                return '';
             }
         },
         created() {

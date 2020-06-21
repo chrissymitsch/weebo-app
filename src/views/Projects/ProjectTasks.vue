@@ -8,13 +8,13 @@
         <p v-if="finishedLoading && (!columns || columns.length === 0)" class="text-center">
             Keine Aufgaben.
         </p>
-        <add-task :id="currentProject.id" :column="null"></add-task>
+        <add-task :id="currentProject.id" :column="null" @taskCreated="taskCreated"></add-task>
         <div class="md-layout" v-if="finishedLoading && columns && columns.length > 0">
-            <div class="md-layout-item column-width" v-for="column in columns" :key="column.title">
+            <div class="md-layout-item column-width" v-for="(column) in columns" :key="column.title">
                 <div>
                     <p class="md-subheading">{{column.title}}</p>
                     <!-- Draggable component comes from vuedraggable. It provides drag & drop functionality -->
-                    <draggable :list="column.tasks" :animation="200" ghost-class="ghost-card" group="tasks">
+                    <draggable :list="column.tasks" :animation="200" ghost-class="ghost-card" group="tasks" @change="change(column)">
                         <!-- Each element from here will be draggable and animated. Note :key is very important here to be unique both for draggable and animations to be smooth & consistent. -->
                         <task-card
                                 v-for="(task) in column.tasks"
@@ -24,7 +24,7 @@
                         <!-- </transition-group> -->
                     </draggable>
                     <task-card :task="null"></task-card>
-                    <add-task :id="currentProject.id" :column="column.title"></add-task>
+                    <add-task :id="currentProject.id" :column="column.title" @taskCreated="taskCreated"></add-task>
                 </div>
             </div>
         </div>
@@ -33,9 +33,9 @@
 
 <script>
     import draggable from "vuedraggable";
-    import TaskCard from "@/components/TaskCard.vue";
-    import AddTask from "@/components/AddTask.vue";
-    import {mapState} from "vuex";
+    import TaskCard from "@/components/tasks/TaskCard.vue";
+    import AddTask from "@/components/tasks/AddTask.vue";
+    import {mapActions, mapState} from "vuex";
 
     export default {
         name: "App",
@@ -83,9 +83,31 @@
                 });
             }
         },
-        watch: {
-            columns(newVal, oldVal) {
-                console.log(newVal, oldVal)
+        methods: {
+            ...mapActions('tasks', ['updateProjectTask']),
+            taskCreated() {
+                if (this.currentProject) {
+                    this.finishedLoading = false;
+                    this.$store.dispatch('tasks/getTasks', this.currentProject.id).then(() => {
+                        for (let i = 0; i < this.columns.length; i += 1) {
+                            this.columns[i].tasks = [];
+                            for (let j = 0; j < this.tasks.length; j += 1) {
+                                if (this.tasks[j].column === this.columns[i].title || this.tasks[j].column === null && i === 0) {
+                                    this.columns[i].tasks.push(this.tasks[j]);
+                                }
+                            }
+                        }
+                    }).finally(() => {
+                        this.finishedLoading = true;
+                    });
+                }
+            },
+            change(column) {
+                for (let i = 0; i < column.tasks.length; i += 1) {
+                    const updatedTask = JSON.parse(JSON.stringify(column.tasks[i]));
+                    updatedTask.column = column.title;
+                    this.updateProjectTask({projectId: this.currentProject.id, task: updatedTask});
+                }
             }
         }
     };

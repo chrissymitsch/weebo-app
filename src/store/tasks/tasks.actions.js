@@ -26,4 +26,13 @@ export default {
     await projectsTasksDB.create(newTask);
   },
 
+  /**
+   * Update task for current project
+   */
+  updateProjectTask: async ({ commit }, {projectId, task}) => {
+    const projectsTasksDB = new ProjectsTasksDB(projectId);
+    const updatedTask = await projectsTasksDB.update(task);
+    commit('updateProjectTask', updatedTask);
+  },
+
 }

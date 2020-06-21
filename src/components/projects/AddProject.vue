@@ -32,14 +32,14 @@
         </md-card-actions>
       </md-card>
 
-      <rewarding :showModal="rewardModalActive" @closeModal="rewardModalActive=false">
+      <Modal :showModal="rewardModalActive" @closeModal="rewardModalActive=false">
         <md-progress-spinner v-if="!rewardSaved" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
         <div v-if="rewardSaved">
           <div class="md-display-1">Bravo!</div>
           <p class="description md-body-2">Für dein erstes Projekt hast du eine Trophäe erhalten!</p>
           <p class="description"><img src="@/assets/img/pokal.png" /></p>
         </div>
-      </rewarding>
+      </Modal>
 
       <md-snackbar :md-active.sync="projectSaved">Das Projekt wurde erfolgreich erstellt.</md-snackbar>
     </form>
@@ -54,11 +54,11 @@
     maxLength
   } from 'vuelidate/lib/validators'
   import { mapMutations, mapState, mapActions } from 'vuex'
-  import Rewarding from "./Rewarding";
+  import Modal from "../Modal";
 
   export default {
     name: 'FormValidation',
-    components: {Rewarding},
+    components: {Modal},
     computed: {
       ...mapState('projects', ['projectCreationPending']),
       ...mapState('rewards', ['userBadges'])

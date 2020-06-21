@@ -27,10 +27,12 @@
       {{ format_date(data.createTimestamp) }}
     </md-card-actions>
     <md-card-actions>
-      <md-tooltip md-direction="left">Du bist Admin</md-tooltip>
-      <md-icon class="md-primary" v-if="isCreator()">
-        star_border
-      </md-icon>
+      <div>
+        <md-tooltip md-direction="left">Du bist Admin</md-tooltip>
+        <md-icon class="md-primary" v-if="isCreator()">
+          star_border
+        </md-icon>
+      </div>
       <div v-if="!disableActions && isCreator()" class="delete-btn" @click="deletionDialogActive = true">
         <md-progress-spinner class="md-accent" v-if="isProjectDeletionPending" :md-diameter="20" :md-stroke="2" md-mode="indeterminate"></md-progress-spinner>
         <md-icon class="md-accent" v-if="!isProjectDeletionPending">delete</md-icon>

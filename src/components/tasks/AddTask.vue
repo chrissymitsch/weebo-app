@@ -1,59 +1,36 @@
 <template>
   <div class="AddTask">
-    <div class="modal" v-if="active">
-      <div class="modal-mask">
-        <div class="modal-wrapper">
-          <div class="modal-container">
-
-            <div class="modal-header">
-              <slot name="header">
-                Aufgabe hinzufügen
-                <md-button class="md-icon-button" @click="active = false"><md-icon>close</md-icon></md-button>
-              </slot>
-            </div>
-
-            <div class="modal-body">
-              <slot name="body">
-                <md-field>
-                  <label>Was gibt's zu tun?</label>
-                  <md-input v-model="form.title"
-                            maxlength="60"
-                            />
-                </md-field>
-                <md-field>
-                  <label>Typ</label>
-                  <md-select v-model="form.type" name="type" id="type">
-                    <md-option value="0">---</md-option>
-                    <md-option value="Design">Design</md-option>
-                    <md-option value="Feature Request">Feature Request</md-option>
-                  </md-select>
-                </md-field>
-
-              </slot>
-            </div>
-
-            <div class="modal-footer">
-              <slot name="footer">
-                <button class="modal-default-button" @click="onCancel()">
-                  Abbrechen
-                </button>
-                <button class="modal-default-button" @click="addTask()">
-                  OK
-                </button>
-              </slot>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
+    <Modal :showModal="active" @closeModal="active=false" size="large">
+      <div class="md-display-1">Neue Aufgabe hinzufügen</div>
+      <md-field>
+        <label>Was gibt's zu tun?</label>
+        <md-input v-model="form.title"
+                  maxlength="60"
+        />
+      </md-field>
+      <md-field>
+        <label>Phase</label>
+        <md-select v-model="form.type" name="type" id="type">
+          <md-option value="0">Allgemein</md-option>
+          <md-option value="1">1. Analyse</md-option>
+          <md-option value="2">2. Spezifikation</md-option>
+          <md-option value="3">3. Modellierung</md-option>
+          <md-option value="4">4. Evaluation</md-option>
+          <md-option value="5">5. Softwareeinführung</md-option>
+        </md-select>
+      </md-field>
+      <md-button @click="onCancel()">Abbrechen</md-button>
+      <md-button class="md-raised md-primary" @click="addTask()">Aufgabe erstellen</md-button>
+    </Modal>
     <md-button @click="active = true"><md-icon>add</md-icon> Aufgabe hinzufügen</md-button>
   </div>
 </template>
 <script>
   import {mapActions} from "vuex";
+  import Modal from "../Modal";
 
   export default {
+    components: {Modal},
     props: {
       column: String,
       id: String
@@ -77,7 +54,7 @@
           this.$store.dispatch('tasks/createProjectTask', this.form).then(() => {
             this.taskSaved = true;
             this.active = false;
-          });
+          }).finally(() => this.$emit('taskCreated'));
         }
       },
       onCancel () {

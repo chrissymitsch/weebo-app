@@ -14,19 +14,17 @@
 
     export default {
         computed: {
-            ...mapState('projects', ['subscriptionPending'])
+            ...mapState('projects', ['subscriptionPending', 'currentProject'])
         },
         data: () => ({
             subscriptionSuccessful: false
         }),
-        props: {
-            project: Object
-        },
         methods: {
             ...mapActions('projects', ['triggerSubscribeProjectAction']),
             subscribe() {
                 this.triggerSubscribeProjectAction(this.$store.navigator);
                 this.subscriptionSuccessful = true;
+                this.$router.push("/projects")
             }
         }
     };

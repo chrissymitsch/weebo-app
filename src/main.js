@@ -5,6 +5,8 @@ import 'vue-material/dist/theme/default.css'
 import Chat from 'vue-beautiful-chat'
 import zircle from 'zircle'
 import 'zircle/dist/zircle.css'
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-default.css';
 
 import App from './App.vue'
 import router from './router'
@@ -21,6 +23,7 @@ Vue.config.productionTip = false;
 Vue.use(VueMaterial);
 Vue.use(Chat);
 Vue.use(zircle);
+Vue.use(VueToast);
 
 new Vue({
   router,

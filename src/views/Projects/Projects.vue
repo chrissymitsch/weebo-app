@@ -12,8 +12,8 @@
 
 <script>
 import { mapState } from 'vuex'
-import ProjectList from '@/components/ProjectList'
-import AddProject from '@/components/AddProject'
+import ProjectList from '@/components/projects/ProjectList'
+import AddProject from '@/components/projects/AddProject'
 
 export default {
   components: {ProjectList, AddProject },

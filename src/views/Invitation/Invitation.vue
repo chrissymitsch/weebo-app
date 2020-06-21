@@ -1,20 +1,22 @@
 <template>
     <div class="Invitation">
-        <h1 class="title" v-if="isUserLoggedIn && project === null && !error">
+        <md-empty-state v-if="isUserLoggedIn && !error && !projectLoadingFinished">
             <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
             Laden...
-        </h1>
-        <p class="title" v-if="isUserLoggedIn && error">
-            <md-icon>mood_bad</md-icon> Da ist leider etwas schief gelaufen.
-        </p>
+        </md-empty-state>
 
         <md-empty-state
-                v-if="isUserLoggedIn && project"
-                md-icon="important_devices"
-                :md-label="`Du wurdest eingeladen, das Projekt &quot;${project.name}&quot; zu abonnieren.`"
-                md-description="Beteilige dich am Design-Prozess, bring neue Ideen ein und unterstütze das Team beim Finden von Lösungen!">
+                v-if="isUserLoggedIn && error && projectLoadingFinished"
+                md-icon="error_outline"
+                md-label="Da ist leider etwas schief gelaufen.">
+        </md-empty-state>
 
-            <subscribe :project="project"></subscribe>
+        <md-empty-state
+                v-if="isUserLoggedIn && projectLoadingFinished && !error"
+                md-icon="important_devices"
+                :md-label="`Du wurdest eingeladen, das Projekt &quot;${currentProject.name}&quot; zu abonnieren.`"
+                md-description="Beteilige dich am Design-Prozess, bring neue Ideen ein und unterstütze das Team beim Finden von Lösungen!">
+            <subscribe></subscribe>
         </md-empty-state>
 
         <md-empty-state
@@ -22,7 +24,6 @@
                 md-icon="important_devices"
                 :md-label="`Du wurdest eingeladen, ein Projekt zu abonnieren.`"
                 md-description="Beteilige dich am Design-Prozess, bring neue Ideen ein und unterstütze das Team beim Finden von Lösungen!">
-
             <login></login>
         </md-empty-state>
     </div>
@@ -30,7 +31,7 @@
 
 <script>
     import {mapActions, mapGetters, mapState} from "vuex";
-    import Subscribe from '@/components/Subscribe'
+    import Subscribe from '@/components/projects/Subscribe'
     import Login from '@/views/Login'
 
     export default {
@@ -38,19 +39,31 @@
         computed: {
             ...mapGetters('authentication', ['isUserLoggedIn']),
             ...mapActions('projects', ['getProjectById']),
-            ...mapState('projects', ['currentProject'])
+            ...mapState('projects', ['currentProject', 'userProjects'])
         },
         data: () => ({
-            project: null,
-            error: false
+            error: false,
+            projectLoadingFinished: false
         }),
         created() {
-            this.$store.dispatch('projects/getProjectById', this.$route.params.projectId).then(() => {
-                this.project = this.currentProject;
-                this.error = false;
-            }).finally(() => {
-                this.error = this.project == null;
-            });
+            const routeParamsProjectId = this.$route.params.projectId;
+            if (this.userProjects) {
+                const checkIfUserHasProject = this.userProjects.filter(function (elem) {
+                    if (elem.projectId === routeParamsProjectId) return elem;
+                    return null;
+                });
+                if (checkIfUserHasProject.length > 0) {
+                    this.error = true;
+                    this.projectLoadingFinished = true;
+                } else {
+                    this.$store.dispatch('projects/getProjectById', this.$route.params.projectId).then(() => {
+                        this.error = false;
+                    }).finally(() => {
+                        this.error = this.currentProject == null;
+                        this.projectLoadingFinished = true;
+                    });
+                }
+            }
         }
     };
 </script>

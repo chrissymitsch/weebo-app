@@ -211,6 +211,17 @@ body {
   color: $danger-color;
 }
 
+/** MEMBERS PAGE **/
+.member-list {
+
+  .md-card {
+    width: 200px;
+    display: inline-block;
+    margin: 8px;
+  }
+}
+
+
 /** PROJECTS PAGE **/
 .project-list {
 

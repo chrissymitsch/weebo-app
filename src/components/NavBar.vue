@@ -40,9 +40,9 @@
         </div>
       </md-app-toolbar>
 
-      <md-app-drawer v-if="currentProject" :md-active.sync="menuVisible" md-swipeable>
+      <md-app-drawer v-if="currentProject && isUserLoggedIn && user" :md-active.sync="menuVisible" md-swipeable>
         <md-app-toolbar md-elevation="0" class="md-accent">
-          <span class="md-title">
+          <span class="md-title" v-if="currentProject.name">
             <md-avatar class="md-avatar-icon md-primary">{{ currentProject.name.charAt(0) }}</md-avatar>
            {{ currentProject.name }}
           </span>
@@ -106,7 +106,7 @@
 <script>
 import firebase from 'firebase/app'
 import { mapGetters, mapState } from 'vuex'
-import Avatar from '@/components/Avatar'
+import Avatar from '@/components/users/Avatar'
 
 export default {
   computed: {

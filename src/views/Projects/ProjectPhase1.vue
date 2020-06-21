@@ -1,35 +1,26 @@
 <template>
-    <div class="ProjectSettings">
+    <div class="ProjectPhase1">
         <Modal :showModal="rewardModalActive" @closeModal="rewardModalActive=false" size="large">
             <md-progress-spinner v-if="!tutorialSaved" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
             <div v-if="tutorialSaved">
-                <div class="md-display-1">Verwalte die Einstellungen deines Projekts!</div>
+                <div class="md-display-1">Starte in die 1. Phase!</div>
                 <p class="description"><img src="@/assets/img/rakete.png" width="200" /></p>
                 <p class="description md-body-2">
-                    Du kannst jederzeit den Namen deines Projekts, die Rechte der Teilnehmer und alle weiteren Infos verwalten.
+                    In der ersten Phase deines Projekts geht es darum, den Nutzungskontext zu verstehen.
+                    Daher finden hier ein paar umfassende Analysen statt, wie z.B.:
+                </p>
+                <p class="description md-caption">Stakeholderanalyse</p>
+                <p class="description md-caption">Interviews</p>
+                <p class="description md-caption">Beobachtungen</p>
+                <p class="description md-caption">Fragebögen</p>
+                <p class="description md-body-2">
+                    Lade Stakeholder zum Projekt ein oder benenne und verwalte sie. Lade wichtige Dokumente und
+                    Ergebnisse hoch und diskutiere mit allen Projektteilnehmern.
                 </p>
             </div>
         </Modal>
 
-        <md-chip>{{ currentProject.name }} / Einstellungen</md-chip>
-        <form novalidate class="md-layout" @submit.prevent="null">
-            <md-card class="md-layout-item md-size-50 md-small-size-100">
-                <md-card-content>
-                    <div class="md-layout md-gutter">
-                        <div class="md-layout-item md-small-size-100">
-                            <md-field>
-                                <label>Projektname</label>
-                                <md-input name="name" id="name" />
-                            </md-field>
-                        </div>
-                    </div>
-                </md-card-content>
-
-                <md-card-actions>
-                    <md-button type="submit" class="md-primary">Projekt speichern</md-button>
-                </md-card-actions>
-            </md-card>
-        </form>
+        <md-chip>{{ currentProject.name }} / Prozess / 1. Analyse</md-chip>
     </div>
 </template>
 
@@ -53,7 +44,7 @@
         methods: {
             triggerReward() {
                 const checkIfUserHasTutorialFinished = this.tutorials.filter(function(elem) {
-                    if(elem.name === "Settings") return elem;
+                    if(elem.name === "Phase0") return elem;
                     return null;
                 });
                 if (checkIfUserHasTutorialFinished.length > 0) {
@@ -61,7 +52,7 @@
                 } else {
                     this.rewardModalActive = true;
                     const tutorial = {
-                        name: "Settings",
+                        name: "Phase0",
                         type: "tutorial"
                     };
                     this.$store.dispatch('rewards/createFinishedTutorial', tutorial).then(() => {
@@ -74,28 +65,4 @@
 </script>
 
 <style lang="scss" scoped>
-    .md-card {
-        display: inline-block;
-        vertical-align: top;
-
-        .md-card-content .md-list-item-container {
-            font-size: 12px;
-        }
-    }
-
-    .md-list-item-content {
-        min-height: 12px;
-    }
-
-    .md-button {
-        min-width: 128px;
-    }
-
-    .md-button.btn-whatsapp {
-        background-color: #2CB742!important;
-    }
-
-    .md-button.btn-telegram {
-        background-color: #2FA6DA!important;
-    }
 </style>

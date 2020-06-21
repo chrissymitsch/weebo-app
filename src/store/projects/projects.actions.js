@@ -79,8 +79,9 @@ export default {
         updateTimestamp: project.updateTimestamp
       };
       const createdUserProject = await userProjectDb.create(newProject);
-      const newMembers = project.members.add(rootState.authentication.user.id);
-      const updatedProject = await projectDb.update({members: newMembers});
+      const updateProject = JSON.parse(JSON.stringify(project));
+      updateProject.members.push(rootState.authentication.user.id);
+      const updatedProject = await projectDb.update(updateProject);
       commit('addUserProject', createdUserProject);
       commit('updateProject', updatedProject);
     }

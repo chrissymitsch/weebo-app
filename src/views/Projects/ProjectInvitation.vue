@@ -1,6 +1,6 @@
 <template>
     <div class="ProjectInvitation">
-        <rewarding :showModal="rewardModalActive" @closeModal="rewardModalActive=false" size="large">
+        <Modal :showModal="rewardModalActive" @closeModal="rewardModalActive=false" size="large">
             <md-progress-spinner v-if="!tutorialSaved" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
             <div v-if="tutorialSaved">
                 <div class="md-display-1">Nimm alle mit an Board!</div>
@@ -11,7 +11,7 @@
                     der Projektteilnehmer aktualisiert.
                 </p>
             </div>
-        </rewarding>
+        </Modal>
 
         <md-chip>{{ currentProject.name }} / Einladung verschicken</md-chip>
 
@@ -141,14 +141,14 @@
 
 <script>
     import {mapState} from "vuex";
-    import Rewarding from "../../components/Rewarding";
+    import Modal from "../../components/Modal";
 
     export default {
         computed: {
             ...mapState('rewards', ['tutorials']),
             ...mapState('projects', ['currentProject'])
         },
-        components: {Rewarding},
+        components: {Modal},
         data: () => ({
             invitationLink: null,
             copied: false,

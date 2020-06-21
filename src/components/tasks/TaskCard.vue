@@ -3,13 +3,12 @@
     <md-card v-if="task">
       <md-card-content class="task-card">
         <p>{{task.title}}</p>
-
         <avatar :user-id="task.creator"></avatar>
       </md-card-content>
       <md-divider></md-divider>
       <md-card-content class="task-card">
         <span class="md-caption">{{format_date(task.createTimestamp)}}</span>
-        <badge v-if="task.type" :color="badgeColor">{{task.type}}</badge>
+        <badge :color="badgeColor">{{badgeTypeName}}</badge>
       </md-card-content>
     </md-card>
     <md-card v-if="!task" class="empty-task md-accent">
@@ -21,7 +20,7 @@
 <script>
   import moment from 'moment';
   import Badge from "./Badge.vue";
-  import Avatar from "./Avatar";
+  import Avatar from "../users/Avatar";
 
   export default {
     components: {
@@ -37,11 +36,25 @@
     computed: {
       badgeColor() {
         const mappings = {
-          Design: "purple",
-          "Feature Request": "teal",
-          Backend: "blue",
-          QA: "green",
-          default: "teal"
+          0: "silver",
+          1: "royalblue",
+          2: "crimson",
+          3: "seagreen",
+          4: "darkmagenta",
+          5: "gold",
+          default: "silver"
+        };
+        return mappings[this.task.type] || mappings.default;
+      },
+      badgeTypeName() {
+        const mappings = {
+          0: "Allgemein",
+          1: "Analyse",
+          2: "Spezifikation",
+          3: "Modellierung",
+          4: "Evaluation",
+          5: "Softwareeinführung",
+          default: "Allgemein"
         };
         return mappings[this.task.type] || mappings.default;
       }

@@ -6,7 +6,7 @@
         <md-progress-spinner v-if="userUpdatePending" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
         <avatar v-if="!userUpdatePending" size="md-large" :key="rerenderAvatar"></avatar>
         <p class="md-caption">{{user.email}}</p>
-        <md-button>Google-Konto verwalten</md-button>
+        <md-button class="md-raised">Google-Konto verwalten</md-button>
       </div>
     </div>
 
@@ -40,7 +40,7 @@
 
 <script>
   import {mapState} from 'vuex'
-import Avatar from "../components/Avatar";
+import Avatar from "../components/users/Avatar";
 
 export default {
   components: {Avatar},

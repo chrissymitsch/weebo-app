@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import ProjectItem from '@/components/ProjectItem'
+import ProjectItem from '@/components/projects/ProjectItem'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {

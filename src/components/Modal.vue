@@ -1,5 +1,5 @@
 <template>
-  <div class="Rewarding">
+  <div class="Modal">
     <div class="modal-mask" v-if="modalActive">
       <div :class="`modal-wrapper ${size}`">
         <div class="modal-container">
@@ -17,7 +17,7 @@
 
 <script>
   export default {
-    name: 'Rewarding',
+    name: 'Modal',
     props: {
       showModal: Boolean,
       size: String
