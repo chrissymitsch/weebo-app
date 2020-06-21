@@ -38,7 +38,7 @@
               <p class="md-body-2">Aufgaben erstellen</p>
               <p class="md-caption">Level {{getLevel('addTask')}}</p>
               <md-progress-bar md-mode="determinate" :md-value="getLevelPercentage('addTask')"></md-progress-bar>
-              <span class="md-caption">({{scores['addTask']}} von {{levelBounds[getLevel('addTask') - 1]}})</span>
+              <span class="md-caption">({{scores['addTask'] || 0}} von {{levelBounds[getLevel('addTask') - 1]}})</span>
             </md-card-content>
           </md-card>
           <md-card>
@@ -49,7 +49,7 @@
               <p class="md-body-2">Aufgaben abschließen</p>
               <p class="md-caption">Level {{getLevel('finishTask')}}</p>
               <md-progress-bar md-mode="determinate" :md-value="getLevelPercentage('finishTask')"></md-progress-bar>
-              <span class="md-caption">({{scores['finishTask']}} von {{levelBounds[getLevel('finishTask') - 1]}})</span>
+              <span class="md-caption">({{scores['finishTask'] || 0}} von {{levelBounds[getLevel('finishTask') - 1]}})</span>
             </md-card-content>
           </md-card>
           <md-card>
@@ -183,16 +183,18 @@ export default {
     getLevel(levelName) {
       this.getScores();
 
-      for (let i = 0; i < this.levelBounds.length; i += 1) {
-        if (i < this.levelBounds.length - 1) {
-          if (this.scores[levelName] < this.levelBounds[i]) {
-            return i + 1;
+      if (this.scores[levelName]) {
+        for (let i = 0; i < this.levelBounds.length; i += 1) {
+          if (i < this.levelBounds.length - 1) {
+            if (this.scores[levelName] < this.levelBounds[i]) {
+              return i + 1;
+            }
+            if (this.scores[levelName] >= this.levelBounds[i] && this.scores[levelName] < this.levelBounds[i + 1]) {
+              return i + 2;
+            }
+          } else {
+            return this.levelBounds.length;
           }
-          if (this.scores[levelName] >= this.levelBounds[i] && this.scores[levelName] < this.levelBounds[i + 1]) {
-            return i + 2;
-          }
-        } else {
-          return this.levelBounds.length;
         }
       }
       return 1;
@@ -200,13 +202,15 @@ export default {
     getLevelPercentage(levelName) {
       this.getScores();
 
-      for (let i = 0; i < this.levelBounds.length; i += 1) {
-        if (i < this.levelBounds.length - 1) {
-          if (this.scores[levelName] < this.levelBounds[i]) {
-            return (this.scores[levelName] / this.levelBounds[i]) * 100;
+      if (this.scores[levelName]) {
+        for (let i = 0; i < this.levelBounds.length; i += 1) {
+          if (i < this.levelBounds.length - 1) {
+            if (this.scores[levelName] < this.levelBounds[i]) {
+              return (this.scores[levelName] / this.levelBounds[i]) * 100;
+            }
+          } else {
+            return 100;
           }
-        } else {
-          return 100;
         }
       }
       return 0;
