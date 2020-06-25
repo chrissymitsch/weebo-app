@@ -1,7 +1,7 @@
 <template>
   <header class="navbar" :class="{ offline: !networkOnLine }">
     <md-app>
-      <md-app-toolbar class="md-primary">
+      <md-app-toolbar class="md-primary" md-elevation="0">
         <md-button class="md-icon-button show-for-small" @click="menuVisible = true">
           <md-icon class="navigation-icon">menu</md-icon>
         </md-button>
@@ -56,6 +56,12 @@
             <md-list-item>
               <md-icon>dashboard</md-icon>
               <span class="md-list-item-text">Dashboard</span>
+            </md-list-item>
+          </router-link>
+          <router-link :to="{ name: 'project-members', params: { project: currentProject } }">
+            <md-list-item>
+              <md-icon>group</md-icon>
+              <span class="md-list-item-text">Projektteilnehmer</span>
             </md-list-item>
           </router-link>
           <router-link

@@ -1,117 +1,133 @@
 <template>
-  <div class="page-wrapper">
-    <p class="md-display-1">{{user.displayName}}</p>
-    <div class="md-layout md-gutter">
-      <div class="md-layout-item text-center">
-        <md-progress-spinner v-if="userUpdatePending" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
-        <avatar v-if="!userUpdatePending" size="md-large" :key="rerenderAvatar"></avatar>
-        <p class="md-caption">{{user.email}}</p>
-        <md-button class="md-raised">Google-Konto verwalten</md-button>
-        <md-card>
-          <md-card-content>
-            <p class="md-title">Profilbild ändern</p>
-            <md-avatar :class="`md-large md-accent ${isActivated(!this.user.customAvatar)}`"
-                       @click.native="updateCustomAvatar('')">
-              <md-ripple><img :src="`${user.photoURL}`" /></md-ripple>
-            </md-avatar>
-            <md-avatar v-for="(avatar) in avatars" :key="avatar" @click.native="updateCustomAvatar(avatar)"
-                       :class="`md-large md-accent ${isActivated(user.customAvatar === avatar)}`">
-              <md-ripple @click="updateCustomAvatar(avatar)"><img :src="avatar" /></md-ripple>
-            </md-avatar>
-          </md-card-content>
-        </md-card>
-        <md-card>
-          <md-card-content>
-            <p class="md-title">Statistiken</p>
-            &quot;Danke&quot; erhalten: 123
-          </md-card-content>
-        </md-card>
-      </div>
-      <div class="md-layout-item text-center">
-        <p class="md-title">Deine Erfolge</p>
-        <div class="badge-list">
-          <md-card>
-            <md-card-media>
-              <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('CreateTasks')" />
-            </md-card-media>
-            <md-card-content>
-              <p class="md-body-2">Aufgaben erstellen</p>
-              <p class="md-caption">Level {{getLevel('addTask')}}</p>
-              <md-progress-bar md-mode="determinate" :md-value="getLevelPercentage('addTask')"></md-progress-bar>
-              <span class="md-caption">({{scores['addTask'] || 0}} von {{levelBounds[getLevel('addTask') - 1]}})</span>
-            </md-card-content>
+  <div class="main-wrapper">
+    <div class="page-wrapper">
+      <div class="md-layout md-gutter">
+        <div class="md-layout-item text-center profile-person">
+          <md-progress-spinner v-if="userUpdatePending" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
+          <avatar v-if="!userUpdatePending" size="md-large" :key="rerenderAvatar"></avatar>
+          <p class="md-display-1">{{user.displayName}}</p>
+          <p class="md-subheading">{{user.email}}</p>
+          <div class="account-button"><md-button class="md-raised">Google-Konto verwalten</md-button></div>
+          <div class="md-layout md-gutter profile-stats">
+            <div class="md-layout-item text-center">
+              <p class="md-subheading">12</p>
+              <p class="md-caption">DANKE</p>
+            </div>
+            <div class="md-layout-item text-center">
+              <p class="md-subheading">12</p>
+              <p class="md-caption">DANKE</p>
+            </div>
+            <div class="md-layout-item text-center">
+              <p class="md-subheading">12</p>
+              <p class="md-caption">DANKE</p>
+            </div>
+          </div>
+
+          <md-card class="profile-avatar-change-card">
+            <md-list>
+              <md-list-item md-expand>
+                <md-icon>image</md-icon>
+                <span class="md-list-item-text">Profilbild ändern</span>
+
+                <div slot="md-expand" class="profile-avatar-change">
+                  <md-avatar :class="`md-large md-accent ${isActivated(!this.user.customAvatar)}`"
+                             @click.native="updateCustomAvatar('')">
+                    <md-ripple><img :src="`${user.photoURL}`" /></md-ripple>
+                  </md-avatar>
+                  <md-avatar v-for="(avatar) in avatars" :key="avatar" @click.native="updateCustomAvatar(avatar)"
+                             :class="`md-large md-accent ${isActivated(user.customAvatar === avatar)}`">
+                    <md-ripple @click="updateCustomAvatar(avatar)"><img :src="avatar" /></md-ripple>
+                  </md-avatar>
+                </div>
+              </md-list-item>
+            </md-list>
           </md-card>
-          <md-card>
-            <md-card-media>
-              <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('FinishTasks')" />
-            </md-card-media>
-            <md-card-content>
-              <p class="md-body-2">Aufgaben abschließen</p>
-              <p class="md-caption">Level {{getLevel('finishTask')}}</p>
-              <md-progress-bar md-mode="determinate" :md-value="getLevelPercentage('finishTask')"></md-progress-bar>
-              <span class="md-caption">({{scores['finishTask'] || 0}} von {{levelBounds[getLevel('finishTask') - 1]}})</span>
-            </md-card-content>
-          </md-card>
-          <md-card>
-            <md-card-media>
-              <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('Discussions')" />
-            </md-card-media>
-            <md-card-content>
-              <p class="md-body-2">Diskutieren</p>
-              <md-progress-bar md-mode="determinate" :md-value="10"></md-progress-bar>
-              <p class="md-caption">Level 1</p>
-            </md-card-content>
-          </md-card>
-          <md-card>
-            <md-card-media>
-              <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('Chat')" />
-            </md-card-media>
-            <md-card-content>
-              <p class="md-body-2">Im Chat quatschen</p>
-              <md-progress-bar md-mode="determinate" :md-value="10"></md-progress-bar>
-              <p class="md-caption">Level 1</p>
-            </md-card-content>
-          </md-card>
-          <md-card>
-            <md-card-media>
-              <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('Uploads')" />
-            </md-card-media>
-            <md-card-content>
-              <p class="md-body-2">Dokumente hochladen</p>
-              <md-progress-bar md-mode="determinate" :md-value="10"></md-progress-bar>
-              <p class="md-caption">Level 1</p>
-            </md-card-content>
-          </md-card>
-          <md-card>
-            <md-card-media>
-              <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('Thanks')" />
-            </md-card-media>
-            <md-card-content>
-              <p class="md-body-2">&quot;Danke&quot; verteilt</p>
-              <md-progress-bar md-mode="determinate" :md-value="10"></md-progress-bar>
-              <p class="md-caption">Level 1</p>
-            </md-card-content>
-          </md-card>
-          <md-card>
-            <md-card-media>
-              <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('Onboarding')" />
-            </md-card-media>
-            <md-card-content>
-              <p class="md-body-2">
-                Du hast dir die Einführung angesehen
-              </p>
-            </md-card-content>
-          </md-card>
-          <md-card>
-            <md-card-media>
-              <img src="@/assets/img/badges/NewProject.png" :class="hasBadge('NewProject')" />
-            </md-card-media>
-            <md-card-content>
-              <p class="md-body-2">
-                Du hast ein Projekt erstellt
-              </p>
-            </md-card-content>
-          </md-card>
+        </div>
+        <div class="md-layout-item text-center">
+          <div class="badge-list">
+            <md-card>
+              <md-card-media>
+                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('CreateTasks')" />
+              </md-card-media>
+              <md-card-content>
+                <p class="md-body-2">Aufgaben erstellen</p>
+                <p class="md-caption">Level {{getLevel('addTask')}}</p>
+                <md-progress-bar md-mode="determinate" :md-value="getLevelPercentage('addTask')"></md-progress-bar>
+                <span class="md-caption">({{scores['addTask'] || 0}} von {{levelBounds[getLevel('addTask') - 1]}})</span>
+              </md-card-content>
+            </md-card>
+            <md-card>
+              <md-card-media>
+                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('FinishTasks')" />
+              </md-card-media>
+              <md-card-content>
+                <p class="md-body-2">Aufgaben abschließen</p>
+                <p class="md-caption">Level {{getLevel('finishTask')}}</p>
+                <md-progress-bar md-mode="determinate" :md-value="getLevelPercentage('finishTask')"></md-progress-bar>
+                <span class="md-caption">({{scores['finishTask'] || 0}} von {{levelBounds[getLevel('finishTask') - 1]}})</span>
+              </md-card-content>
+            </md-card>
+            <md-card>
+              <md-card-media>
+                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('Discussions')" />
+              </md-card-media>
+              <md-card-content>
+                <p class="md-body-2">Diskutieren</p>
+                <md-progress-bar md-mode="determinate" :md-value="10"></md-progress-bar>
+                <p class="md-caption">Level 1</p>
+              </md-card-content>
+            </md-card>
+            <md-card>
+              <md-card-media>
+                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('Chat')" />
+              </md-card-media>
+              <md-card-content>
+                <p class="md-body-2">Im Chat quatschen</p>
+                <md-progress-bar md-mode="determinate" :md-value="10"></md-progress-bar>
+                <p class="md-caption">Level 1</p>
+              </md-card-content>
+            </md-card>
+            <md-card>
+              <md-card-media>
+                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('Uploads')" />
+              </md-card-media>
+              <md-card-content>
+                <p class="md-body-2">Dokumente hochladen</p>
+                <md-progress-bar md-mode="determinate" :md-value="10"></md-progress-bar>
+                <p class="md-caption">Level 1</p>
+              </md-card-content>
+            </md-card>
+            <md-card>
+              <md-card-media>
+                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('Thanks')" />
+              </md-card-media>
+              <md-card-content>
+                <p class="md-body-2">&quot;Danke&quot; verteilt</p>
+                <md-progress-bar md-mode="determinate" :md-value="10"></md-progress-bar>
+                <p class="md-caption">Level 1</p>
+              </md-card-content>
+            </md-card>
+            <md-card>
+              <md-card-media>
+                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('Onboarding')" />
+              </md-card-media>
+              <md-card-content>
+                <p class="md-body-2">
+                  Du hast dir die Einführung angesehen
+                </p>
+              </md-card-content>
+            </md-card>
+            <md-card>
+              <md-card-media>
+                <img src="@/assets/img/badges/NewProject.png" :class="hasBadge('NewProject')" />
+              </md-card-media>
+              <md-card-content>
+                <p class="md-body-2">
+                  Du hast ein Projekt erstellt
+                </p>
+              </md-card-content>
+            </md-card>
+          </div>
         </div>
       </div>
     </div>
@@ -222,9 +238,39 @@ export default {
 <style lang="scss" scoped>
   @import '@/theme/variables.scss';
 
-  .md-layout.md-gutter {
-    margin: 0;
-    padding: 0;
+  .profile-person {
+    text-align: center;
+    .md-display-1 {
+      margin-bottom: 12px;
+    }
+
+    .account-button {
+      width: 100%;
+      display: inline-block;
+      .md-button {
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+    }
+
+    .profile-stats {
+      width: 50%;
+      display: inline-flex;
+
+      .md-layout-item:not(:last-child) {
+        border-right: 1px solid #AFB4BB;
+      }
+    }
+  }
+
+  .profile-avatar-change-card {
+    margin-top: 32px;
+  }
+
+  .profile-avatar-change {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
   }
 
   .activated-avatar {
@@ -252,4 +298,5 @@ export default {
   .badge img {
     width: 120px;
   }
+
 </style>

@@ -19,8 +19,8 @@
           <md-option value="5">5. Softwareeinführung</md-option>
         </md-select>
       </md-field>
-      <md-button @click="onCancel()">Abbrechen</md-button>
       <md-button class="md-raised md-primary" @click="addTask()">Aufgabe erstellen</md-button>
+      <md-button @click="onCancel()">Abbrechen</md-button>
     </Modal>
     <md-button @click="openModal()"><md-icon>add</md-icon> Aufgabe hinzufügen</md-button>
   </div>

@@ -17,36 +17,77 @@
 
         <md-chip>{{ currentProject.name }} / Dashboard</md-chip>
 
-        <md-card class="project-status margin8" md-with-hover>
-            <md-ripple>
-                <md-card-header>
-                    <div class="md-title">Projektstatus</div>
-                </md-card-header>
-
-                <md-card-content>
-                    <div class="md-layout md-gutter">
-                        <div class="md-layout-item">
-                            <p class="md-body-2" v-if="currentProject.level">Level {{currentProject.level}}</p>
-                            <p class="md-body-2" v-if="!currentProject.level">Level 1</p>
-                            <md-progress-bar class="md-accent" md-mode="determinate" :md-value="currentProject.phase * 25"></md-progress-bar>
-                        </div>
-                        <div class="md-layout-item">
-                            <p class="md-body-2">Letzte Aktivität: {{format_unix_date(currentProject.updateTimestamp.seconds)}}</p>
-                            <p class="md-body-2">Teilnehmer: {{currentProject.members.length}}</p>
-                            <p class="md-body-2">Offene Aufgaben: XYZ</p>
-                        </div>
-                    </div>
-                </md-card-content>
-            </md-ripple>
-        </md-card>
-
-        <md-card md-with-hover>
-            <md-card-content>
+        <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
                 <z-canvas :views="$options.components"></z-canvas>
-            </md-card-content>
-        </md-card>
+            </div>
 
+            <div class="md-layout-item">
+                <md-card class="project-status margin8" md-with-hover>
+                    <md-ripple>
+                        <md-card-header class="md-subheading">
+                            Dieser Monat
+                        </md-card-header>
 
+                        <md-card-content>
+                            <div class="md-layout md-gutter">
+                                <div class="md-layout-item">
+                                    <p class="md-body-2" v-if="currentProject.level">Level {{currentProject.level}}</p>
+                                    <p class="md-body-2" v-if="!currentProject.level">Level 1</p>
+                                    <md-progress-bar class="md-accent" md-mode="determinate" :md-value="currentProject.phase * 25"></md-progress-bar>
+                                </div>
+                                <div class="md-layout-item width-20">
+                                    <p class="md-body-2">Letzte Aktivität: {{format_unix_date(currentProject.updateTimestamp.seconds)}}</p>
+                                    <p class="md-body-2">Teilnehmer: {{currentProject.members.length}}</p>
+                                    <p class="md-body-2">Offene Aufgaben: XYZ</p>
+                                </div>
+                            </div>
+                        </md-card-content>
+                    </md-ripple>
+                </md-card>
+
+                <md-card class="project-status margin8" md-with-hover>
+                    <md-ripple>
+                        <md-card-content>
+                            <div class="md-layout md-gutter">
+                                <div class="md-layout-item">
+                                    10 offene Aufgaben
+                                </div>
+                                <div class="md-layout-item">
+                                    2 neue Projektteilnehmer
+                                </div>
+                            </div>
+                        </md-card-content>
+                    </md-ripple>
+                </md-card>
+
+                <md-card class="project-status margin8" md-with-hover>
+                    <md-ripple>
+                        <md-card-header class="md-subheading">
+                            Letzte Aktivitäten
+                        </md-card-header>
+
+                        <md-card-content>
+                            Bla
+                        </md-card-content>
+                    </md-ripple>
+                </md-card>
+
+                <md-card class="project-status margin8" md-with-hover>
+                    <md-ripple>
+                        <md-card-header class="md-subheading">
+                            14
+                        </md-card-header>
+
+                        <md-card-content>
+                            Noch 13 Tage bis
+                            <p class="md-display-1">Usability-Test</p>
+                        </md-card-content>
+                    </md-ripple>
+                </md-card>
+
+            </div>
+        </div>
     </div>
 </template>
 
@@ -118,6 +159,11 @@
         position: relative;
         width: 100%;
         height: 350px;
+        background-color: $light-grey-color;
+    }
+
+    .z-label {
+        font-size: 12px;
     }
 
     .theme-zircle {
@@ -164,9 +210,5 @@
                 max-width: 50%;
             }
         }
-    }
-
-    .project-status .md-card-header {
-        background: $vue-color;
     }
 </style>

@@ -18,7 +18,7 @@
             <p class="md-caption">Bereits in Phase 1 können alle Projektteilnehmer einbezogen werden.</p>
         </div>
         <p v-if="(!currentProject.phase && $zircle.getParams().currentPhase === 0) || currentProject.phase === $zircle.getParams().currentPhase">
-            <md-button class="md-accent" @click="finishPhaseDialogActive = true">
+            <md-button class="md-accent md-raised" @click="finishPhaseDialogActive = true">
                 <md-icon>check</md-icon> Phase abschließen
             </md-button>
         </p>

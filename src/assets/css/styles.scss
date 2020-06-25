@@ -13,11 +13,6 @@ body {
   margin: 0;
   position: inherit;
 
-  a {
-    font-weight: 500;
-    text-decoration: none;
-  }
-
   .new-content-available-toastr {
     position: absolute;
     bottom: 10px;
@@ -48,10 +43,15 @@ body {
       }
     }
   }
+
+  .project-details-wrapper {
+    margin-top: 1rem;
+    padding: 1rem;
+  }
 }
 
-.md-accent .md-button-content {
-  color: #ffffff;
+.md-accent .md-button-content, .md-accent .md-button-content .md-icon {
+  color: #ffffff!important;
 }
 
 /** HOME PAGE **/
@@ -262,9 +262,6 @@ body {
     }
   }
 }
-
-
-/** PROJECT LIST **/
 
 .project-row {
   display: flex;

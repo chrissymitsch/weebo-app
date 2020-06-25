@@ -4,7 +4,7 @@
       <md-app-drawer md-permanent="full">
         <md-app-toolbar md-elevation="0" class="md-accent">
           <span class="md-title">
-            <md-avatar class="md-avatar-icon md-primary">{{ project.name.charAt(0) }}</md-avatar>
+          <md-avatar class="md-avatar-icon md-primary"><img :src="`https://avatars.dicebear.com/api/jdenticon/${project.id}.svg`" alt="" /></md-avatar>
            {{ project.name }}
           </span>
         </md-app-toolbar>
@@ -62,45 +62,60 @@
       </md-app-drawer>
 
       <md-app-content>
-        <md-app-toolbar md-elevation="0" class="md-primary">
+        <md-app-toolbar md-elevation="0" class="phase-toolbar">
           <div class="md-toolbar-row">
-            <p v-if="project.phase === 0 || !project.phase">Analysephase:</p>
-            <p v-if="project.phase === 1">Spezifikationsphase:</p>
-            <p v-if="project.phase === 2">Modellierungsphase:</p>
-            <p v-if="project.phase === 3">Evaluationsphase:</p>
-            <p v-if="project.phase === 4">Softwareeinführung:</p>
+            <p v-if="project.phase === 0 || !project.phase">
+              <md-tooltip md-direction="top">Analysephase</md-tooltip>
+              <md-avatar class="md-accent">1</md-avatar>
+            </p>
+            <p v-if="project.phase === 1">
+              <md-tooltip md-direction="top">Spezifikationsphase</md-tooltip>
+              <md-avatar class="md-accent">2</md-avatar>
+            </p>
+            <p v-if="project.phase === 2">
+              <md-tooltip md-direction="top">Modellierungsphase</md-tooltip>
+              <md-avatar class="md-accent">3</md-avatar>
+            </p>
+            <p v-if="project.phase === 3">
+              <md-tooltip md-direction="top">Evaluationsphase</md-tooltip>
+              <md-avatar class="md-accent">4</md-avatar>
+            </p>
+            <p v-if="project.phase === 4">
+              <md-tooltip md-direction="top">Softwareeinführung</md-tooltip>
+              <md-avatar class="md-accent">Endgame</md-avatar>
+            </p>
 
             <router-link :to="{ name: 'project-tasks', params: { project: project } }">
-              <md-button class="md-icon-button">
+              <md-button class="md-icon-button md-primary">
                 <md-icon class="navigation-icon">playlist_add_check</md-icon>
                 <md-tooltip md-direction="top">Aufgaben</md-tooltip>
               </md-button>
             </router-link>
             <router-link :to="{ name: 'project-schedules', params: { project: project } }">
-              <md-button class="md-icon-button">
+              <md-button class="md-icon-button md-primary">
                 <md-icon class="navigation-icon">cloud_upload</md-icon>
                 <md-tooltip md-direction="top">Dateien und Dokumente</md-tooltip>
               </md-button>
             </router-link>
             <router-link :to="{ name: 'project-discussion', params: { project: project } }">
-              <md-button class="md-icon-button">
+              <md-button class="md-icon-button md-primary">
                 <md-icon class="navigation-icon">message</md-icon>
                 <md-tooltip md-direction="top">Diskussion</md-tooltip>
               </md-button>
             </router-link>
             <router-link v-if="project.level && project.level > 0" :to="{ name: 'project-creativemode', params: { project: project } }">
-              <md-button class="md-icon-button">
+              <md-button class="md-icon-button md-primary">
                 <md-icon class="navigation-icon">category</md-icon>
                 <md-tooltip md-direction="top">Kreativmodus</md-tooltip>
               </md-button>
             </router-link>
             <router-link :to="{ name: 'project-schedules', params: { project: project } }">
-              <md-button class="md-icon-button">
+              <md-button class="md-icon-button md-primary">
                 <md-icon class="navigation-icon">calendar_today</md-icon>
                 <md-tooltip md-direction="top">Terminplaner</md-tooltip>
               </md-button>
             </router-link>
-            <md-button class="md-icon-button">
+            <md-button class="md-icon-button md-primary">
               <md-icon class="navigation-icon">help</md-icon>
               <md-tooltip md-direction="top">Hilfe?</md-tooltip>
             </md-button>
@@ -109,7 +124,7 @@
 
         <div class="md-layout md-gutter with-bg">
           <div class="md-layout-item md-layout md-gutter">
-            <div class="md-layout-item">
+            <div class="md-layout-item project-details-wrapper">
               <router-view></router-view>
             </div>
           </div>
@@ -160,14 +175,30 @@
   width: 230px;
   max-width: calc(100vw - 125px);
   border-right: 1px solid rgba(#000, .12);
+  background-color: $accent-color;
+  color: #ffffff;
 
   .md-title .md-avatar {
     margin: 0;
   }
-}
 
-.navigation-icon {
-  color: #039BE5!important;
+  .md-list {
+    background-color: $accent-color;
+    color: #ffffff;
+
+    .md-list-item-text, .md-icon, a {
+      color: #ffffff!important;
+    }
+
+    @mixin activatedLink() {
+      margin-bottom: -2px;
+      border-bottom: 2px solid $vue-color;
+    }
+
+    .router-link-active span {
+      @include activatedLink;
+    }
+  }
 }
 
 .project-detail {
@@ -178,13 +209,24 @@
   min-width: 100%;
 }
 
-@mixin activatedLink() {
-  margin-bottom: -2px;
-  border: 2px solid $vue-color;
+.md-app-toolbar.phase-toolbar {
+  background-color: #CFD2D4;
+
+  .md-toolbar-row {
+    justify-content: space-between;
+  }
+
+  @mixin activatedIconLink() {
+    color: $accent-color;
+  }
+
+  .router-link-active .md-button {
+    @include activatedIconLink;
+  }
 }
 
-.router-link-active .md-button {
-  @include activatedLink;
+.router-link-active .md-button .md-icon {
+  color: $accent-color;
 }
 
 </style>

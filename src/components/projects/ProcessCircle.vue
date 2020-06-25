@@ -1,5 +1,5 @@
 <template>
-  <z-view size="xl" style="border-width: 7px" slider :progress="go">
+  <z-view size="xl" style="border-width: 16px;" slider :progress="go">
     <md-avatar class="md-avatar-icon md-large md-primary">
       <md-icon>group</md-icon>
     </md-avatar>
@@ -7,22 +7,23 @@
       <z-spot
               :angle="225"
               size="s"
-              :distance="140"
+              :distance="120"
               label="Analyse"
-              label-pos="left"
-              :style="`border-width: 7px; border-color: ${getBorderColor(0)};`"
+              label-pos="top"
+              :style="`border-width: 4px; border-color: ${getBorderColor(0)};`"
               :to-view="{name: 'Phase',
               params: {currentPhase: 0,}
               }">
+        <md-tooltip>Analyse</md-tooltip>
         <md-avatar :class="`md-avatar-icon ${getPhaseColor(0)}`">1</md-avatar>
       </z-spot>
       <z-spot
               :angle="315"
               size="s"
-              :distance="140"
+              :distance="120"
               label="Spezifikation"
-              label-pos="right"
-              :style="`border-width: 7px; border-color: ${getBorderColor(1)};`"
+              label-pos="top"
+              :style="`border-width: 4px; border-color: ${getBorderColor(1)};`"
               :to-view="{name: 'Phase',
               params: {currentPhase: 1,}
               }">
@@ -31,10 +32,10 @@
       <z-spot
               :angle="45"
               size="s"
-              :distance="140"
+              :distance="120"
               label="Modellierung"
-              label-pos="right"
-              :style="`border-width: 7px; border-color: ${getBorderColor(2)};`"
+              label-pos="bottom"
+              :style="`border-width: 4px; border-color: ${getBorderColor(2)};`"
               :to-view="{name: 'Phase',
               params: {currentPhase: 2,}
               }">
@@ -43,10 +44,10 @@
       <z-spot
               :angle="135"
               size="s"
-              :distance="140"
+              :distance="120"
               label="Evaluation"
-              label-pos="left"
-              :style="`border-width: 7px; border-color: ${getBorderColor(3)};`"
+              label-pos="bottom"
+              :style="`border-width: 4px; border-color: ${getBorderColor(3)};`"
               :to-view="{name: 'Phase',
               params: {currentPhase: 3,}
               }">
