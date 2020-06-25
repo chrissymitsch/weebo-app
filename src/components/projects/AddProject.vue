@@ -1,48 +1,37 @@
 <template>
   <div>
-    <form novalidate class="md-layout">
-      <md-card class="md-layout-item md-size-100 md-small-size-100">
-        <md-card-header>
-          <div class="md-title">Neues Projekt anlegen</div>
-        </md-card-header>
-
+    <md-card class="md-layout-item text-center">
+      <form novalidate class="md-layout">
         <md-card-content>
-          <div class="md-layout md-gutter">
-            <div class="md-layout-item md-size-100 md-small-size-100">
-              <md-field :class="getValidationClass('projectName')">
-                <label>Projektname</label>
-                <md-input v-model="form.projectName" :disabled="projectCreationPending"
-                          maxlength="30"
-                          @input="setProjectNameToCreate"
-                          @keypress.enter.prevent="validate()" />
-                <span class="md-error" v-if="!$v.form.projectName.required">Es muss ein Projektname angegeben werden!</span>
-                <span class="md-error" v-else-if="!$v.form.projectName.minlength || !$v.form.projectName.maxlength">Der Projektname ist ungültig!</span>
-              </md-field>
-            </div>
-          </div>
-        </md-card-content>
-
-        <md-progress-bar md-mode="indeterminate" v-if="projectCreationPending" />
-
-        <md-card-actions>
+          <md-field :class="getValidationClass('projectName')">
+            <label>Projektname</label>
+            <md-input v-model="form.projectName" :disabled="projectCreationPending"
+                      maxlength="30"
+                      @input="setProjectNameToCreate"
+                      @keypress.enter.prevent="validate()" />
+            <span class="md-error" v-if="!$v.form.projectName.required">Es muss ein Projektname angegeben werden!</span>
+            <span class="md-error" v-else-if="!$v.form.projectName.minlength || !$v.form.projectName.maxlength">Der Projektname ist ungültig!</span>
+          </md-field>
           <md-button
                   class="md-raised md-primary create-project-btn"
                   @click="validate()"
                   :disabled="$v.$invalid || projectCreationPending">Projekt anlegen</md-button>
-        </md-card-actions>
-      </md-card>
 
-      <Modal :showModal="rewardModalActive" @closeModal="rewardModalActive=false">
-        <md-progress-spinner v-if="!rewardSaved" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
-        <div v-if="rewardSaved">
-          <div class="md-display-1">Bravo!</div>
-          <p class="description md-body-2">Für dein erstes Projekt hast du eine Trophäe erhalten!</p>
-          <p class="description"><img src="@/assets/img/pokal.png" /></p>
-        </div>
-      </Modal>
+        </md-card-content>
+        <md-progress-bar md-mode="indeterminate" v-if="projectCreationPending" />
+      </form>
+    </md-card>
 
-      <md-snackbar :md-active.sync="projectSaved">Das Projekt wurde erfolgreich erstellt.</md-snackbar>
-    </form>
+    <Modal :showModal="rewardModalActive" @closeModal="rewardModalActive=false">
+      <md-progress-spinner v-if="!rewardSaved" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
+      <div v-if="rewardSaved">
+        <div class="md-display-1">Bravo!</div>
+        <p class="description md-body-2">Für dein erstes Projekt hast du eine Trophäe erhalten!</p>
+        <p class="description"><img src="@/assets/img/pokal.png" /></p>
+      </div>
+    </Modal>
+
+    <md-snackbar :md-active.sync="projectSaved">Das Projekt wurde erfolgreich erstellt.</md-snackbar>
   </div>
 </template>
 
@@ -130,6 +119,10 @@
 </script>
 
 <style lang="scss" scoped>
+  .md-field {
+    width: 80%;
+  }
+
   .md-progress-bar {
     position: absolute;
     top: 0;

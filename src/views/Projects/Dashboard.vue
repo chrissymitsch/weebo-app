@@ -123,7 +123,7 @@
     .theme-zircle {
         --shade-color: white;
         --primary-color: rgba(0, 0, 0, .3);
-        --accent-color: #17b2e8;
+        --accent-color: #039BE5;
     }
     .spots-enter {
         transform: scale(0);

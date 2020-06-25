@@ -4,5 +4,4 @@ export default {
   /* User update */
   setUserUpdatePending: (state, value) =>
       (state.userUpdatePending = value),
-
 }

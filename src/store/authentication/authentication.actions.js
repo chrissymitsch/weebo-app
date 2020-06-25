@@ -15,7 +15,6 @@ export default {
       : userFromFirebase;
 
     commit('setUser', user);
-    dispatch('projects/getUserProjects', null, { root: true });
     dispatch('rewards/getUserScore', user.id, { root: true });
     dispatch('rewards/getUserBadges', user.id, { root: true });
     dispatch('rewards/getFinishedTutorials', user.id, { root: true });

@@ -1,4 +1,3 @@
-import UserProjectsDB from '@/firebase/user-projects-db'
 import ProjectsDB from '@/firebase/projects-db'
 import UsersDB from "@/firebase/users-db";
 
@@ -7,24 +6,31 @@ export default {
    * Fetch project member
    */
   getProjectMember: async ({ rootState }, userId) => {
-    console.log(rootState.authentication.user.id);
+    console.log("getProjectMember", rootState.authentication.user.id);
     const userDb = new UsersDB();
-
     return userDb.read(userId);
   },
 
   /**
-   * Fetch projects of current loggedin user
+   * Fetch project
    */
-  getUserProjects: async ({ rootState, commit }) => {
-    const userProjectDb = new UserProjectsDB(rootState.authentication.user.id);
-
-    const projects = await userProjectDb.readAll();
-    commit('setUserProjects', projects)
+  getProject: async ({ rootState }, projectId) => {
+    console.log("getProject", rootState.authentication.user.id);
+    const projectDb = new ProjectsDB();
+    return projectDb.read(projectId);
   },
 
   /**
    * Fetch projects
+   */
+  getProjects: async ({ rootState, commit }) => {
+    const usersDb = new UsersDB();
+    const user = await usersDb.read(rootState.authentication.user.id);
+    commit('setUserProjects', user.projects);
+  },
+
+  /**
+   * Fetch current project
    */
   getProjectById: async ({ commit, dispatch }, projectId) => {
     const projectDb = new ProjectsDB();
@@ -34,57 +40,71 @@ export default {
 
     const members = [];
 
-    for (let i = 0; i < project.members.length; i += 1) {
-      const member = dispatch('getProjectMember', project.members[i]);
-      members.push(member);
+    if (project.members) {
+      for (let i = 0; i < project.members.length; i += 1) {
+        dispatch('getProjectMember', project.members[i]).then(data => {
+          members.push(data);
+        });
+      }
+      commit('setProjectMembers', members);
     }
-    commit('setProjectMembers', members);
+  },
+
+  /**
+   * Updates project list for current loggedin user
+   */
+  updateUserProjects: async ({ commit, rootState }, project) => {
+    const usersDb = new UsersDB();
+
+    const user = await usersDb.read(rootState.authentication.user.id);
+    if (user.projects) {
+      user.projects.push(project.id);
+    } else {
+      user.projects = [project.id];
+    }
+    await usersDb.update(user);
+    commit('setUserProjects', user.projects);
+    commit('setProjectCreationPending', false)
   },
 
   /**
    * Create a project for current loggedin user
    */
-  createUserProject: async ({ commit, rootState }, project) => {
-    const userProjectDb = new UserProjectsDB(rootState.authentication.user.id);
+  createUserProject: async ({ commit, dispatch, rootState }, project) => {
     const projectDb = new ProjectsDB();
 
     commit('setProjectCreationPending', true);
     project.members = [rootState.authentication.user.id];
     const createdProject = await projectDb.create(project);
-    const newProject = {
-      createTimestamp: createdProject.createTimestamp,
-      creator: createdProject.creator,
-      projectId: createdProject.id,
-      name: createdProject.name,
-      updateTimestamp: createdProject.updateTimestamp
-    };
-    const createdUserProject = await userProjectDb.create(newProject);
-    commit('addUserProject', createdUserProject);
-    commit('setProjectCreationPending', false)
+    dispatch("updateUserProjects", createdProject);
   },
 
   /**
    * Subscribes current loggedin user to a project.
    */
-  subscribeUserToProject: async ({ commit, rootState, getters }, project) => {
-    const userProjectDb = new UserProjectsDB(rootState.authentication.user.id);
+  subscribeUserToProject: async ({ commit, rootState }, project) => {
+    const usersDb = new UsersDB();
     const projectDb = new ProjectsDB();
 
     commit('setSubscriptionPending', true);
-    if (!getters.getUserProjectByProjectId(project.id)) {
-      const newProject = {
-        createTimestamp: project.createTimestamp,
-        creator: project.creator,
-        projectId: project.id,
-        name: project.name,
-        updateTimestamp: project.updateTimestamp
-      };
-      const createdUserProject = await userProjectDb.create(newProject);
+    const user = await usersDb.read(rootState.authentication.user.id);
+    if ((user.projects && !user.projects.includes(project.id)) || !user.projects) {
       const updateProject = JSON.parse(JSON.stringify(project));
-      updateProject.members.push(rootState.authentication.user.id);
+
+      if (updateProject.members) {
+        updateProject.members.push(rootState.authentication.user.id);
+      } else {
+        updateProject.members = [rootState.authentication.user.id];
+      }
       const updatedProject = await projectDb.update(updateProject);
-      commit('addUserProject', createdUserProject);
+      if (user.projects) {
+        user.projects.push(project.id);
+      } else {
+        user.projects = [project.id];
+      }
+      await usersDb.update(user);
       commit('updateProject', updatedProject);
+      commit('setUserProjects', user.projects)
     }
     commit('setSubscriptionPending', false)
   },
@@ -114,12 +134,17 @@ export default {
   deleteUserProject: async ({ rootState, commit, getters }, projectId) => {
     if (getters.isProjectDeletionPending(projectId)) return;
 
-    const userProjectsDb = new UserProjectsDB(rootState.authentication.user.id);
+    const usersDb = new UsersDB();
     const projectsDb = new ProjectsDB();
 
     commit('addProjectDeletionPending', projectId);
-    await userProjectsDb.delete(getters.getUserProjectByProjectId(projectId).id);
+    const user = await usersDb.read(rootState.authentication.user.id);
+    user.projects = user.projects.filter(e => e !== projectId);
+
+    await usersDb.update(user);
     await projectsDb.delete(projectId);
+
+    commit('setUserProjects', user.projects);
     commit('removeProjectById', projectId);
     commit('removeProjectDeletionPending', projectId)
   },
@@ -127,15 +152,12 @@ export default {
   /**
    * Update a user project from its id
    */
-  updateUserProject: async ({ rootState, commit, getters }, project) => {
+  updateUserProject: async ({ commit, getters }, project) => {
     if (getters.isProjectUpdatePending(project.id)) return;
 
-    const userProjectsDb = new UserProjectsDB(rootState.authentication.user.id);
     const projectsDb = new ProjectsDB();
 
     commit('addProjectUpdatePending', project.id);
-    const userProjectId = getters.getUserProjectByProjectId(project.id).id;
-    await userProjectsDb.update({id: userProjectId});
     await projectsDb.update(project);
     commit('updateProject', project);
     commit('removeProjectUpdatePending', project)
@@ -147,10 +169,19 @@ export default {
   unsubscribeUserProject: async ({ rootState, commit, getters }, projectId) => {
     if (getters.isProjectUnsubscriptionPending(projectId)) return;
 
-    const userProjectsDb = new UserProjectsDB(rootState.authentication.user.id);
+    const usersDb = new UsersDB();
+    const projectsDb = new ProjectsDB();
+
     commit('addProjectUnsubscriptionPending', projectId);
-    await userProjectsDb.delete(getters.getUserProjectByProjectId(projectId).id);
-    commit('removeProjectById', getters.getUserProjectByProjectId(projectId).id);
+    const user = await usersDb.read(rootState.authentication.user.id);
+    user.projects = user.projects.filter(e => e !== projectId);
+    await usersDb.update(user);
+    const project = await projectsDb.read(projectId);
+    project.members = project.members.filter(e => e !== rootState.authentication.user.id);
+    const updatedProject = await projectsDb.update(project);
+
+    commit('setUserProjects', user.projects);
+    commit('removeProjectById', updatedProject);
     commit('removeProjectUnsubscriptionPending', projectId)
   },
 

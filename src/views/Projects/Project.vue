@@ -21,7 +21,8 @@
     components: { ProjectDetail },
     computed: {
       ...mapActions('projects', ['getProjectById']),
-      ...mapState('projects', ['currentProject', 'userProjects']),
+      ...mapState('authentication', ['user']),
+      ...mapState('projects', ['currentProject']),
       ...mapMutations('projects', ['setCurrentProject'])
     },
     data: () => ({
@@ -29,13 +30,9 @@
       settingCurrentProject: true,
     }),
     created() {
-      if (this.userProjects) {
+      if (this.user.projects) {
         const projectId = this.$route.params.id;
-        const checkIfUserHasProject = this.userProjects.filter(function (elem) {
-          if (elem.projectId === projectId) return elem;
-          return null;
-        });
-        if (checkIfUserHasProject.length > 0) {
+        if (this.user.projects.includes(projectId)) {
           this.$store.dispatch('projects/getProjectById', projectId).then(() => {
             this.project = this.currentProject;
           }).finally(() => this.settingCurrentProject = false);

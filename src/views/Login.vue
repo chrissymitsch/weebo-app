@@ -1,29 +1,31 @@
 <template>
-  <div class="page-wrapper">
-    <div class="md-layout md-gutter">
-      <div class="md-layout-item">
-        <p class="md-display-1">Anmelden</p>
+  <div class="main-wrapper">
+    <div class="page-wrapper">
+      <div class="md-layout md-gutter">
+        <div class="md-layout-item">
+          <p class="md-display-1">Anmelden</p>
 
-        <!-- Loader -->
-        <h1 class="title" v-show="user === undefined" data-test="loader">
-          <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
-        </h1>
+          <!-- Loader -->
+          <h1 class="title" v-show="user === undefined" data-test="loader">
+            <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
+          </h1>
 
-        <!-- Offline instruction -->
-        <div v-show="!networkOnLine" data-test="offline-instruction">
-          Bitte prüfe deine Internetverbindung. Anmelden ist offline nicht möglich.
-        </div>
+          <!-- Offline instruction -->
+          <div v-show="!networkOnLine" data-test="offline-instruction">
+            Bitte prüfe deine Internetverbindung. Anmelden ist offline nicht möglich.
+          </div>
 
-        <p v-if="loginError">{{ loginError }}</p>
-        <!-- Auth UI -->
-        <div
-          v-show="user !== undefined && !user && networkOnLine"
-          data-test="login-btn"
-          class="login-btn"
-          @click="login"
-        >
-          <img src="@/assets/img/g-logo.png" width="23" />
-          Mit Google anmelden
+          <p v-if="loginError">{{ loginError }}</p>
+          <!-- Auth UI -->
+          <div
+            v-show="user !== undefined && !user && networkOnLine"
+            data-test="login-btn"
+            class="login-btn"
+            @click="login"
+          >
+            <img src="@/assets/img/g-logo.png" width="23" />
+            Mit Google anmelden
+          </div>
         </div>
       </div>
     </div>

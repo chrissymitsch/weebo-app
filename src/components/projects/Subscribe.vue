@@ -14,7 +14,7 @@
 
     export default {
         computed: {
-            ...mapState('projects', ['subscriptionPending', 'currentProject'])
+            ...mapState('projects', ['currentProject', 'subscriptionPending']),
         },
         data: () => ({
             subscriptionSuccessful: false

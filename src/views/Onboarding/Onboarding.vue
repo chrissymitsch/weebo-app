@@ -6,7 +6,7 @@
                         md-icon="important_devices"
                         md-label="Erstelle dein Projekt"
                         md-description="Starte den nutzerzentrierten Gestaltprozess für dein Projekt.">
-                    <md-button class="md-raised md-primary" @click="setDone('first', 'second')">Weiter &rarr;</md-button>
+                    <md-button class="md-raised md-accent" @click="setDone('first', 'second')">Weiter</md-button>
                     <router-link to="/projects"><md-button class="md-raised">Überspringen</md-button></router-link>
                 </md-empty-state>
             </md-step>
@@ -16,7 +16,7 @@
                         md-icon="group_add"
                         md-label="Stakeholder einladen"
                         md-description="Füge Auftraggeber, Nutzer, Teams usw. hinzu für Transparenz.">
-                    <md-button class="md-raised md-primary" @click="setDone('second', 'third')">Weiter &rarr;</md-button>
+                    <md-button class="md-raised md-accent" @click="setDone('second', 'third')">Weiter</md-button>
                     <router-link to="/projects"><md-button class="md-raised">Überspringen</md-button></router-link>
                 </md-empty-state>
             </md-step>
@@ -97,10 +97,20 @@
 </script>
 
 <style lang="scss" scoped>
+    @import '@/theme/variables.scss';
+
     .md-steppers {
-        background: url("~@/assets/img/1800w/background2.jpg") fixed;
-        background-size: 100% 100%;
+        background: $light-grey-color;
     }
+
+    .md-steppers-wrapper {
+        background: #ffffff!important;
+    }
+
+    .md-steppers-container {
+        background: #ffffff;
+    }
+
     .without-bg {
         background: #ffffff;
     }

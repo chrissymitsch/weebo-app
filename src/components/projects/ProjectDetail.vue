@@ -167,7 +167,7 @@
 }
 
 .navigation-icon {
-  color: #17b2e8!important;
+  color: #039BE5!important;
 }
 
 .project-detail {

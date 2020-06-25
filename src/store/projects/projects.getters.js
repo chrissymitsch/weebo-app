@@ -1,5 +1,3 @@
-import { find } from 'lodash'
-
 export default {
   /**
    * Check if a project has deletion pending
@@ -18,11 +16,4 @@ export default {
    */
   isProjectUpdatePending: state => projectId =>
     state.projectUpdatePending.includes(projectId),
-
-  /**
-   * Get user's project by id
-   */
-  getUserProjectByProjectId: state => projectId =>
-    find(state.userProjects, project => project.projectId === projectId),
-
 }

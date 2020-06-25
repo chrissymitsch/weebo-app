@@ -15,7 +15,7 @@ export default {
    * Create a message for current project
    */
   createMessage: async ({ rootState }, message) => {
-    console.log(rootState.authentication.user.id);
+    console.log("createMessage", rootState.authentication.user.id);
     const messagesDb = new MessagesDb(message.projectId);
     const projectsDb = new ProjectsDB();
     const newMessage = await messagesDb.create(message);

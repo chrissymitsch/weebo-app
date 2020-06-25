@@ -1,18 +1,17 @@
 <template>
   <header class="navbar" :class="{ offline: !networkOnLine }">
     <md-app>
-      <md-app-toolbar>
+      <md-app-toolbar class="md-primary">
         <md-button class="md-icon-button show-for-small" @click="menuVisible = true">
           <md-icon class="navigation-icon">menu</md-icon>
         </md-button>
         <router-link to="/home">
-          <img alt="logo-bento" class="logo" src="@/assets/img/bento-starter.svg" />
-          <span class="site-name title-desktop md-xsmall-hide">{{ appTitle }}</span>
-          <span class="site-name title-mobile md-xsmall-size">{{ appShortTitle }}</span>
+          <span class="md-title title-desktop md-xsmall-hide">{{ appTitle }}</span>
+          <span class="md-title title-mobile md-xsmall-size">{{ appShortTitle }}</span>
         </router-link>
         <div class="links md-toolbar-section-end">
           <nav class="nav-links">
-            <div class="nav-item">
+            <div class="nav-item" v-if="isUserLoggedIn">
               <router-link to="/projects">Projekte</router-link>
             </div>
             <div v-if="!isUserLoggedIn && networkOnLine" class="nav-item">

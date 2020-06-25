@@ -1,14 +1,18 @@
 <template>
-  <div class="page-wrapper">
-    <div class="md-layout md-gutter">
-      <div class="md-layout-item">
-        <p class="md-display-1">Willkommen bei Weebo</p>
-        <div class="text-center"><img alt="logo-bento" src="@/assets/img/bento-starter.svg" /></div>
-        <md-empty-state
-                md-label="Erstelle dein Projekt"
-                md-description="Verwalte den Gestaltungsprozess deines Projekts und arbeite gemeinsam mit allen Stakeholdern am Projekterfolg!">
-          <router-link to="/onboarding"><md-button class="button md-primary md-raised">Starte dein Projekt &rarr;</md-button></router-link>
-        </md-empty-state>
+  <div class="main-wrapper">
+    <div class="page-wrapper">
+      <div class="md-layout md-gutter">
+        <div class="md-layout-item">
+          <div class="text-center"><img alt="logo-bento" src="@/assets/img/bento-starter.svg" /></div>
+        </div>
+        <div class="md-layout-item text-center">
+          <p class="md-display-1">Human-Centered Design</p>
+          <p class="md-caption">FÜR DEIN PROJEKT</p>
+          <md-empty-state
+                  md-description="Verwalte den Gestaltungsprozess deines Projekts und arbeite gemeinsam mit allen Stakeholdern am Projekterfolg!">
+            <router-link to="/onboarding"><md-button class="button md-accent md-raised">Starte dein Projekt</md-button></router-link>
+          </md-empty-state>
+        </div>
       </div>
     </div>
   </div>
@@ -35,10 +39,3 @@ export default {
   computed: mapState('app', ['appTitle'])
 }
 </script>
-
-<style lang="scss" scoped>
-  .page-wrapper {
-    background: url("~@/assets/img/1800w/background2.jpg") fixed;
-    background-size: 100% 100%;
-  }
-</style>

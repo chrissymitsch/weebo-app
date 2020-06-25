@@ -63,7 +63,6 @@
                 this.$store.dispatch('messages/getMessages', this.currentProject.id).then(() => {
                     const messageToSort = JSON.parse(JSON.stringify(this.messages));
                     this.messageList = this.sortMessageList(messageToSort);
-                    console.log(this.messageList)
                 }).finally(() => {
                     this.finishedLoading = true;
                 });

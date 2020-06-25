@@ -1,10 +1,11 @@
 <template>
-  <div class="page-wrapper">
-    <div class="md-layout md-gutter">
-      <div class="md-layout-item">
-        <p class="md-display-1">Deine Projekte</p>
-        <project-list class="project-list"></project-list>
-        <add-project v-if="networkOnLine"></add-project>
+  <div class="main-wrapper">
+    <div class="page-wrapper">
+      <div class="md-layout md-gutter">
+        <div class="md-layout-item">
+          <p class="md-display-1">Deine Projekte</p>
+          <project-list class="project-list"></project-list>
+        </div>
       </div>
     </div>
   </div>
@@ -13,10 +14,9 @@
 <script>
 import { mapState } from 'vuex'
 import ProjectList from '@/components/projects/ProjectList'
-import AddProject from '@/components/projects/AddProject'
 
 export default {
-  components: {ProjectList, AddProject },
+  components: {ProjectList },
   computed: mapState('app', ['networkOnLine'])
 }
 </script>
