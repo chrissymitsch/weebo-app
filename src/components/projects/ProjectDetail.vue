@@ -91,6 +91,14 @@
                 <md-tooltip md-direction="top">Aufgaben</md-tooltip>
               </md-button>
             </router-link>
+            <router-link v-if="project.phase === 1" :to="{ name: 'project-personas', params: { project: project } }">
+                <md-button class="md-icon-button md-primary">
+                  <md-badge class="md-primary" md-content="neu">
+                    <md-icon class="navigation-icon">account_box</md-icon>
+                  </md-badge>
+                  <md-tooltip md-direction="top">Personas und Szenarien</md-tooltip>
+                </md-button>
+            </router-link>
             <router-link :to="{ name: 'project-cloud', params: { project: project } }">
               <md-button class="md-icon-button md-primary">
                 <md-icon class="navigation-icon">cloud_upload</md-icon>
@@ -115,10 +123,6 @@
                 <md-tooltip md-direction="top">Terminplaner</md-tooltip>
               </md-button>
             </router-link>
-            <md-button class="md-icon-button md-primary">
-              <md-icon class="navigation-icon">help</md-icon>
-              <md-tooltip md-direction="top">Hilfe?</md-tooltip>
-            </md-button>
           </div>
         </md-app-toolbar>
 

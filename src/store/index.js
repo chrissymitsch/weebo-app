@@ -6,6 +6,7 @@ import authentication from './authentication'
 import app from './app'
 import files from './files'
 import messages from './messages'
+import personas from './personas'
 import projects from './projects'
 import rewards from './rewards'
 import tasks from './tasks'
@@ -20,6 +21,7 @@ export default new Vuex.Store({
     app,
     files,
     messages,
+    personas,
     projects,
     rewards,
     tasks

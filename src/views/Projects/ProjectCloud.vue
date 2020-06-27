@@ -87,8 +87,15 @@
             </md-table-toolbar>
 
             <md-table-empty-state
+                    v-if="search"
                     md-label="Keine Dateien gefunden."
                     :md-description="`Für '${search}' wurden keine Dateien gefunden.`">
+            </md-table-empty-state>
+
+            <md-table-empty-state
+                    v-if="!search"
+                    md-label="Keine Dateien gefunden."
+                    :md-description="`Für diese Phase wurden keine Dateien gefunden. Dateien aus anderen Phasen können in der Projekthistorie gefunden werden.`">
             </md-table-empty-state>
 
             <md-table-row slot="md-table-row" slot-scope="{ item }">
@@ -192,13 +199,15 @@
                         this.uploadValue = 100;
                         storageRef.snapshot.ref.getDownloadURL().then((url) => {
                             this.uploadFile = url;
-                            this.createProjectFile({
+                            this.$store.dispatch('files/createProjectFile', {
                                 "phase": this.currentProject.phase,
                                 "url": url,
                                 "projectId": this.currentProject.id,
                                 "name": metaData[0].name,
                                 "size": metaData[0].size,
                                 "type": metaData[0].type
+                            }).then(() => {
+                                this.searched = this.filterFilesByPhase(this.files);
                             });
                             this.createMessage({
                                 "projectId": this.currentProject.id,
@@ -207,7 +216,6 @@
                                     "text": `${this.user.displayName} hat die Datei "${this.fileData[0].name}" hochgeladen.`
                                 }
                             });
-                            this.searched = this.filterFilesByPhase(this.files);
                             this.fileData = null;
 
                             this.triggerScoreAction({name: "addFile", score: 1, type: "score"});

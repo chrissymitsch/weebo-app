@@ -15,6 +15,18 @@
             </div>
         </Modal>
 
+
+        <Modal :showModal="congratulationsModalActive" @closeModal="congratulationsModalActive=false" size="large">
+            <md-empty-state
+                    md-label="Glückwunsch!"
+                    md-icon="verified"
+                    md-description="Du hast die Phase abgeschlossen! Alle Dateien, die darin erstellt wurden,
+                        sind weiterhin über die Prozesshistorie erreichbar.
+                        Je nach Phase kannst du nun neue Funktionen benutzen!">
+            </md-empty-state>
+        </Modal>
+
+
         <md-chip>{{ currentProject.name }} / Dashboard</md-chip>
 
         <div class="md-layout md-gutter">
@@ -109,7 +121,6 @@
                             </md-card-header>
 
                             <md-card-content v-if="getLatestMessage()">
-                                <p class="md-caption">{{format_date(getLatestMessage().createTimestamp)}}</p>
                                 <message :message="getLatestMessage()"></message>
                             </md-card-content>
                         </md-ripple>
@@ -140,7 +151,7 @@
             Modal,
             /* eslint-disable vue/no-unused-components */
             ProcessCircle: () => import('../../components/projects/ProcessCircle'),
-            Phase: ()  => import('./Phase')
+            Phase: () => import('./Phase')
         },
         data: () => ({
             tutorialSaved: false,
@@ -151,12 +162,13 @@
                 "2": "MODELLIERUNG",
                 "3": "EVALUATION",
                 "4": "SOFTWAREEINFÜHRUNG"
-            }
+            },
+            congratulationsModalActive: false
         }),
         methods: {
             triggerReward() {
-                const checkIfUserHasTutorialFinished = this.tutorials.filter(function(elem) {
-                    if(elem.name === "Dashboard") return elem;
+                const checkIfUserHasTutorialFinished = this.tutorials.filter(function (elem) {
+                    if (elem.name === "Dashboard") return elem;
                     return null;
                 });
                 if (checkIfUserHasTutorialFinished.length > 0) {
@@ -172,13 +184,13 @@
                     });
                 }
             },
-            format_date(value){
+            format_date(value) {
                 if (value) {
                     return (moment(value).format('DD.MM.YYYY, HH:mm')).concat(" Uhr");
                 }
                 return '';
             },
-            format_unix_date(value){
+            format_unix_date(value) {
                 if (value) {
                     return (moment.unix(value).format('DD.MM.YYYY, HH:mm')).concat(" Uhr");
                 }
@@ -204,9 +216,11 @@
             }
         },
         created() {
-            setTimeout(function () { this.triggerReward() }.bind(this), 1000);
+            setTimeout(function () {
+                this.triggerReward()
+            }.bind(this), 1000);
         },
-        mounted () {
+        mounted() {
             this.$zircle.config({
                 style: {
                     theme: 'zircle',
@@ -214,6 +228,15 @@
                 }
             });
             this.$zircle.setView('ProcessCircle');
+        },
+        watch: {
+            currentProject(newValue, oldValue) {
+                if (newValue !== oldValue) {
+                    if (newValue.phase !== oldValue.phase) {
+                        this.congratulationsModalActive = true;
+                    }
+                }
+            }
         }
     }
 </script>

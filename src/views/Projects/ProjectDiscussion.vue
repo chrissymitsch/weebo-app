@@ -9,24 +9,9 @@
                 </p>
 
                 <md-card class="discussion" v-if="finishedLoading">
-                    <p class="md-caption text-center">21.06.2020</p>
-                    <div v-for="(message) in messageList" :key="message.id">
-                        <md-divider></md-divider>
-                        <md-card-header>
-                            <span class="md-body-2">Hans Wurst</span>
-                            <span class="md-caption"> 19:15 Uhr</span>
-                        </md-card-header>
-                        <md-card-content>
-                            {{message.data.text}}
-                        </md-card-content>
-
-                        <md-divider></md-divider>
-
-                        <md-card-header class="md-body-2">Hans Wurst</md-card-header>
-                        <md-card-content>
-                            Blabla hat was hochgeladen
-                        </md-card-content>
-                    </div>
+                    <md-card-content v-for="(message) in messageList" :key="message.id">
+                        <message :message="message"></message>
+                    </md-card-content>
                 </md-card>
             </div>
         </div>
@@ -35,8 +20,10 @@
 
 <script>
     import { mapState } from 'vuex'
+    import Message from "../../components/projects/Message";
 
     export default {
+        components: {Message},
         computed: {
             ...mapState('app', ['networkOnLine']),
             ...mapState('projects', ['currentProject']),
@@ -49,20 +36,23 @@
         methods: {
             sortMessageList(list) {
                 function compare(a, b) {
-                    if (a.createTimestamp < b.createTimestamp)
-                        return -1;
                     if (a.createTimestamp > b.createTimestamp)
+                        return -1;
+                    if (a.createTimestamp < b.createTimestamp)
                         return 1;
                     return 0;
                 }
                 return list.sort(compare);
             },
+            filterMessageList(list) {
+                return list.filter(message => message.projectId === this.currentProject.id && message.type !== "fileComment")
+            }
         },
         created() {
             if (this.currentProject) {
                 this.$store.dispatch('messages/getMessages', this.currentProject.id).then(() => {
                     const messageToSort = JSON.parse(JSON.stringify(this.messages));
-                    this.messageList = this.sortMessageList(messageToSort);
+                    this.messageList = this.sortMessageList(this.filterMessageList(messageToSort));
                 }).finally(() => {
                     this.finishedLoading = true;
                 });

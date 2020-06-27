@@ -10,10 +10,10 @@
         </p>
         <add-task :id="currentProject.id" :column="null" @taskCreated="updateColumns"></add-task>
 
-        <md-chip :class="getActivatedBadge('Alle')" @click="activatedBadgeType = 'Alle'">
+        <md-chip :class="getActivatedBadge('Alle')" @click="activatedBadgeType = 'Alle'" md-clickable>
             Alle
         </md-chip>
-        <md-chip v-for="(badge, index) in nameMappings" :class="getActivatedBadge(index)" :key="index" @click="activatedBadgeType = index">
+        <md-chip v-for="(badge, index) in nameMappings" :class="getActivatedBadge(index)" :key="index" @click="activatedBadgeType = index" md-clickable>
             {{badge}}
         </md-chip>
 
@@ -105,7 +105,7 @@
                 if (!this.currentProject.phase) {
                     this.activatedBadgeType = "1";
                 } else {
-                    this.activatedBadgeType = Number(this.currentProject.phase) + 1;
+                    this.activatedBadgeType = (Number(this.currentProject.phase) + 1).toString();
                 }
                 for (let i = 0; i < this.columns.length; i += 1) {
                     for (let j = 0; j < this.tasks.length; j += 1) {
@@ -166,7 +166,7 @@
                 }
             },
             getActivatedBadge(phase) {
-                if (this.activatedBadgeType === phase) {
+                if (Number(this.activatedBadgeType) === Number(phase)) {
                     return "md-accent";
                 }
                 return "";

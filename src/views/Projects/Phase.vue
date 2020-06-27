@@ -11,11 +11,18 @@
         <p><md-button class="md-icon-button" @click="goBack()"><md-icon>close</md-icon></md-button></p>
         <div class="phase1" v-if="$zircle.getParams().currentPhase == null || $zircle.getParams().currentPhase === 0">
             <p class="md-title">Phase 1: Analyse</p>
-            <p class="md-caption">Bereits in Phase 1 können alle Projektteilnehmer einbezogen werden.</p>
         </div>
         <div class="phase2" v-if="$zircle.getParams().currentPhase === 1">
-            <p class="md-title">Phase 2: Analyse</p>
-            <p class="md-caption">Bereits in Phase 1 können alle Projektteilnehmer einbezogen werden.</p>
+            <p class="md-title">Phase 2: Spezifikation</p>
+        </div>
+        <div class="phase3" v-if="$zircle.getParams().currentPhase === 2">
+            <p class="md-title">Phase 3: Modellierung</p>
+        </div>
+        <div class="phase4" v-if="$zircle.getParams().currentPhase === 3">
+            <p class="md-title">Phase 4: Evaluation</p>
+        </div>
+        <div class="phase5" v-if="$zircle.getParams().currentPhase === 4">
+            <p class="md-title">Endgame: Softwareeinführung</p>
         </div>
         <p v-if="(!currentProject.phase && $zircle.getParams().currentPhase === 0) || currentProject.phase === $zircle.getParams().currentPhase">
             <md-button class="md-accent md-raised" @click="finishPhaseDialogActive = true">
@@ -46,6 +53,7 @@
                 projectToUpdate.phase = this.$zircle.getParams().currentPhase + 1;
                 this.triggerUpdateProjectAction(projectToUpdate);
                 this.finishPhaseDialogActive = false;
+                this.goBack();
             }
         }
     };
