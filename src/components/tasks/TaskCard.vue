@@ -153,6 +153,7 @@
 
     .md-menu .md-chip {
       cursor: pointer;
+      height: 32px;
     }
   }
 

@@ -180,6 +180,10 @@
         margin-top: 24px;
     }
 
+    .md-chip {
+        height: 32px;
+    }
+
     .column-width {
     }
     /* Unfortunately @apply cannot be setup in codesandbox,
