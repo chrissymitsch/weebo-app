@@ -1,3 +1,5 @@
 export default {
-  messages: []
+  messages: [],
+  messageCreationPending: [],
+  messageLoading: []
 }

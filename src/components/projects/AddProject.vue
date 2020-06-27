@@ -46,7 +46,7 @@
   import Modal from "../Modal";
 
   export default {
-    name: 'FormValidation',
+    name: 'AddProject',
     components: {Modal},
     computed: {
       ...mapState('projects', ['projectCreationPending']),

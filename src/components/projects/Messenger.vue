@@ -31,7 +31,8 @@
         {{message.data.text}}
       </template>
     </beautiful-chat>
-    <md-badge class="md-primary" v-if="!isChatOpen && newMessagesCount > 0" :md-content="newMessagesCount">
+<!--    <md-badge class="md-primary" v-if="!isChatOpen && newMessagesCount > 0" :md-content="newMessagesCount">-->
+    <md-badge class="md-primary" v-if="!isChatOpen && newMessagesCount > 0">
     </md-badge>
   </div>
 </template>
@@ -119,9 +120,7 @@
         this.messageList = [...this.messageList, message];
         message.projectId = this.currentProject.id;
         message.author = this.user.id;
-        this.$store.dispatch('messages/createMessage', message).then(() => {
-          console.log("messageSaved");
-        });
+        this.createMessage(message);
       },
       openChat() {
         // called when the user clicks on the fab button to open the chat
@@ -173,8 +172,8 @@
 
           if (this.currentProject) {
             fire.collection("projects").doc(this.currentProject.id).onSnapshot(() => {
-              this.newMessagesCount += 1;
               this.getAllMessages();
+              this.newMessagesCount += 1;
             });
           }
         }

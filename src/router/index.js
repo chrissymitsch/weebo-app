@@ -119,6 +119,13 @@ const router = new Router({
               import(/* webpackChunkName: "client-chunk-project-tasks" */ '@/views/Projects/ProjectTasks.vue')
         },
         {
+          path: 'cloud',
+          name: 'project-cloud',
+          props: true,
+          component: () =>
+              import(/* webpackChunkName: "client-chunk-project-tasks" */ '@/views/Projects/ProjectCloud.vue')
+        },
+        {
           path: 'discussion',
           name: 'project-discussion',
           props: true,

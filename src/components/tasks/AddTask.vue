@@ -26,11 +26,14 @@
   </div>
 </template>
 <script>
-  import {mapActions} from "vuex";
+  import {mapActions, mapState} from "vuex";
   import Modal from "../Modal";
 
   export default {
     components: {Modal},
+    computed: {
+      ...mapState('tasks', ['tasks']),
+    },
     props: {
       column: String,
       id: String
@@ -57,6 +60,7 @@
       addTask () {
         if (this.form.title != null) {
           this.form.column = this.column;
+          this.form.position = this.tasks.length;
           this.form.projectId = this.id;
           this.$store.dispatch('tasks/createProjectTask', this.form).then(() => {
             this.taskSaved = true;

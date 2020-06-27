@@ -80,7 +80,7 @@ export default {
       return null;
     });
     if (checkIfUserHasScore.length > 0) {
-      const updateScore = JSON.parse(JSON.stringify(checkIfUserHasScore[0]));;
+      const updateScore = JSON.parse(JSON.stringify(checkIfUserHasScore[0]));
       updateScore.score += 1;
       dispatch('updateUserScore', updateScore)
     } else {

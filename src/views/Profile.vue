@@ -10,16 +10,16 @@
           <div class="account-button"><md-button class="md-raised">Google-Konto verwalten</md-button></div>
           <div class="md-layout md-gutter profile-stats">
             <div class="md-layout-item text-center">
-              <p class="md-subheading">12</p>
+              <p class="md-subheading">{{user.thankYou}}</p>
               <p class="md-caption">DANKE</p>
             </div>
             <div class="md-layout-item text-center">
-              <p class="md-subheading">12</p>
-              <p class="md-caption">DANKE</p>
+              <p class="md-subheading">{{userScore.length + userBadges.length}}</p>
+              <p class="md-caption">ERFOLGE</p>
             </div>
             <div class="md-layout-item text-center">
-              <p class="md-subheading">12</p>
-              <p class="md-caption">DANKE</p>
+              <p class="md-subheading">{{user.projects.length}}</p>
+              <p class="md-caption">PROJEKTE</p>
             </div>
           </div>
 
@@ -53,7 +53,7 @@
                 <p class="md-body-2">Aufgaben erstellen</p>
                 <p class="md-caption">Level {{getLevel('addTask')}}</p>
                 <md-progress-bar md-mode="determinate" :md-value="getLevelPercentage('addTask')"></md-progress-bar>
-                <span class="md-caption">({{scores['addTask'] || 0}} von {{levelBounds[getLevel('addTask') - 1]}})</span>
+                <md-tooltip>({{scores['addTask'] || 0}} von {{levelBounds[getLevel('addTask') - 1]}} Punkten)</md-tooltip>
               </md-card-content>
             </md-card>
             <md-card>
@@ -64,7 +64,7 @@
                 <p class="md-body-2">Aufgaben abschließen</p>
                 <p class="md-caption">Level {{getLevel('finishTask')}}</p>
                 <md-progress-bar md-mode="determinate" :md-value="getLevelPercentage('finishTask')"></md-progress-bar>
-                <span class="md-caption">({{scores['finishTask'] || 0}} von {{levelBounds[getLevel('finishTask') - 1]}})</span>
+                <md-tooltip>({{scores['finishTask'] || 0}} von {{levelBounds[getLevel('finishTask') - 1]}} Punkten)</md-tooltip>
               </md-card-content>
             </md-card>
             <md-card>
@@ -92,9 +92,10 @@
                 <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('Uploads')" />
               </md-card-media>
               <md-card-content>
-                <p class="md-body-2">Dokumente hochladen</p>
-                <md-progress-bar md-mode="determinate" :md-value="10"></md-progress-bar>
-                <p class="md-caption">Level 1</p>
+                <p class="md-body-2">Dateien hochladen</p>
+                <p class="md-caption">Level {{getLevel('addFile')}}</p>
+                <md-progress-bar md-mode="determinate" :md-value="getLevelPercentage('addFile')"></md-progress-bar>
+                <md-tooltip>({{scores['addFile'] || 0}} von {{levelBounds[getLevel('addFile') - 1]}} Punkten)</md-tooltip>
               </md-card-content>
             </md-card>
             <md-card>
@@ -103,8 +104,9 @@
               </md-card-media>
               <md-card-content>
                 <p class="md-body-2">&quot;Danke&quot; verteilt</p>
-                <md-progress-bar md-mode="determinate" :md-value="10"></md-progress-bar>
-                <p class="md-caption">Level 1</p>
+                <p class="md-caption">Level {{getLevel('thankYou')}}</p>
+                <md-progress-bar md-mode="determinate" :md-value="getLevelPercentage('thankYou')"></md-progress-bar>
+                <md-tooltip>({{scores['thankYou'] || 0}} von {{levelBounds[getLevel('thankYou') - 1]}} Punkten)</md-tooltip>
               </md-card-content>
             </md-card>
             <md-card>

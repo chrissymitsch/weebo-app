@@ -30,7 +30,7 @@
             });
         } else {
             this.finishedLoading = true;
-            this.userForAvatar = this.user;
+            this.userForAvatar = JSON.parse(JSON.stringify(this.user));
         }
       }
   };

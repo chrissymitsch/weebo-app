@@ -92,7 +92,7 @@
       this.go = 1;
       let phase = 0;
       if (this.currentProject.phase > 0) {
-        phase = this.currentProject.phase * 25;
+        phase = (Number(this.currentProject.phase) * 25);
       }
       setInterval(function () {
         if (vm.go >= phase) {

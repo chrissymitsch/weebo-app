@@ -1,9 +1,11 @@
 <template>
-  <div class="page-wrapper">
-    <h1 class="title">
-      <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
-      Laden...
-    </h1>
+  <div class="main-wrapper">
+    <div class="page-wrapper">
+      <h1 class="title">
+        <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
+        Laden...
+      </h1>
+    </div>
   </div>
 </template>
 

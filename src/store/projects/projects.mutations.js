@@ -6,12 +6,33 @@ export default {
   /* Projects */
   setCurrentProject: (state, project) => (state.currentProject = project),
   setUserProjects: (state, projects) => (state.userProjects = projects),
-  setProjectMembers: (state, members) => (state.projectMembers =  members),
   updateProject: (state, updatedProject) => (state.currentProject = updatedProject),
   removeProjectById: (state, projectId) => {
     if (state.currentProject && state.currentProject.id === projectId) {
       state.currentProject = null;
     }
+  },
+
+  /* Project members */
+  addProjectMember: (state, member) => {
+    if (state.projectMembers) {
+      state.projectMembers.push(member)
+    } else {
+      state.projectMembers =  [member]
+    }
+  },
+  addProjectMemberLoading: (state, memberId) =>
+      state.projectMemberLoading.push(memberId),
+  removeProjectMemberLoading: (state, memberId) => {
+    const index = state.projectMemberLoading.findIndex(member => member.id === memberId);
+    state.projectMemberLoading.splice(index, 1)
+  },
+
+  addProjectMemberUpdatePending: (state, memberId) =>
+      state.projectMemberUpdatePending.push(memberId),
+  removeProjectMemberUpdatePending: (state, memberId) => {
+    const index = state.projectMemberUpdatePending.findIndex(member => member.id === memberId);
+    state.projectMemberUpdatePending.splice(index, 1)
   },
 
   /* Projects deletion */

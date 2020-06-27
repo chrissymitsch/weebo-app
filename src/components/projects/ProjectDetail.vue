@@ -91,7 +91,7 @@
                 <md-tooltip md-direction="top">Aufgaben</md-tooltip>
               </md-button>
             </router-link>
-            <router-link :to="{ name: 'project-schedules', params: { project: project } }">
+            <router-link :to="{ name: 'project-cloud', params: { project: project } }">
               <md-button class="md-icon-button md-primary">
                 <md-icon class="navigation-icon">cloud_upload</md-icon>
                 <md-tooltip md-direction="top">Dateien und Dokumente</md-tooltip>
@@ -111,7 +111,7 @@
             </router-link>
             <router-link :to="{ name: 'project-schedules', params: { project: project } }">
               <md-button class="md-icon-button md-primary">
-                <md-icon class="navigation-icon">calendar_today</md-icon>
+                <md-icon class="navigation-icon">insert_invitation</md-icon>
                 <md-tooltip md-direction="top">Terminplaner</md-tooltip>
               </md-button>
             </router-link>

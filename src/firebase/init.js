@@ -1,5 +1,6 @@
 import * as firebase from 'firebase';
-import 'firebase/auth'
+import 'firebase/auth';
+import 'firebase/storage';
 
 // The configuration below is not sensitive data.
 const config = {

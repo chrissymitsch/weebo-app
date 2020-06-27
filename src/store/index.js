@@ -4,10 +4,11 @@ import VueSocialSharing from 'vue-social-sharing'
 
 import authentication from './authentication'
 import app from './app'
+import files from './files'
 import messages from './messages'
 import projects from './projects'
-import tasks from './tasks'
 import rewards from './rewards'
+import tasks from './tasks'
 
 Vue.use(Vuex);
 Vue.use(VueSocialSharing);
@@ -17,9 +18,10 @@ export default new Vuex.Store({
   modules: {
     authentication,
     app,
+    files,
     messages,
     projects,
-    tasks,
-    rewards
+    rewards,
+    tasks
   }
 })

@@ -5,10 +5,29 @@ export default {
   /**
    * Fetch project member
    */
-  getProjectMember: async ({ rootState }, userId) => {
-    console.log("getProjectMember", rootState.authentication.user.id);
+  getProjectMember: async ({ commit }, userId) => {
+    commit('addProjectMemberLoading', userId);
     const userDb = new UsersDB();
-    return userDb.read(userId);
+    const user = await userDb.read(userId);
+    commit('removeProjectMemberLoading', userId);
+    return user;
+  },
+
+  /**
+   * Updates a thank you score for project member
+   */
+  updateThankYouScore: async ({ commit }, userId) => {
+    commit('addProjectMemberUpdatePending', userId);
+    const userDb = new UsersDB();
+    const user = await userDb.read(userId);
+    const userToUpdate = JSON.parse(JSON.stringify(user));
+    if (userToUpdate.thankYou) {
+      userToUpdate.thankYou += Number(userToUpdate.thankYou);
+    } else {
+      userToUpdate.thankYou = 1;
+    }
+    await userDb.update(userToUpdate);
+    commit('removeProjectMemberUpdatePending', userId);
   },
 
   /**
@@ -38,15 +57,12 @@ export default {
     const project = await projectDb.read(projectId);
     commit('setCurrentProject', project);
 
-    const members = [];
-
     if (project.members) {
       for (let i = 0; i < project.members.length; i += 1) {
         dispatch('getProjectMember', project.members[i]).then(data => {
-          members.push(data);
+          commit('addProjectMember', data);
         });
       }
-      commit('setProjectMembers', members);
     }
   },
 
@@ -186,9 +202,16 @@ export default {
   },
 
   /**
-   * Subscribes to finish phase of an existing project.
+   * Subscribes to update an existing project.
    */
-  triggerFinishPhaseAction: ({ dispatch }, project) => {
+  triggerUpdateProjectAction: ({ dispatch }, project) => {
     dispatch('updateUserProject', project)
+  },
+
+  /**
+   * Subscribes to update thank you score an project member.
+   */
+  triggerUpdateThankYouAction: ({ dispatch }, projectMemberId) => {
+    dispatch('updateThankYouScore', projectMemberId);
   }
 }

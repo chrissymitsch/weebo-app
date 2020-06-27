@@ -30,49 +30,62 @@
                         </md-card-header>
 
                         <md-card-content>
-                            <div class="md-layout md-gutter">
-                                <div class="md-layout-item">
-                                    <p class="md-body-2" v-if="currentProject.level">Level {{currentProject.level}}</p>
-                                    <p class="md-body-2" v-if="!currentProject.level">Level 1</p>
-                                    <md-progress-bar class="md-accent" md-mode="determinate" :md-value="currentProject.phase * 25"></md-progress-bar>
+                            CHART
+                        </md-card-content>
+                    </md-ripple>
+                </md-card>
+
+                <md-card class="project-status margin8" md-with-hover>
+                    <div @click="routeTo('tasks')">
+                        <md-ripple>
+                            <md-card-header class="md-subheading">
+                                Offene Aufgaben
+                            </md-card-header>
+
+                            <md-card-content>
+                                <div class="md-layout md-gutter profile-stats">
+                                    <div class="md-layout-item text-center">
+                                        <p class="md-subheading">{{getOpenTasks('all')}}</p>
+                                        <p class="md-caption">GESAMT</p>
+                                    </div>
+                                    <div class="md-layout-item text-center">
+                                        <p class="md-subheading">{{getOpenTasks(currentProject.phase)}}</p>
+                                        <p class="md-caption opentasks-phasename" v-if="!currentProject.phase">{{phaseNameMappings["0"]}}</p>
+                                        <p class="md-caption opentasks-phasename" v-if="currentProject.phase">{{phaseNameMappings[currentProject.phase]}}</p>
+                                    </div>
+                                    <div class="md-layout-item text-center">
+                                        <p class="md-subheading">{{getOpenTasks('other')}}</p>
+                                        <p class="md-caption">ALLGEMEIN</p>
+                                    </div>
                                 </div>
-                                <div class="md-layout-item width-20">
-                                    <p class="md-body-2">Letzte Aktivität: {{format_unix_date(currentProject.updateTimestamp.seconds)}}</p>
-                                    <p class="md-body-2">Teilnehmer: {{currentProject.members.length}}</p>
-                                    <p class="md-body-2">Offene Aufgaben: XYZ</p>
+                            </md-card-content>
+                        </md-ripple>
+                    </div>
+                </md-card>
+
+                <md-card class="project-status margin8" md-with-hover>
+                    <md-ripple>
+                        <md-card-content>
+                            <div class="md-layout md-gutter profile-stats">
+                                <div class="md-layout-item text-center">
+                                    <p class="md-subheading">Letzte Aktivität</p>
+                                    <p class="md-caption">{{format_unix_date(currentProject.updateTimestamp.seconds)}}</p>
+                                </div>
+                                <div class="md-layout-item text-center">
+                                    <p class="md-subheading">Neustes Mitglied</p>
+                                    <p class="md-caption">
+                                        <avatar :user-id="currentProject.members[currentProject.members.length - 1]"></avatar>
+                                    </p>
                                 </div>
                             </div>
                         </md-card-content>
                     </md-ripple>
                 </md-card>
 
-                <md-card class="project-status margin8" md-with-hover>
-                    <md-ripple>
-                        <md-card-content>
-                            <div class="md-layout md-gutter">
-                                <div class="md-layout-item">
-                                    10 offene Aufgaben
-                                </div>
-                                <div class="md-layout-item">
-                                    2 neue Projektteilnehmer
-                                </div>
-                            </div>
-                        </md-card-content>
-                    </md-ripple>
-                </md-card>
-
-                <md-card class="project-status margin8" md-with-hover>
-                    <md-ripple>
-                        <md-card-header class="md-subheading">
-                            Letzte Aktivitäten
-                        </md-card-header>
-
-                        <md-card-content>
-                            Bla
-                        </md-card-content>
-                    </md-ripple>
-                </md-card>
-
+            </div>
+        </div>
+        <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
                 <md-card class="project-status margin8" md-with-hover>
                     <md-ripple>
                         <md-card-header class="md-subheading">
@@ -85,7 +98,23 @@
                         </md-card-content>
                     </md-ripple>
                 </md-card>
+            </div>
 
+            <div class="md-layout-item">
+                <md-card class="project-status margin8" md-with-hover>
+                    <div @click="routeTo('discussion')">
+                        <md-ripple>
+                            <md-card-header class="md-subheading">
+                                Neuste Beiträge
+                            </md-card-header>
+
+                            <md-card-content v-if="getLatestMessage()">
+                                <p class="md-caption">{{format_date(getLatestMessage().createTimestamp)}}</p>
+                                <message :message="getLatestMessage()"></message>
+                            </md-card-content>
+                        </md-ripple>
+                    </div>
+                </md-card>
             </div>
         </div>
     </div>
@@ -95,13 +124,19 @@
     import {mapState} from "vuex";
     import moment from 'moment';
     import Modal from "../../components/Modal";
+    import Avatar from "../../components/users/Avatar";
+    import Message from "../../components/projects/Message";
 
     export default {
         computed: {
+            ...mapState('messages', ['messages']),
             ...mapState('rewards', ['tutorials']),
-            ...mapState('projects', ['currentProject'])
+            ...mapState('projects', ['currentProject']),
+            ...mapState('tasks', ['tasks'])
         },
         components: {
+            Message,
+            Avatar,
             Modal,
             /* eslint-disable vue/no-unused-components */
             ProcessCircle: () => import('../../components/projects/ProcessCircle'),
@@ -110,6 +145,13 @@
         data: () => ({
             tutorialSaved: false,
             rewardModalActive: false,
+            phaseNameMappings: {
+                "0": "ANALYSE",
+                "1": "SPEZIFIKATION",
+                "2": "MODELLIERUNG",
+                "3": "EVALUATION",
+                "4": "SOFTWAREEINFÜHRUNG"
+            }
         }),
         methods: {
             triggerReward() {
@@ -130,11 +172,35 @@
                     });
                 }
             },
+            format_date(value){
+                if (value) {
+                    return (moment(value).format('DD.MM.YYYY, HH:mm')).concat(" Uhr");
+                }
+                return '';
+            },
             format_unix_date(value){
                 if (value) {
                     return (moment.unix(value).format('DD.MM.YYYY, HH:mm')).concat(" Uhr");
                 }
                 return '';
+            },
+            getOpenTasks(type) {
+                if (type === 'all') {
+                    return this.tasks.filter(task => task.column === "Neu").length;
+                }
+                if (type === 'other') {
+                    return this.tasks.filter(task => task.type === "0" && task.column === "Neu").length;
+                }
+                if (!type) {
+                    return this.tasks.filter(task => task.type === "1" && task.column === "Neu").length;
+                }
+                return this.tasks.filter(task => task.type === (Number(type) + 1) && task.column === "Neu").length;
+            },
+            routeTo(route) {
+                this.$router.push(route);
+            },
+            getLatestMessage() {
+                return this.messages.filter(message => message.id === this.currentProject.newMessage)[0];
             }
         },
         created() {
@@ -154,6 +220,10 @@
 
 <style lang="scss" scoped>
     @import '@/theme/variables.scss';
+
+    .opentasks-phasename {
+        word-break: break-all;
+    }
 
     .z-canvas {
         position: relative;

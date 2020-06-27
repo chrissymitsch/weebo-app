@@ -6,15 +6,15 @@
         Projekt wird geladen...
       </div>
     </div>
-    <div class="main-wrapper" v-if="!settingCurrentProject && !project">
+    <div class="main-wrapper" v-if="!settingCurrentProject && !currentProject">
       <div class="page-wrapper">
         Du bist nicht Teilnehmer dieses Projekts. Warte auf den Einladungslink!
       </div>
     </div>
     <div class="page-wrapper">
       <project-detail
-        v-if="!settingCurrentProject && project"
-        :project="project"
+        v-if="!settingCurrentProject && currentProject"
+        :project="currentProject"
       ></project-detail>
      </div>
   </div>
@@ -31,16 +31,17 @@
       ...mapState('projects', ['currentProject', 'userProjects'])
     },
     data: () => ({
-      project: null,
       settingCurrentProject: true,
     }),
     mounted() {
       if (this.userProjects) {
         const projectId = this.$route.params.id;
         if (this.userProjects.includes(projectId)) {
-          this.$store.dispatch('projects/getProjectById', projectId).then(() => {
-            this.project = this.currentProject;
-          }).finally(() => this.settingCurrentProject = false);
+          this.$store.dispatch('projects/getProjectById', projectId)
+                  .finally(() => this.settingCurrentProject = false);
+          this.$store.dispatch('tasks/getTasks', projectId);
+          this.$store.dispatch('files/getFiles', projectId);
+          this.$store.dispatch('messages/getMessages', projectId);
         } else {
           this.settingCurrentProject = false;
         }

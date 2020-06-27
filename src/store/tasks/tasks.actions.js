@@ -14,16 +14,18 @@ export default {
   /**
    * Create a task for current project
    */
-  createProjectTask: async ({ rootState }, task) => {
+  createProjectTask: async ({ rootState, commit }, task) => {
     const newTask = {
       title: task.title,
       creator: rootState.authentication.user.id,
+      position: task.position,
       type: task.type,
       column: task.column
     };
 
     const projectsTasksDB = new ProjectsTasksDB(task.projectId);
     await projectsTasksDB.create(newTask);
+    commit('addProjectTask', newTask);
   },
 
   /**
@@ -31,8 +33,8 @@ export default {
    */
   updateProjectTask: async ({ commit }, {projectId, task}) => {
     const projectsTasksDB = new ProjectsTasksDB(projectId);
-    const updatedTask = await projectsTasksDB.update(task);
-    commit('updateProjectTask', updatedTask);
+    await projectsTasksDB.update(task);
+    commit('updateProjectTask', task);
   },
 
 }

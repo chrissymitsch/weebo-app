@@ -16,4 +16,10 @@ export default {
    */
   isProjectUpdatePending: state => projectId =>
     state.projectUpdatePending.includes(projectId),
+
+  /**
+   * Check if a project member is loading
+   */
+  isProjectMemberLoading: state => memberId =>
+    state.projectMemberLoading.includes(memberId),
 }

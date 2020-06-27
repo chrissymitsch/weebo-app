@@ -37,14 +37,14 @@
             finishPhaseDialogActive: false
         }),
         methods: {
-            ...mapActions('projects', ['triggerFinishPhaseAction']),
+            ...mapActions('projects', ['triggerUpdateProjectAction']),
             goBack() {
                 this.$zircle.goBack();
             },
             onConfirm () {
                 const projectToUpdate = JSON.parse(JSON.stringify(this.currentProject));
                 projectToUpdate.phase = this.$zircle.getParams().currentPhase + 1;
-                this.triggerFinishPhaseAction(projectToUpdate);
+                this.triggerUpdateProjectAction(projectToUpdate);
                 this.finishPhaseDialogActive = false;
             }
         }
