@@ -38,11 +38,13 @@
                 <md-card class="project-status margin8" md-with-hover>
                     <md-ripple>
                         <md-card-header class="md-subheading">
-                            Dieser Monat
+                            Mitarbeiter des Monats
                         </md-card-header>
-
-                        <md-card-content>
-                            CHART
+                        <md-card-content class="text-center">
+                            <avatar :user-id="getMemberOfTheMonth().winner"></avatar>
+                            <p class="md-body-2">
+                                Mit {{getMemberOfTheMonth().winnerScore}}x <i>Danke</i>
+                            </p>
                         </md-card-content>
                     </md-ripple>
                 </md-card>
@@ -142,7 +144,7 @@
         computed: {
             ...mapState('messages', ['messages']),
             ...mapState('rewards', ['tutorials']),
-            ...mapState('projects', ['currentProject']),
+            ...mapState('projects', ['currentProject', 'projectMembers']),
             ...mapState('tasks', ['tasks'])
         },
         components: {
@@ -213,6 +215,27 @@
             },
             getLatestMessage() {
                 return this.messages.filter(message => message.id === this.currentProject.newMessage)[0];
+            },
+            getMemberOfTheMonth() {
+                const thisMonth = moment().format("MM").toString();
+                const thisYear = moment().year().toString();
+                const searchString = thisMonth.concat(".").concat(thisYear);
+                const allScores = [];
+                const allMembers = [];
+                this.projectMembers.filter(member => {
+                    let memberScores = 0;
+                    if (member.thankYou) {
+                        const scoresToCount = member.thankYou.filter(thanks => thanks.date.includes(searchString));
+                        for (let i = 0; i < scoresToCount.length; i += 1) {
+                            memberScores += Number(scoresToCount[i].score);
+                        }
+                    }
+                    allScores.push(memberScores);
+                    allMembers.push(member.id);
+                    return true;
+                });
+                const maxScore = allScores.indexOf(Math.max(...allScores));
+                return {"winner": allMembers[maxScore], "winnerScore": Math.max(...allScores)};
             }
         },
         created() {

@@ -92,12 +92,12 @@
               </md-button>
             </router-link>
             <router-link v-if="project.phase === 1" :to="{ name: 'project-personas', params: { project: project } }">
+              <md-badge class="md-primary" md-content="neu">
                 <md-button class="md-icon-button md-primary">
-                  <md-badge class="md-primary" md-content="neu">
-                    <md-icon class="navigation-icon">account_box</md-icon>
-                  </md-badge>
+                  <md-icon class="navigation-icon">account_box</md-icon>
                   <md-tooltip md-direction="top">Personas und Szenarien</md-tooltip>
                 </md-button>
+              </md-badge>
             </router-link>
             <router-link :to="{ name: 'project-cloud', params: { project: project } }">
               <md-button class="md-icon-button md-primary">

@@ -1,5 +1,6 @@
 import ProjectsDB from '@/firebase/projects-db'
 import UsersDB from "@/firebase/users-db";
+import moment from 'moment'
 
 export default {
   /**
@@ -21,10 +22,26 @@ export default {
     const userDb = new UsersDB();
     const user = await userDb.read(userId);
     const userToUpdate = JSON.parse(JSON.stringify(user));
+    const today = moment().format("DD.MM.YYYY");
     if (userToUpdate.thankYou) {
-      userToUpdate.thankYou += Number(userToUpdate.thankYou);
+      const checkTodaysScore = userToUpdate.thankYou.findIndex(elem => elem.date === today);
+      if (checkTodaysScore > -1) {
+        userToUpdate.thankYou[checkTodaysScore] = {
+          "score": Number(userToUpdate.thankYou[checkTodaysScore].score) + 1,
+          "date": today
+        }
+        console.log(userToUpdate)
+      } else {
+        userToUpdate.thankYou.push({
+          "score": 1,
+          "date": today
+        });
+      }
     } else {
-      userToUpdate.thankYou = 1;
+      userToUpdate.thankYou = [{
+        "score": 1,
+        "date": today
+      }];
     }
     await userDb.update(userToUpdate);
     commit('removeProjectMemberUpdatePending', userId);

@@ -10,7 +10,7 @@
           <div class="account-button"><md-button class="md-raised">Google-Konto verwalten</md-button></div>
           <div class="md-layout md-gutter profile-stats">
             <div class="md-layout-item text-center">
-              <p class="md-subheading">{{user.thankYou}}</p>
+              <p class="md-subheading">{{getThankYou()}}</p>
               <p class="md-caption">DANKE</p>
             </div>
             <div class="md-layout-item text-center">
@@ -47,7 +47,7 @@
           <div class="badge-list">
             <md-card>
               <md-card-media>
-                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('CreateTasks')" />
+                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('addTask')" />
               </md-card-media>
               <md-card-content>
                 <p class="md-body-2">Aufgaben erstellen</p>
@@ -58,7 +58,7 @@
             </md-card>
             <md-card>
               <md-card-media>
-                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('FinishTasks')" />
+                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('finishTask')" />
               </md-card-media>
               <md-card-content>
                 <p class="md-body-2">Aufgaben abschließen</p>
@@ -69,27 +69,18 @@
             </md-card>
             <md-card>
               <md-card-media>
-                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('Discussions')" />
+                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('addMessage')" />
               </md-card-media>
               <md-card-content>
                 <p class="md-body-2">Diskutieren</p>
-                <md-progress-bar md-mode="determinate" :md-value="10"></md-progress-bar>
-                <p class="md-caption">Level 1</p>
+                <p class="md-caption">Level {{getLevel('addMessage')}}</p>
+                <md-progress-bar md-mode="determinate" :md-value="getLevelPercentage('addMessage')"></md-progress-bar>
+                <md-tooltip>({{scores['addMessage'] || 0}} von {{levelBounds[getLevel('addMessage') - 1]}} Punkten)</md-tooltip>
               </md-card-content>
             </md-card>
             <md-card>
               <md-card-media>
-                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('Chat')" />
-              </md-card-media>
-              <md-card-content>
-                <p class="md-body-2">Im Chat quatschen</p>
-                <md-progress-bar md-mode="determinate" :md-value="10"></md-progress-bar>
-                <p class="md-caption">Level 1</p>
-              </md-card-content>
-            </md-card>
-            <md-card>
-              <md-card-media>
-                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('Uploads')" />
+                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('addFile')" />
               </md-card-media>
               <md-card-content>
                 <p class="md-body-2">Dateien hochladen</p>
@@ -100,7 +91,7 @@
             </md-card>
             <md-card>
               <md-card-media>
-                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('Thanks')" />
+                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('thankYou')" />
               </md-card-media>
               <md-card-content>
                 <p class="md-body-2">&quot;Danke&quot; verteilt</p>
@@ -151,7 +142,10 @@ export default {
     avatars: null,
     rerenderAvatar: 0,
     scores: [],
-    levelBounds: [2, 5, 10, 15, 20, 30, 50, 75, 100, 150, 200, 300, 500, 1000]
+    levelBounds: [2, 5, 10, 15, 20, 30, 50, 75, 100, 150, 200, 300, 500, 1000],
+    levelBoundsBronze: [2, 5, 10, 15],
+    levelBoundsSilver: [20, 30, 50, 75, 100],
+    levelBoundsGold: [150, 200, 300, 500, 1000]
   }),
   created() {
     this.avatars = [
@@ -174,12 +168,21 @@ export default {
         return "activated-avatar";
       return "not-activated";
     },
+    getThankYou() {
+      let score = 0;
+      if (this.user.thankYou) {
+        for (let i = 0; i < this.user.thankYou.length; i += 1) {
+          score += Number(this.user.thankYou[i].score);
+        }
+      }
+      return score;
+    },
     hasBadge(badgeName) {
       const checkIfUserHasBadge = this.userBadges.filter(function(elem) {
         if(elem.name === badgeName) return elem;
         return null;
       });
-      if (checkIfUserHasBadge.length > 0) {
+      if (checkIfUserHasBadge.length > 0 || this.scores[badgeName] >= 1000) {
         return "activated-badge";
       }
       return "not-activated-badge";

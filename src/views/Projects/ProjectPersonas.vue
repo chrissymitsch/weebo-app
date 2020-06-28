@@ -74,12 +74,14 @@
 
                 <md-table-row slot="md-table-row" slot-scope="{ item }">
                     <md-table-cell md-label="Name" md-sort-by="name">
-                        <a :href="item.url" target=_blank>{{ item.name }}</a>
+                        <a href="#" @click="triggerPersonaModal(item)">{{ item.name }}</a>
                     </md-table-cell>
-                    <md-table-cell md-label="Kommentare" md-sort-by="type">
-                        <md-button class="md-icon-button" @click="triggerPersonaModal(item)"><md-icon>message</md-icon></md-button>
+                    <md-table-cell md-label="Kommentare">
+                        <md-badge md-dense :md-content="countMessages(item.id)">
+                            <md-button class="md-icon-button" @click="triggerPersonaModal(item)"><md-icon>message</md-icon></md-button>
+                        </md-badge>
                     </md-table-cell>
-                    <md-table-cell md-label="" md-sort-by="createTimestamp">{{ format_date(item.createTimestamp) }}</md-table-cell>
+                    <md-table-cell md-label="Erstellt" md-sort-by="createTimestamp">{{ format_date(item.createTimestamp) }}</md-table-cell>
                 </md-table-row>
             </md-table>
         </div>
@@ -154,6 +156,9 @@
                     return 0;
                 }
                 return list.sort(compare);
+            },
+            countMessages(personaId) {
+                return this.messages.filter(message => message.type === "personaComment" && message.personaId === personaId).length;
             },
             getPersonaMessages(personaId) {
                 this.selectedPersonaMessages = this.sortMessageList(this.messages.filter(message => message.type === "personaComment" && message.personaId === personaId));

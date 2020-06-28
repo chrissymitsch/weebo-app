@@ -3,6 +3,7 @@
         <md-ripple>
             <img v-if="!userForAvatar.customAvatar && userForAvatar.photoURL" :src="userForAvatar.photoURL" alt="Avatar">
             <img v-if="userForAvatar.customAvatar" :src="userForAvatar.customAvatar" alt="Avatar">
+            <md-tooltip md-direction="top">{{userForAvatar.displayName}}</md-tooltip>
         </md-ripple>
     </md-avatar>
 </template>

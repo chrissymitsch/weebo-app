@@ -31,9 +31,8 @@
         {{message.data.text}}
       </template>
     </beautiful-chat>
-<!--    <md-badge class="md-primary" v-if="!isChatOpen && newMessagesCount > 0" :md-content="newMessagesCount">-->
-    <md-badge class="md-primary" v-if="!isChatOpen && newMessagesCount > 0">
-    </md-badge>
+<!--    <md-badge class="md-primary" v-if="!isChatOpen && newMessagesCount > 0">-->
+<!--    </md-badge>-->
   </div>
 </template>
 
@@ -184,13 +183,6 @@
 
 <style lang="scss">
   @import '@/theme/variables.scss';
-
-  .md-badge {
-    position: fixed;
-    right: 22px;
-    bottom: 66px;
-    z-index: 100;
-  }
 
   .sc-launcher, .sc-chat-window {
     z-index: 99;

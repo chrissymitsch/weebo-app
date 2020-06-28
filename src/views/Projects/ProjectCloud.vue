@@ -111,10 +111,12 @@
                     <a :href="item.url" target=_blank>{{ item.name }}</a>
                 </md-table-cell>
                 <md-table-cell md-label="Kommentare" md-sort-by="type">
-                    <md-button class="md-icon-button" @click="triggerFileModal(item)"><md-icon>message</md-icon></md-button>
+                    <md-badge md-dense :md-content="countMessages(item.id)">
+                        <md-button class="md-icon-button" @click="triggerFileModal(item)"><md-icon>message</md-icon></md-button>
+                    </md-badge>
                 </md-table-cell>
                 <md-table-cell md-label="Größe" md-sort-by="size">{{ formatBytes(item.size) }}</md-table-cell>
-                <md-table-cell md-label="" md-sort-by="createTimestamp">{{ format_date(item.createTimestamp) }}</md-table-cell>
+                <md-table-cell md-label="Erstellt" md-sort-by="createTimestamp">{{ format_date(item.createTimestamp) }}</md-table-cell>
             </md-table-row>
         </md-table>
     </div>
@@ -182,6 +184,9 @@
             filterFilesByPhase(files) {
                 const filesToFilter = JSON.parse(JSON.stringify(files));
                 return filesToFilter.filter(file => file.phase === this.currentProject.phase);
+            },
+            countMessages(fileId) {
+                return this.messages.filter(message => message.type === "fileComment" && message.fileId === fileId).length;
             },
             onUpload() {
                 this.errorMessage = null;
