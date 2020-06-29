@@ -262,6 +262,10 @@ export default {
       width: 50%;
       display: inline-flex;
 
+      @media (max-width: 865px) {
+        width: 100%;
+      }
+
       .md-layout-item:not(:last-child) {
         border-right: 1px solid #AFB4BB;
       }

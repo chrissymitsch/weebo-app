@@ -17,34 +17,36 @@ export default {
   /**
    * Updates a thank you score for project member
    */
-  updateThankYouScore: async ({ commit }, userId) => {
-    commit('addProjectMemberUpdatePending', userId);
+  updateThankYouScore: async ({ commit }, {projectMemberId, projectId}) => {
+    commit('addProjectMemberUpdatePending', projectMemberId);
     const userDb = new UsersDB();
-    const user = await userDb.read(userId);
+    const user = await userDb.read(projectMemberId);
     const userToUpdate = JSON.parse(JSON.stringify(user));
     const today = moment().format("DD.MM.YYYY");
     if (userToUpdate.thankYou) {
-      const checkTodaysScore = userToUpdate.thankYou.findIndex(elem => elem.date === today);
+      const checkTodaysScore = userToUpdate.thankYou.findIndex(elem => elem.date === today && elem.projectId === projectId);
       if (checkTodaysScore > -1) {
         userToUpdate.thankYou[checkTodaysScore] = {
           "score": Number(userToUpdate.thankYou[checkTodaysScore].score) + 1,
-          "date": today
+          "date": today,
+          "projectId": projectId
         }
-        console.log(userToUpdate)
       } else {
         userToUpdate.thankYou.push({
           "score": 1,
-          "date": today
+          "date": today,
+          "projectId": projectId
         });
       }
     } else {
       userToUpdate.thankYou = [{
         "score": 1,
-        "date": today
+        "date": today,
+        "projectId": projectId
       }];
     }
     await userDb.update(userToUpdate);
-    commit('removeProjectMemberUpdatePending', userId);
+    commit('removeProjectMemberUpdatePending', projectMemberId);
   },
 
   /**
@@ -228,7 +230,7 @@ export default {
   /**
    * Subscribes to update thank you score an project member.
    */
-  triggerUpdateThankYouAction: ({ dispatch }, projectMemberId) => {
-    dispatch('updateThankYouScore', projectMemberId);
+  triggerUpdateThankYouAction: ({ dispatch }, {projectMemberId, projectId}) => {
+    dispatch('updateThankYouScore', {projectMemberId, projectId});
   }
 }

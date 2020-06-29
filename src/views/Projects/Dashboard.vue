@@ -38,9 +38,14 @@
                 <md-card class="project-status margin8" md-with-hover>
                     <md-ripple>
                         <md-card-header class="md-subheading">
-                            Mitarbeiter des Monats
+                            <md-icon>favorite_border</md-icon> Mitarbeiter des Monats
                         </md-card-header>
-                        <md-card-content class="text-center">
+                        <md-card-content class="text-center" v-if="getMemberOfTheMonth().winnerScore < 1">
+                            <p class="md-body-2">
+                                Noch niemand.
+                            </p>
+                        </md-card-content>
+                        <md-card-content class="text-center" v-if="getMemberOfTheMonth().winnerScore > 0">
                             <avatar :user-id="getMemberOfTheMonth().winner"></avatar>
                             <p class="md-body-2">
                                 Mit {{getMemberOfTheMonth().winnerScore}}x <i>Danke</i>
@@ -53,7 +58,7 @@
                     <div @click="routeTo('tasks')">
                         <md-ripple>
                             <md-card-header class="md-subheading">
-                                Offene Aufgaben
+                                <md-icon>list</md-icon> Offene Aufgaben
                             </md-card-header>
 
                             <md-card-content>
@@ -208,7 +213,7 @@
                 if (!type) {
                     return this.tasks.filter(task => task.type === "1" && task.column === "Neu").length;
                 }
-                return this.tasks.filter(task => task.type === (Number(type) + 1) && task.column === "Neu").length;
+                return this.tasks.filter(task => task.type === (Number(type) + 1).toString() && task.column === "Neu").length;
             },
             routeTo(route) {
                 this.$router.push(route);
@@ -225,7 +230,7 @@
                 this.projectMembers.filter(member => {
                     let memberScores = 0;
                     if (member.thankYou) {
-                        const scoresToCount = member.thankYou.filter(thanks => thanks.date.includes(searchString));
+                        const scoresToCount = member.thankYou.filter(thanks => thanks.date.includes(searchString) && thanks.projectId === this.currentProject.id);
                         for (let i = 0; i < scoresToCount.length; i += 1) {
                             memberScores += Number(scoresToCount[i].score);
                         }

@@ -16,7 +16,7 @@ export default {
    */
   createProjectPersona: async ({ commit }, persona) => {
     const personasDb = new ProjectPersonasDb(persona.projectId);
-    await personasDb.create(persona);
-    commit('addProjectPersona', persona);
+    const createdPerson = await personasDb.create(persona);
+    commit('addProjectPersona', createdPerson);
   },
 }

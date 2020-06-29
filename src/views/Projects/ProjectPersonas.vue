@@ -46,7 +46,19 @@
             </div>
         </Modal>
 
-        <div class="persona-layout">
+        <div class="persona-layout md-xsmall-size md-small-hide md-medium-hide md-large-hide md-xlarge-hide">
+            <add-persona :id="currentProject.id" @personaCreated="updatePersona"></add-persona>
+            <md-list>
+                <md-list-item v-for="(persona, index) in searched" :key="index">
+                    <md-button @click="triggerPersonaModal(persona)"><md-icon>message</md-icon> ({{countMessages(persona.id)}})</md-button>
+                    <span class="md-list-item-text persona-name">
+                        <a href="#" @click="triggerPersonaModal(persona)">{{ persona.name }}</a>
+                    </span>
+                </md-list-item>
+            </md-list>
+        </div>
+
+        <div class="persona-layout md-xsmall-hide">
             <add-persona :id="currentProject.id" @personaCreated="updatePersona"></add-persona>
             <md-divider></md-divider>
             <md-table v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
@@ -164,7 +176,7 @@
                 this.selectedPersonaMessages = this.sortMessageList(this.messages.filter(message => message.type === "personaComment" && message.personaId === personaId));
             },
             addThankYou(receiver) {
-                this.triggerUpdateThankYouAction(receiver);
+                this.triggerUpdateThankYouAction({"projectMemberId": receiver, "projectId": this.currentProject.id});
                 this.triggerScoreAction({name: "thankYou", score: 1, type: "score"});
                 this.$toast.success('Du hast ein Dankeschön verteilt (+1 Punkt)', {
                     position: 'top-right',
@@ -209,5 +221,16 @@
 <style scoped>
     .persona-layout {
         margin-top: 24px;
+    }
+
+    .persona-layout.md-xsmall-size {
+        display: inherit;
+    }
+
+    .persona-name {
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 </style>

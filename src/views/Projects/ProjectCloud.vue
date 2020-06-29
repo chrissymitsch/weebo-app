@@ -18,7 +18,7 @@
                     Du kannst hier die Datei <i>{{selectedFile.name}}</i> kommentieren oder dich dafür bedanken!
                 </p>
                 <md-button v-if="selectedFile.creator === user.id" class="md-raised" disabled><md-icon>favorite_border</md-icon>Danke</md-button>
-                <md-button v-if="selectedFile.creator !== user.id" class="md-raised md-accent" @click="addThankYou(selectedFile.creator)">
+                <md-button v-if="selectedFile.creator === user.id" class="md-raised md-accent" @click="addThankYou(selectedFile.creator)">
                     <md-icon>favorite_border</md-icon>
                     Danke
                 </md-button>
@@ -266,7 +266,7 @@
                 this.getFileMessages(file.id);
             },
             addThankYou(receiver) {
-                this.triggerUpdateThankYouAction(receiver);
+                this.triggerUpdateThankYouAction({"projectMemberId": receiver, "projectId": this.currentProject.id});
                 this.triggerScoreAction({name: "thankYou", score: 1, type: "score"});
                 this.$toast.success('Du hast ein Dankeschön verteilt (+1 Punkt)', {
                     position: 'top-right',

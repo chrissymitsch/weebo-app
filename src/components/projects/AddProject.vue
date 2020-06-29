@@ -1,8 +1,9 @@
 <template>
-  <div>
+  <div class="width-100">
     <md-card class="md-layout-item text-center">
       <form novalidate class="md-layout">
-        <md-card-content>
+        <md-card-content class="width-100">
+          <md-button class="md-icon-button md-dense md-accent md-raised"><md-icon>add</md-icon></md-button>
           <md-field :class="getValidationClass('projectName')">
             <label>Projektname</label>
             <md-input v-model="form.projectName" :disabled="projectCreationPending"
@@ -119,6 +120,20 @@
 </script>
 
 <style lang="scss" scoped>
+  .md-card {
+    min-height: 200px;
+  }
+
+  @media (max-width: 600px) {
+    .width-100 {
+      width: 100%;
+    }
+
+    .md-card {
+      width: 100%;
+    }
+  }
+
   .md-field {
     width: 80%;
   }

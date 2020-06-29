@@ -127,6 +127,7 @@
         }),
         methods: {
             ...mapActions('rewards', ['triggerScoreAction']),
+            ...mapActions('messages', ['createMessage']),
             openModal() {
                 this.active = true;
                 this.$nextTick(() => {
@@ -153,6 +154,7 @@
                 this.form.picture = `https://avatars.dicebear.com/api/${this.form.gender}/${this.currentTimestamp}.svg?options[mood][]=happy`;
                 this.form.projectId = this.currentProject.id;
                 this.form.creator = this.user.id;
+                const name = ''.concat(this.form.name);
                 this.$store.dispatch('personas/createProjectPersona', this.form).then(() => {
                     this.taskSaved = true;
                     this.active = false;
@@ -163,6 +165,13 @@
                         duration: 60000 // 1 minute
                     });
                     this.resetForm();
+                    this.createMessage({
+                        "projectId": this.currentProject.id,
+                        "type": "system",
+                        "data": {
+                            "text": `${this.user.displayName} hat eine neue Persona "${name}" erstellt.`
+                        }
+                    });
                     this.$emit('personaCreated');
                 });
             },
