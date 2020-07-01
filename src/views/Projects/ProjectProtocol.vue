@@ -1,5 +1,5 @@
 <template>
-    <div class="ProjectDiskussion" v-if="currentProject">
+    <div class="ProjectProtocol" v-if="currentProject">
         <md-chip>{{ currentProject.name }} / Diskussion</md-chip>
         <div class="md-layout md-gutter">
             <div class="md-layout-item">
@@ -20,14 +20,14 @@
 
 <script>
     import { mapState } from 'vuex'
-    import Message from "../../components/projects/Message";
+    import Message from "../../components/messages/Message";
 
     export default {
         components: {Message},
         computed: {
             ...mapState('app', ['networkOnLine']),
             ...mapState('projects', ['currentProject']),
-            ...mapState('messages', ['messages'])
+            ...mapState('messages', ['messages']),
         },
         data: () => ({
             finishedLoading: 0,
@@ -46,7 +46,7 @@
             },
             filterMessageList(list) {
                 return list.filter(message => message.projectId === this.currentProject.id && message.type !== "fileComment")
-            }
+            },
         },
         created() {
             if (this.currentProject) {

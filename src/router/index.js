@@ -130,7 +130,7 @@ const router = new Router({
           name: 'project-discussion',
           props: true,
           component: () =>
-              import(/* webpackChunkName: "client-chunk-project-discussion" */ '@/views/Projects/ProjectDiscussion.vue')
+              import(/* webpackChunkName: "client-chunk-project-discussion" */ '@/views/Projects/ProjectProtocol.vue')
         },
         {
           path: 'personas',

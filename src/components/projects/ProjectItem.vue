@@ -27,7 +27,7 @@
                 :to="{ name: 'project-dashboard', params: { id: projectId, project: project } }"
         >
           <md-avatar class="md-avatar-icon md-primary"><img :src="`https://avatars.dicebear.com/api/jdenticon/${projectId}.svg`" alt="" /></md-avatar>
-          <div class="md-title project-title"><p>{{ project.name }}</p></div>
+          <p class="md-title project-title">{{ project.name }}</p>
         </router-link>
         <p class="md-caption">Letzte Aktualisierung: {{ format_date(project.updateTimestamp) }}</p>
       </md-card-content>
@@ -111,14 +111,11 @@
 }
 
   .project-title {
-    display: inline-grid;
-
-    p {
-      max-width: 200px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: auto;
   }
 
   .md-card {

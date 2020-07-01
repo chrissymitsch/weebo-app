@@ -17,7 +17,7 @@
 
         <md-empty-state
                 md-label="Nimm alle mit an Board!"
-                md-description="Teile dein Projekt mit Team-Mitgliedern, Kunden, Auftraggebern, usw., damit du
+                md-description="Teile dein Projekt mit Team-Mitgliedern, Kunden, Auftraggebern usw., damit du
                 Weebo als Kollaborations-Tool für dein Projekt nutzen kannst.">
             <md-avatar class="md-large md-accent"><img src="@/assets/img/rakete.png" /></md-avatar>
         </md-empty-state>
@@ -79,62 +79,90 @@
             <md-button @click.stop.prevent="copyLink">Kopieren</md-button>
         </md-field>
 
-        <div class="md-layout md-gutter">
-            <div class="md-layout-item md-layout md-gutter">
-                <div class="md-layout-item">
-                    <md-card class="md-accent">
-                        <md-card-content>
-                            <md-list class="md-accent">
-                                <md-subheader>Du (Admin)</md-subheader>
-
-                                <md-list-item>
-                                    <md-icon class="md-accent">check_box</md-icon>
-                                    <span class="md-list-item-text">Projekte anlegen / bearbeiten / löschen</span>
-                                </md-list-item>
-                                <md-list-item>
-                                    <md-icon class="md-accent">check_box</md-icon>
-                                    <span class="md-list-item-text">Einladungslink versenden</span>
-                                </md-list-item>
-                                <md-list-item>
-                                    <md-icon class="md-accent">check_box</md-icon>
-                                    <span class="md-list-item-text">Teilnehmer verwalten</span>
-                                </md-list-item>
-                                <md-list-item>
-                                    <md-icon class="md-accent">check_box</md-icon>
-                                    <span class="md-list-item-text">Dokumente hochladen</span>
-                                </md-list-item>
-                            </md-list>
-                        </md-card-content>
-                    </md-card>
+        <md-card>
+            <md-card-header>
+                <p class="md-body-2">Übersicht über einige wichtige Funktionalitäten</p>
+            </md-card-header>
+            <md-card-content>
+                <div class="md-layout md-gutter">
+                    <div class="md-layout-item">
+                        <md-list>
+                            <md-subheader>Du (Admin)</md-subheader>
+                            <md-list-item>
+                                <md-icon class="md-accent">check_box</md-icon>
+                                <span class="md-list-item-text">Projekte anlegen / bearbeiten / löschen</span>
+                            </md-list-item>
+                            <md-list-item>
+                                <md-icon class="md-accent">check_box</md-icon>
+                                <span class="md-list-item-text">Projekte abonnieren und entfernen</span>
+                            </md-list-item>
+                            <md-list-item>
+                                <md-icon class="md-accent">check_box</md-icon>
+                                <span class="md-list-item-text">Einladungslink versenden</span>
+                            </md-list-item>
+                            <md-list-item>
+                                <md-icon class="md-accent">check_box</md-icon>
+                                <span class="md-list-item-text">Teilnehmer verwalten</span>
+                            </md-list-item>
+                            <md-list-item>
+                                <md-icon class="md-accent">check_box</md-icon>
+                                <span class="md-list-item-text">Dokumente hochladen</span>
+                            </md-list-item>
+                            <md-list-item>
+                                <md-icon class="md-accent">check_box</md-icon>
+                                <span class="md-list-item-text">Termine erstellen / bearbeiten / löschen</span>
+                            </md-list-item>
+                            <md-list-item>
+                                <md-icon class="md-accent">check_box</md-icon>
+                                <span class="md-list-item-text">Gruppenchat nutzen</span>
+                            </md-list-item>
+                            <md-list-item>
+                                <md-icon class="md-accent">check_box</md-icon>
+                                <span class="md-list-item-text">Personas erstellen</span>
+                            </md-list-item>
+                        </md-list>
+                    </div>
+                    <div class="md-layout-item">
+                        <md-list class="md-accent">
+                            <md-subheader>Eingeladene Projektteilnehmer</md-subheader>
+                            <md-list-item>
+                                <md-icon class="md-accent">check_box_outline_blank</md-icon>
+                                <span class="md-list-item-text">Projekte anlegen / bearbeiten / löschen</span>
+                            </md-list-item>
+                            <md-list-item>
+                                <md-icon class="md-accent">check_box</md-icon>
+                                <span class="md-list-item-text">Projekte abonnieren und entfernen</span>
+                            </md-list-item>
+                            <md-list-item>
+                                <md-icon class="md-accent">check_box_outline_blank</md-icon>
+                                <span class="md-list-item-text">Einladungslink versenden</span>
+                            </md-list-item>
+                            <md-list-item>
+                                <md-icon class="md-accent">check_box_outline_blank</md-icon>
+                                <span class="md-list-item-text">Teilnehmer verwalten</span>
+                            </md-list-item>
+                            <md-list-item>
+                                <md-icon class="md-accent">check_box</md-icon>
+                                <span class="md-list-item-text">Dokumente hochladen</span>
+                            </md-list-item>
+                            <md-list-item>
+                                <md-icon class="md-accent">check_box</md-icon>
+                                <span class="md-list-item-text">Termine erstellen / bearbeiten / löschen</span>
+                            </md-list-item>
+                            <md-list-item>
+                                <md-icon class="md-accent">check_box</md-icon>
+                                <span class="md-list-item-text">Gruppenchat nutzen</span>
+                            </md-list-item>
+                            <md-list-item>
+                                <md-icon class="md-accent">check_box</md-icon>
+                                <span class="md-list-item-text">Personas erstellen</span>
+                            </md-list-item>
+                        </md-list>
+                    </div>
                 </div>
-                <div class="md-layout-item">
-                    <md-card class="md-accent">
-                        <md-card-content>
-                            <md-list class="md-accent">
-                                <md-subheader>Eingeladene Projektteilnehmer</md-subheader>
+            </md-card-content>
+        </md-card>
 
-                                <md-list-item>
-                                    <md-icon class="md-accent">check_box_outline_blank</md-icon>
-                                    <span class="md-list-item-text">Projekte anlegen / bearbeiten / löschen</span>
-                                </md-list-item>
-                                <md-list-item>
-                                    <md-icon class="md-accent">check_box_outline_blank</md-icon>
-                                    <span class="md-list-item-text">Einladungslink versenden</span>
-                                </md-list-item>
-                                <md-list-item>
-                                    <md-icon class="md-accent">check_box_outline_blank</md-icon>
-                                    <span class="md-list-item-text">Teilnehmer verwalten</span>
-                                </md-list-item>
-                                <md-list-item>
-                                    <md-icon class="md-accent">check_box</md-icon>
-                                    <span class="md-list-item-text">Dokumente hochladen</span>
-                                </md-list-item>
-                            </md-list>
-                        </md-card-content>
-                    </md-card>
-                </div>
-            </div>
-        </div>
         <md-snackbar :md-active.sync="copied">Link in Zwischenablage kopiert.</md-snackbar>
     </div>
 </template>
@@ -195,15 +223,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .md-card {
-        display: inline-block;
-        vertical-align: top;
-
-        .md-card-content .md-list-item-container {
-            font-size: 12px;
-        }
-    }
-
     .md-list-item-content {
         min-height: 12px;
     }

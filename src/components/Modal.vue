@@ -1,7 +1,7 @@
 <template>
   <div class="Modal">
     <div class="modal-mask" v-if="modalActive">
-      <div :class="`modal-wrapper ${size}`">
+      <div :class="`modal-wrapper ${size}`" @click.self="$emit('closeModal')">
         <div class="modal-container">
           <div class="close">
             <md-button class="md-icon-button" @click="$emit('closeModal')"><md-icon>close</md-icon></md-button>

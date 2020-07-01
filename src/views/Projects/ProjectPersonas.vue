@@ -5,7 +5,7 @@
         <Modal :showModal="personaModalActive" @closeModal="personaModalActive=false" size="large">
             <div v-if="selectedPersona">
                 <persona-details :persona="selectedPersona"></persona-details>
-                <md-table>
+                <md-table class="hide-for-small">
                     <md-table-row>
                         <md-table-head>Von</md-table-head>
                         <md-table-head>Am</md-table-head>
@@ -46,7 +46,7 @@
             </div>
         </Modal>
 
-        <div class="persona-layout md-xsmall-size md-small-hide md-medium-hide md-large-hide md-xlarge-hide">
+        <div class="persona-layout show-for-small">
             <add-persona :id="currentProject.id" @personaCreated="updatePersona"></add-persona>
             <md-list>
                 <md-list-item v-for="(persona, index) in searched" :key="index">
@@ -58,7 +58,7 @@
             </md-list>
         </div>
 
-        <div class="persona-layout md-xsmall-hide">
+        <div class="persona-layout hide-for-small">
             <add-persona :id="currentProject.id" @personaCreated="updatePersona"></add-persona>
             <md-divider></md-divider>
             <md-table v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
@@ -221,10 +221,6 @@
 <style scoped>
     .persona-layout {
         margin-top: 24px;
-    }
-
-    .persona-layout.md-xsmall-size {
-        display: inherit;
     }
 
     .persona-name {

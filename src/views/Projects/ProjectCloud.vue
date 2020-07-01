@@ -75,7 +75,18 @@
             </div>
         </div>
 
-        <md-table v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
+        <div class="show-for-small">
+            <md-list>
+                <md-list-item v-for="(file, index) in searched" :key="index">
+                    <md-button @click="triggerFileModal(file)"><md-icon>message</md-icon> ({{countMessages(file.id)}})</md-button>
+                    <span class="md-list-item-text persona-name">
+                        <a href="#" @click="triggerFileModal(persona)">{{ file.name }}</a>
+                    </span>
+                </md-list-item>
+            </md-list>
+        </div>
+
+        <md-table class="hide-for-small" v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
             <md-table-toolbar>
                 <div class="md-toolbar-section-start">
                     <h1 class="md-title">Dateien</h1>

@@ -4,11 +4,14 @@
       <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
       Projekte werden geladen...
     </p>
-    <p v-if="finishedLoading && (!userProjects || userProjects.length === 0)" class="text-center">
-      Noch keine Projekte verknüpft.
-    </p>
+    <div v-if="finishedLoading && (!userProjects || userProjects.length === 0)">
+      <p class="text-center">
+        Noch keine Projekte verknüpft.
+      </p>
+      <add-project v-if="networkOnLine"></add-project>
+    </div>
 
-    <div class="project-list" v-if="finishedLoading && userProjects">
+    <div class="project-list" v-if="finishedLoading && userProjects && userProjects.length > 0">
       <project-item
               v-for="(project, index) in userProjects"
               :key="project"
@@ -20,6 +23,10 @@
               @deleteProject="deleteUserProject"
               @unsubscribeProject="unsubscribeUserProject"
       ></project-item>
+      <add-project v-if="networkOnLine"></add-project>
+    </div>
+
+    <div v-if="finishedLoading && !userProjects">
       <add-project v-if="networkOnLine"></add-project>
     </div>
   </div>

@@ -164,6 +164,7 @@
                         duration: 60000 // 1 minute
                     });
                 }
+                this.updateColumns();
             },
             getActivatedBadge(phase) {
                 if (Number(this.activatedBadgeType) === Number(phase)) {
@@ -171,7 +172,7 @@
                 }
                 return "";
             }
-        }
+        },
     };
 </script>
 

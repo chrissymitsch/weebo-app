@@ -87,7 +87,7 @@
                         <md-card-content>
                             <div class="md-layout md-gutter profile-stats">
                                 <div class="md-layout-item text-center">
-                                    <p class="md-subheading">Letzte Aktivität</p>
+                                    <p class="md-subheading">Zuletzt aktualisiert</p>
                                     <p class="md-caption">{{format_unix_date(currentProject.updateTimestamp.seconds)}}</p>
                                 </div>
                                 <div class="md-layout-item text-center">
@@ -143,7 +143,7 @@
     import moment from 'moment';
     import Modal from "../../components/Modal";
     import Avatar from "../../components/users/Avatar";
-    import Message from "../../components/projects/Message";
+    import Message from "../../components/messages/Message";
 
     export default {
         computed: {

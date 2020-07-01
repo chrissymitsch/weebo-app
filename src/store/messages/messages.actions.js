@@ -30,7 +30,10 @@ export default {
     const messagesDb = new MessagesDb(message.projectId);
     const projectsDb = new ProjectsDB();
     const newMessage = await messagesDb.create(message);
-    await projectsDb.update({id: message.projectId, newMessage: newMessage.id});
+    await projectsDb.update({
+      id: message.projectId,
+      newMessage: newMessage.id
+    });
     commit('addMessages', newMessage);
     commit('removeMessageCreationPending', message);
   },

@@ -13,7 +13,7 @@
             @close="closeAddToHomeScreenModalForApple(false)"
     >
     </apple-add-to-home-screen-modal>
-    <messenger></messenger>
+    <chat></chat>
   </div>
 </template>
 
@@ -21,11 +21,11 @@
 import NavBar from '@/components/NavBar'
 import NewContentAvailableToastr from '@/components/NewContentAvailableToastr'
 import AppleAddToHomeScreenModal from '@/components/AppleAddToHomeScreenModal'
-import Messenger from '@/components/projects/Messenger'
+import Chat from '@/components/messages/Chat'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 export default {
-  components: { NavBar, NewContentAvailableToastr, AppleAddToHomeScreenModal, Messenger },
+  components: { NavBar, NewContentAvailableToastr, AppleAddToHomeScreenModal, Chat },
   computed: {
     ...mapGetters('app', ['newContentAvailable']),
     ...mapState('app', ['showAddToHomeScreenModalForApple', 'refreshingApp'])

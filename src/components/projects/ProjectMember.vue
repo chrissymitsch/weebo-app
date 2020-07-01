@@ -10,7 +10,10 @@
       <p class="md-title">{{ data.displayName }}</p>
     </md-card-content>
     <md-card-actions class="md-caption">
-      test
+      <md-button class="md-icon-button" v-if="!isCreator()">
+        <md-tooltip md-direction="top">Teilnehmer entfernen</md-tooltip>
+        <md-icon>remove_circle_outline</md-icon>
+      </md-button>
     </md-card-actions>
   </md-card>
 </template>

@@ -16,9 +16,7 @@
             :showCloseButton="true"
             :colors="colors"
             :alwaysScrollToBottom="alwaysScrollToBottom"
-            :messageStyling="messageStyling"
-            @onType="handleOnType"
-            @edit="editMessage">
+            :messageStyling="messageStyling">
       <template v-slot:header>
         <div class="sc-header--title">
           {{ currentProject.name }}-Gruppenchat
@@ -46,7 +44,7 @@
   import fire from "../../firebase/init";
 
   export default {
-    name: 'app',
+    name: 'Chat',
     components: {Avatar},
     computed: {
       ...mapState('authentication', ['user']),
@@ -105,15 +103,11 @@
         alwaysScrollToBottom: true, // when set to true always scrolls the chat to the bottom when new events are in (new message, user starts typing...)
         messageStyling: true, // enables *bold* /emph/ _underline_ and such (more info at github.com/mattezza/msgdown)
         finishedLoading: false,
+        newestMessage: null
       }
     },
     methods: {
       ...mapActions('messages', ['createMessage']),
-      sendMessage(text) {
-        if (text.length > 0) {
-          this.onMessageWasSent({author: 'support', type: 'text', data: {text}})
-        }
-      },
       onMessageWasSent(message) {
         // called when the user sends a message
         this.messageList = [...this.messageList, message];
@@ -132,16 +126,9 @@
         this.newMessagesCount = 0;
       },
       handleScrollToTop() {
+        console.log("top")
         // called when the user scrolls message list to top
         // leverage pagination for loading another page of messages
-      },
-      handleOnType() {
-        console.log('Emit typing event')
-      },
-      editMessage(message) {
-        const msg = this.messageList.find(m => m.id === message.id);
-        msg.isEdited = true;
-        msg.data.text = message.data.text;
       },
       sortMessageList(list) {
         function compare(a, b) {
@@ -153,11 +140,16 @@
         }
         return list.sort(compare);
       },
+      filterMessageList(list) {
+        return list.filter(message =>
+                message.type === "text" ||
+                message.type === "emoji");
+      },
       getAllMessages() {
         if (this.currentProject) {
           this.$store.dispatch('messages/getMessages', this.currentProject.id).then(() => {
             const messageToSort = JSON.parse(JSON.stringify(this.messages));
-            this.messageList = this.sortMessageList(messageToSort);
+            this.messageList = this.sortMessageList(this.filterMessageList(messageToSort));
           }).finally(() => {
             this.finishedLoading = true;
           });
@@ -167,12 +159,15 @@
     watch: {
       currentProject(newValue, oldValue) {
         if (newValue !== oldValue) {
+          this.newestMessage = this.currentProject.newMessage;
           this.getAllMessages();
 
           if (this.currentProject) {
-            fire.collection("projects").doc(this.currentProject.id).onSnapshot(() => {
-              this.getAllMessages();
-              this.newMessagesCount += 1;
+            fire.collection("projects").doc(this.currentProject.id).onSnapshot(data => {
+              if (this.newestMessage !== data.data().newMessage) {
+                this.getAllMessages();
+                this.newMessagesCount += 1;
+              }
             });
           }
         }
@@ -201,6 +196,10 @@
     .sc-message--emoji {
       font-size: 30px;
       margin: 8px;
+    }
+
+    .sc-emoji-picker {
+      z-index: 9999;
     }
 
     .sc-header {

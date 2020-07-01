@@ -188,16 +188,6 @@ body {
   color: $danger-color;
 }
 
-/** MEMBERS PAGE **/
-.member-list {
-
-  .md-card {
-    width: 200px;
-    display: inline-block;
-    margin: 8px;
-  }
-}
-
 /** PROFILE PAGE **/
 .badge-list {
   display: flex;
@@ -236,8 +226,8 @@ body {
 }
 
 
-/** PROJECTS PAGE **/
-.project-list {
+/** PROJECTS & MEMBERS PAGE **/
+.project-list, .member-list {
   display: flex;
   justify-content: start;
   flex-wrap: wrap;
@@ -382,5 +372,24 @@ body {
   .modal-container {
     width: 600px;
     margin-top: 80px;
+  }
+}
+
+
+@media (min-width: 600px) {
+  .hide-for-small {
+    display: inherit;
+  }
+  .show-for-small {
+    display: none;
+  }
+}
+
+@media (max-width: 599px) {
+  .hide-for-small {
+    display: none;
+  }
+  .show-for-small {
+    display: inherit;
   }
 }

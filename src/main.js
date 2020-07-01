@@ -7,6 +7,7 @@ import zircle from 'zircle'
 import 'zircle/dist/zircle.css'
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-default.css';
+import VCalendar from 'v-calendar';
 
 import App from './App.vue'
 import router from './router'
@@ -24,17 +25,10 @@ Vue.use(VueMaterial);
 Vue.use(Chat);
 Vue.use(zircle);
 Vue.use(VueToast);
+Vue.use(VCalendar);
 
 new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount('#app');
-
-// eslint-disable-next-line no-console
-console.info(`
-🍱 This app was bootstrapped with bento-starter 🍱
-
-👉 https://bento-starter.netlify.com/
-
-`);
