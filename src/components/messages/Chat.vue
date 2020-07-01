@@ -23,7 +23,7 @@
         </div>
       </template>
       <template v-slot:user-avatar="{ message }">
-        <avatar :user-id="message.author"></avatar>
+        <avatar v-if="message.type !== 'system'" :user-id="message.author"></avatar>
       </template>
       <template v-slot:text-message-body="{ message }">
         {{message.data.text}}
@@ -143,14 +143,20 @@
       filterMessageList(list) {
         return list.filter(message =>
                 message.type === "text" ||
-                message.type === "emoji");
+                message.type === "emoji" ||
+                message.type === "system");
       },
-      getAllMessages() {
+      getAllMessages(newestMessage) {
         if (this.currentProject) {
           this.$store.dispatch('messages/getMessages', this.currentProject.id).then(() => {
             const messageToSort = JSON.parse(JSON.stringify(this.messages));
             this.messageList = this.sortMessageList(this.filterMessageList(messageToSort));
           }).finally(() => {
+            if (newestMessage && this.messageList.filter(
+                    message => message.id === newestMessage &&
+                            (message.type === 'text' || message.type === 'emoji' || message.type === 'system')).length > 0) {
+              this.newMessagesCount += 1;
+            }
             this.finishedLoading = true;
           });
         }
@@ -165,8 +171,7 @@
           if (this.currentProject) {
             fire.collection("projects").doc(this.currentProject.id).onSnapshot(data => {
               if (this.newestMessage !== data.data().newMessage) {
-                this.getAllMessages();
-                this.newMessagesCount += 1;
+                this.getAllMessages(this.newestMessage);
               }
             });
           }

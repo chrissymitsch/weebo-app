@@ -8,7 +8,8 @@
         <p v-if="finishedLoading && (!columns || columns.length === 0)" class="text-center">
             Keine Aufgaben.
         </p>
-        <add-task :id="currentProject.id" :column="null" @taskCreated="updateColumns"></add-task>
+
+        <add-task class="first-add-task-button" :id="currentProject.id" :column="null" @taskCreated="updateColumns"></add-task>
 
         <md-chip :class="getActivatedBadge('Alle')" @click="activatedBadgeType = 'Alle'" md-clickable>
             Alle
@@ -176,8 +177,8 @@
     };
 </script>
 
-<style scoped>
-    .md-layout {
+<style lang="scss" scoped>
+    .md-layout, .first-add-task-button {
         margin-top: 24px;
     }
 
@@ -185,8 +186,6 @@
         height: 32px;
     }
 
-    .column-width {
-    }
     /* Unfortunately @apply cannot be setup in codesandbox,
     but you'd use "@apply border opacity-50 border-blue-500 bg-gray-200" here */
     .ghost-card {

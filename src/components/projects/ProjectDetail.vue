@@ -64,26 +64,28 @@
       <md-app-content>
         <md-app-toolbar md-elevation="0" class="phase-toolbar">
           <div class="md-toolbar-row">
-            <p v-if="project.phase === 0 || !project.phase">
-              <md-tooltip md-direction="top">Analysephase</md-tooltip>
-              <md-avatar class="md-accent">1</md-avatar>
-            </p>
-            <p v-if="project.phase === 1">
-              <md-tooltip md-direction="top">Spezifikationsphase</md-tooltip>
-              <md-avatar class="md-accent">2</md-avatar>
-            </p>
-            <p v-if="project.phase === 2">
-              <md-tooltip md-direction="top">Modellierungsphase</md-tooltip>
-              <md-avatar class="md-accent">3</md-avatar>
-            </p>
-            <p v-if="project.phase === 3">
-              <md-tooltip md-direction="top">Evaluationsphase</md-tooltip>
-              <md-avatar class="md-accent">4</md-avatar>
-            </p>
-            <p v-if="project.phase === 4">
-              <md-tooltip md-direction="top">Softwareeinführung</md-tooltip>
-              <md-avatar class="md-accent">Endgame</md-avatar>
-            </p>
+            <router-link :to="{ name: 'project-dashboard' }">
+              <p v-if="project.phase === 0 || !project.phase">
+                <md-tooltip md-direction="top">Analysephase</md-tooltip>
+                <md-avatar class="md-accent">1</md-avatar>
+              </p>
+              <p v-if="project.phase === 1">
+                <md-tooltip md-direction="top">Spezifikationsphase</md-tooltip>
+                <md-avatar class="md-accent">2</md-avatar>
+              </p>
+              <p v-if="project.phase === 2">
+                <md-tooltip md-direction="top">Modellierungsphase</md-tooltip>
+                <md-avatar class="md-accent">3</md-avatar>
+              </p>
+              <p v-if="project.phase === 3">
+                <md-tooltip md-direction="top">Evaluationsphase</md-tooltip>
+                <md-avatar class="md-accent">4</md-avatar>
+              </p>
+              <p v-if="project.phase === 4">
+                <md-tooltip md-direction="top">Softwareeinführung</md-tooltip>
+                <md-avatar class="md-accent">Endgame</md-avatar>
+              </p>
+            </router-link>
 
             <router-link :to="{ name: 'project-tasks', params: { project: project } }">
               <md-button class="md-icon-button md-primary">

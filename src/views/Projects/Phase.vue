@@ -25,7 +25,7 @@
             <p class="md-title">Endgame: Softwareeinführung</p>
         </div>
         <p v-if="(!currentProject.phase && $zircle.getParams().currentPhase === 0) || currentProject.phase === $zircle.getParams().currentPhase">
-            <md-button class="md-accent md-raised" @click="finishPhaseDialogActive = true">
+            <md-button class="md-accent md-raised" @click="finishPhaseDialogActive = true" v-if="isCreator()">
                 <md-icon>check</md-icon> Phase abschließen
             </md-button>
         </p>
@@ -38,6 +38,7 @@
     export default {
         name: "Phase",
         computed: {
+            ...mapState('authentication', ['user']),
             ...mapState('projects', ['currentProject'])
         },
         data: () => ({
@@ -54,6 +55,9 @@
                 this.triggerUpdateProjectAction(projectToUpdate);
                 this.finishPhaseDialogActive = false;
                 this.goBack();
+            },
+            isCreator() {
+                return this.currentProject.creator === this.user.id;
             }
         }
     };
