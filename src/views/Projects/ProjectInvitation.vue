@@ -1,17 +1,14 @@
 <template>
     <div class="ProjectInvitation">
-        <Modal :showModal="rewardModalActive" @closeModal="rewardModalActive=false" size="large">
-            <md-progress-spinner v-if="!tutorialSaved" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
-            <div v-if="tutorialSaved">
-                <div class="md-display-1">Nimm alle mit an Board!</div>
-                <p class="description"><img src="@/assets/img/rakete.png" width="200" /></p>
-                <p class="description md-body-2">
-                    Lade alle Beteiligten zur Zusammenarbeit ein, indem du eine Einladung per E-Mail, SMS, WhatsApp,
-                    Telegram oder per Direktlink verschickst! Sobald eine Einladung angenommen wurde, wird die Liste
-                    der Projektteilnehmer aktualisiert.
-                </p>
-            </div>
-        </Modal>
+        <tutorial-modal tutorialName="Invitation">
+            <div class="md-display-1 text-center">Nimm alle mit an Board!</div>
+            <p class="description"><img src="@/assets/img/rakete.png" width="200" /></p>
+            <p class="description md-body-2">
+                Lade alle Projektbeteiligten zur Zusammenarbeit ein, indem du eine Einladung per E-Mail, SMS, WhatsApp,
+                Telegram oder per Direktlink verschickst! Sobald eine Einladung angenommen wurde, wird die Liste
+                der Projektteilnehmer aktualisiert.
+            </p>
+        </tutorial-modal>
 
         <md-chip>{{ currentProject.name }} / Einladung verschicken</md-chip>
 
@@ -166,23 +163,19 @@
 
 <script>
     import {mapState} from "vuex";
-    import Modal from "../../components/Modal";
+    import TutorialModal from "../../components/rewards/TutorialModal";
 
     export default {
         computed: {
-            ...mapState('rewards', ['tutorials']),
             ...mapState('projects', ['currentProject'])
         },
-        components: {Modal},
+        components: {TutorialModal},
         data: () => ({
             invitationLink: null,
-            copied: false,
-            tutorialSaved: false,
-            rewardModalActive: false
+            copied: false
         }),
         created() {
             this.makeInvitationLink(this.currentProject.id);
-            setTimeout(function () { this.triggerReward() }.bind(this), 1000);
         },
         methods: {
             makeInvitationLink(projectId) {
@@ -196,24 +189,6 @@
 
                 document.execCommand("copy");
                 this.copied = true;
-            },
-            triggerReward() {
-                const checkIfUserHasTutorialFinished = this.tutorials.filter(function(elem) {
-                    if(elem.name === "Invitation") return elem;
-                    return null;
-                });
-                if (checkIfUserHasTutorialFinished.length > 0) {
-                    this.rewardModalActive = false;
-                } else {
-                    this.rewardModalActive = true;
-                    const tutorial = {
-                        name: "Invitation",
-                        type: "tutorial"
-                    };
-                    this.$store.dispatch('rewards/createFinishedTutorial', tutorial).then(() => {
-                        this.tutorialSaved = true;
-                    });
-                }
             }
         }
     };

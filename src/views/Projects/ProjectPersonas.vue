@@ -1,5 +1,19 @@
 <template>
     <div class="ProjectPersonas" v-if="currentProject && currentProject.phase === 1">
+        <tutorial-modal tutorialName="ProjectPersonas">
+            <div class="md-display-1 text-center">Es ist Zeit, Personas zu erstellen!</div>
+            <p class="description"><img src="@/assets/img/astronaut1.png" width="200" /></p>
+            <p class="description md-body-2">
+                In Phase 2 des nutzerzentrierten Designprozesses, der Spezifikationsphase, geht es darum, die
+                Anforderungen deiner Nutzer festzulegen.<br />
+                Personas stellen fiktive Repräsentationen potenzieller Nutzer dar. Um herauszufinden, welche Bedürfnisse
+                deine späteren Nutzer haben, solltest du mit deinem Projektteam Personas erarbeiten.<br />
+                Damit es einfacher geht, steht dir ein vorstrukturiertes Formular mit allen nötigen Inhalten zur
+                Verfügung. Außerdem kannst du mit allen Projektteilnehmern über die fertigen Personas diskutieren.
+            </p>
+        </tutorial-modal>
+
+
         <md-chip>{{ currentProject.name }} / Personas und Szenarien</md-chip>
 
         <Modal :showModal="personaModalActive" @closeModal="personaModalActive=false" size="large">
@@ -107,6 +121,7 @@
     import Avatar from "../../components/users/Avatar";
     import Modal from "../../components/Modal";
     import PersonaDetails from "../../components/personas/PersonaDetails";
+    import TutorialModal from "../../components/rewards/TutorialModal";
 
     const toLower = text => {
         return text.toString().toLowerCase()
@@ -121,7 +136,7 @@
     };
 
     export default {
-        components: {PersonaDetails, Modal, Avatar, AddPersona},
+        components: {TutorialModal, PersonaDetails, Modal, Avatar, AddPersona},
         computed: {
             ...mapState('authentication', ['user']),
             ...mapState('projects', ['currentProject']),

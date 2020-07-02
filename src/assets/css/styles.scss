@@ -89,11 +89,28 @@ body {
   margin-right: 8px;
 }
 
-.show-for-small {
-  display: none;
-  @media (max-width: 600px) {
-    display: flex;
+@media (min-width: 600px) {
+  .hide-for-small {
+    display: inherit;
   }
+  .show-for-small {
+    display: none;
+  }
+}
+
+@media (max-width: 599px) {
+  .hide-for-small {
+    display: none;
+  }
+  .show-for-small {
+    display: inherit;
+  }
+}
+
+.button-tutorial-help {
+  position: absolute;
+  right: 4px;
+  margin-top: -24px;
 }
 
 /** NAVBAR **/
@@ -388,21 +405,3 @@ body {
   }
 }
 
-
-@media (min-width: 600px) {
-  .hide-for-small {
-    display: inherit;
-  }
-  .show-for-small {
-    display: none;
-  }
-}
-
-@media (max-width: 599px) {
-  .hide-for-small {
-    display: none;
-  }
-  .show-for-small {
-    display: inherit;
-  }
-}

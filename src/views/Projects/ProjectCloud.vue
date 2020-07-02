@@ -1,5 +1,16 @@
 <template>
     <div class="ProjectCloud" v-if="currentProject">
+        <tutorial-modal tutorialName="ProjectCloud">
+            <div class="md-display-1 text-center">Willkommen in der Cloud!</div>
+            <p class="description"><img src="@/assets/img/cloud.png" width="200" /></p>
+            <p class="description md-body-2">
+                Du kannst hier Dateien hochladen, z.B. PDFs, Grafiken, Präsentationen, Excel-Tabellen usw.<br />
+                Teile einfach alles mit den anderen Projektteilnehmern und diskutiere darüber, um Kommunikation und
+                Transparenz zu fördern.
+            </p>
+        </tutorial-modal>
+
+
         <Modal :showModal="fileCommentModalActive" @closeModal="fileCommentModalActive=false" size="large">
             <div v-if="selectedFile">
                 <p class="md-title"><a :href="selectedFile.url" target=_blank>{{selectedFile.name}}</a></p>
@@ -142,6 +153,7 @@
     import moment from "moment";
     import Modal from "../../components/Modal";
     import Avatar from "../../components/users/Avatar";
+    import TutorialModal from "../../components/rewards/TutorialModal";
 
     const toLower = text => {
         return text.toString().toLowerCase()
@@ -161,7 +173,7 @@
 
     export default {
         name: 'ProjectCloud',
-        components: {Avatar, Modal},
+        components: {TutorialModal, Avatar, Modal},
         computed: {
             ...mapState('authentication', ['user']),
             ...mapState('projects', ['currentProject', 'projectUpdatePending']),

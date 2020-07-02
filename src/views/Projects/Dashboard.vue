@@ -1,19 +1,17 @@
 <template>
     <div class="Dashboard">
-        <Modal :showModal="rewardModalActive" @closeModal="rewardModalActive=false" size="large">
-            <md-progress-spinner v-if="!tutorialSaved" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
-            <div v-if="tutorialSaved">
-                <div class="md-display-1">Verwalte dein Projekt</div>
-                <p class="description md-body-2">
-                    Lade alle Beteiligten zur Zusammenarbeit ein, Plane Aufgaben und Termine
-                    und durchlaufe den nutzerzentrierten Design-Prozess gemeinsam!
-                </p>
-                <p class="description"><img src="@/assets/img/stern.png" /></p>
-                <p class="description md-body-2">
-                    Sammle Punkte und Auszeichnungen, um mehr Funktionen freizuschalten!
-                </p>
-            </div>
-        </Modal>
+        <tutorial-modal tutorialName="Dashboard">
+            <div class="md-display-1 text-center">Willkommen in deinem Projekt-Dashboard</div>
+            <p class="description"><img src="@/assets/logo.png" width="200" /></p>
+            <p class="description md-body-2">
+                Hier kannst du den aktuellen Status und einige interessante Details deines Projekts ansehen.
+                Über das linke Menü kannst du dich über deine Projektphase informieren und dir alle
+                Projektteilnehmer anzeigen lassen.
+                Das obere Menü dient dazu, in deiner aktuellen Phase Aktionen auszuführen.
+                Schau dich doch mal um, du kannst Aufgaben anlegen, Dateien hochladen, Termine planen und mehr.
+                Und vergiss nicht, alle Projektteilnehmer über den Chat unten rechts zu begrüßen!
+            </p>
+        </tutorial-modal>
 
 
         <Modal :showModal="congratulationsModalActive" @closeModal="congratulationsModalActive=false" size="large">
@@ -144,15 +142,16 @@
     import Modal from "../../components/Modal";
     import Avatar from "../../components/users/Avatar";
     import Message from "../../components/messages/Message";
+    import TutorialModal from "../../components/rewards/TutorialModal";
 
     export default {
         computed: {
             ...mapState('messages', ['messages']),
-            ...mapState('rewards', ['tutorials']),
             ...mapState('projects', ['currentProject', 'projectMembers']),
             ...mapState('tasks', ['tasks'])
         },
         components: {
+            TutorialModal,
             Message,
             Avatar,
             Modal,
@@ -173,24 +172,6 @@
             congratulationsModalActive: false
         }),
         methods: {
-            triggerReward() {
-                const checkIfUserHasTutorialFinished = this.tutorials.filter(function (elem) {
-                    if (elem.name === "Dashboard") return elem;
-                    return null;
-                });
-                if (checkIfUserHasTutorialFinished.length > 0) {
-                    this.rewardModalActive = false;
-                } else {
-                    this.rewardModalActive = true;
-                    const tutorial = {
-                        name: "Dashboard",
-                        type: "tutorial"
-                    };
-                    this.$store.dispatch('rewards/createFinishedTutorial', tutorial).then(() => {
-                        this.tutorialSaved = true;
-                    });
-                }
-            },
             format_date(value) {
                 if (value) {
                     return (moment(value).format('DD.MM.YYYY, HH:mm')).concat(" Uhr");
@@ -242,11 +223,6 @@
                 const maxScore = allScores.indexOf(Math.max(...allScores));
                 return {"winner": allMembers[maxScore], "winnerScore": Math.max(...allScores)};
             }
-        },
-        created() {
-            setTimeout(function () {
-                this.triggerReward()
-            }.bind(this), 1000);
         },
         mounted() {
             this.$zircle.config({

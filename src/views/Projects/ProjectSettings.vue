@@ -1,15 +1,12 @@
 <template>
     <div class="ProjectSettings">
-        <Modal :showModal="rewardModalActive" @closeModal="rewardModalActive=false" size="large">
-            <md-progress-spinner v-if="!tutorialSaved" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
-            <div v-if="tutorialSaved">
-                <div class="md-display-1">Verwalte die Einstellungen deines Projekts!</div>
-                <p class="description"><img src="@/assets/img/rakete.png" width="200" /></p>
-                <p class="description md-body-2">
-                    Du kannst jederzeit den Namen deines Projekts, die Rechte der Teilnehmer und alle weiteren Infos verwalten.
-                </p>
-            </div>
-        </Modal>
+        <tutorial-modal tutorialName="Settings">
+            <div class="md-display-1 text-center">Verwalte die Einstellungen deines Projekts!</div>
+            <p class="description"><img src="@/assets/img/ufo.png" width="200" /></p>
+            <p class="description md-body-2">
+                Du kannst jederzeit den Namen deines Projekts und die Rechte der Teilnehmer verwalten.
+            </p>
+        </tutorial-modal>
 
         <md-chip>{{ currentProject.name }} / Einstellungen</md-chip>
         <form novalidate class="md-layout" @submit.prevent="null">
@@ -35,41 +32,13 @@
 
 <script>
     import {mapState} from "vuex";
-    import Modal from "../../components/Modal";
+    import TutorialModal from "../../components/rewards/TutorialModal";
 
     export default {
         computed: {
-            ...mapState('rewards', ['tutorials']),
             ...mapState('projects', ['currentProject'])
         },
-        components: {Modal},
-        data: () => ({
-            tutorialSaved: false,
-            rewardModalActive: false
-        }),
-        created() {
-            setTimeout(function () { this.triggerReward() }.bind(this), 1000);
-        },
-        methods: {
-            triggerReward() {
-                const checkIfUserHasTutorialFinished = this.tutorials.filter(function(elem) {
-                    if(elem.name === "Settings") return elem;
-                    return null;
-                });
-                if (checkIfUserHasTutorialFinished.length > 0) {
-                    this.rewardModalActive = false;
-                } else {
-                    this.rewardModalActive = true;
-                    const tutorial = {
-                        name: "Settings",
-                        type: "tutorial"
-                    };
-                    this.$store.dispatch('rewards/createFinishedTutorial', tutorial).then(() => {
-                        this.tutorialSaved = true;
-                    });
-                }
-            }
-        }
+        components: {TutorialModal}
     };
 </script>
 

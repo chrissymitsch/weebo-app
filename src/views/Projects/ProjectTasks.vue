@@ -1,5 +1,17 @@
 <template>
     <div class="ProjectTasks" v-if="currentProject">
+        <tutorial-modal tutorialName="ProjectTasks">
+            <div class="md-display-1 text-center">Was gibt's zu tun?</div>
+            <p class="description"><img src="@/assets/img/rakete.png" width="200" /></p>
+            <p class="description md-body-2">
+                Schreibe Aufgaben für dich und dein Team. Was habt ihr in der aktuellen Projektphase vor, was gibt es
+                für die anderen Phasen noch zu tun oder allgemein... Hauptsache, ihr vergesst nichts!<br />
+                Filtere die Aufgaben nach Phase, ändere den Titel einer Aufgabe über das Stift-Symbol oder weise dir
+                eine Aufgabe per Klick auf den Avatar eines Projektteilnehmers zu.
+            </p>
+        </tutorial-modal>
+
+
         <md-chip>{{ currentProject.name }} / Aufgaben-Board</md-chip>
         <p v-if="!finishedLoading" class="text-center">
             <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
@@ -68,10 +80,12 @@
     import TaskCard from "@/components/tasks/TaskCard.vue";
     import AddTask from "@/components/tasks/AddTask.vue";
     import {mapActions, mapState} from "vuex";
+    import TutorialModal from "../../components/rewards/TutorialModal";
 
     export default {
         name: "App",
         components: {
+            TutorialModal,
             TaskCard,
             AddTask,
             draggable

@@ -1,6 +1,17 @@
 <template>
     <div class="ProjectProtocol" v-if="currentProject">
-        <md-chip>{{ currentProject.name }} / Diskussion</md-chip>
+        <tutorial-modal tutorialName="ProjectProtocol">
+            <div class="md-display-1 text-center">Was ist alles passiert...</div>
+            <p class="description"><img src="@/assets/img/saturn.png" width="200" /></p>
+            <p class="description md-body-2">
+                während du weg warst?<br />
+                Das steht hier geschrieben. Chat-Diskussionen, Mitteilungen über Kommentare, neue Dateien o.ä. findest
+                du hier. Verpasse nichts mehr und schaue regelmäßig ins Aktivitätsprotokoll.
+            </p>
+        </tutorial-modal>
+
+
+        <md-chip>{{ currentProject.name }} / Aktivitätsprotokoll</md-chip>
         <div class="md-layout md-gutter">
             <div class="md-layout-item">
                 <p v-if="!finishedLoading" class="text-center">
@@ -21,9 +32,10 @@
 <script>
     import { mapState } from 'vuex'
     import Message from "../../components/messages/Message";
+    import TutorialModal from "../../components/rewards/TutorialModal";
 
     export default {
-        components: {Message},
+        components: {TutorialModal, Message},
         computed: {
             ...mapState('app', ['networkOnLine']),
             ...mapState('projects', ['currentProject']),

@@ -3,7 +3,7 @@
         <md-dialog-confirm
                 :md-active.sync="finishPhaseDialogActive"
                 :md-title="`Möchtest du Phase ${$zircle.getParams().currentPhase + 1} wirklich beenden?`"
-                md-content="Alle Dateien, Diskussionen etc. werden weiterhin abrufbar sein."
+                md-content="Alle Dateien, Kommentare etc. werden weiterhin abrufbar sein."
                 md-confirm-text="Okay"
                 md-cancel-text="Abbrechen!"
                 @md-confirm="onConfirm" />

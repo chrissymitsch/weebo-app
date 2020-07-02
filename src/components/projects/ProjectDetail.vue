@@ -110,7 +110,7 @@
             <router-link :to="{ name: 'project-discussion', params: { project: project } }">
               <md-button class="md-icon-button md-primary">
                 <md-icon class="navigation-icon">message</md-icon>
-                <md-tooltip md-direction="top">Diskussion</md-tooltip>
+                <md-tooltip md-direction="top">Aktivitätsprotokoll</md-tooltip>
               </md-button>
             </router-link>
             <router-link v-if="project.level && project.level > 0" :to="{ name: 'project-creativemode', params: { project: project } }">
