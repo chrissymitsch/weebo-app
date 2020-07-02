@@ -39,8 +39,7 @@
                     <ShareNetwork
                             network="sms"
                             :url="invitationLink"
-                            :title="`Einladung für Projekt ${ currentProject.name }!`"
-                            :description="`Du hast eine Einladung für das Projekt ${ currentProject.name } erhalten.`">
+                            :title="`Du hast eine Einladung für das Projekt ${ currentProject.name } erhalten.`">
                         <md-button class="md-raised md-primary">
                             <md-icon>sms</md-icon>
                             <span>SMS</span>
@@ -51,8 +50,7 @@
                     <ShareNetwork
                             network="whatsapp"
                             :url="invitationLink"
-                            :title="`Einladung für Projekt ${ currentProject.name }!`"
-                            :description="`Du hast eine Einladung für das Projekt ${ currentProject.name } erhalten.`">
+                            :title="`Du hast eine Einladung für das Projekt ${ currentProject.name } erhalten.`">
                         <md-button class="md-raised md-primary btn-whatsapp">
                             <img class="button-logo" alt="" src="@/assets/img/WhatsApp.svg" />
                             <span>WhatsApp</span>
@@ -63,8 +61,7 @@
                     <ShareNetwork
                             network="telegram"
                             :url="invitationLink"
-                            :title="`Einladung für Projekt ${ currentProject.name }!`"
-                            :description="`Du hast eine Einladung für das Projekt ${ currentProject.name } erhalten.`">
+                            :title="`Du hast eine Einladung für das Projekt ${ currentProject.name } erhalten.`">
                         <md-button class="md-raised md-primary btn-telegram">
                             <img class="button-logo" alt="" src="@/assets/img/Telegram_logo.svg" />
                             <span>Telegram</span>
@@ -123,7 +120,7 @@
                         </md-list>
                     </div>
                     <div class="md-layout-item">
-                        <md-list class="md-accent">
+                        <md-list class="md-dense">
                             <md-subheader>Eingeladene Projektteilnehmer</md-subheader>
                             <md-list-item>
                                 <md-icon class="md-accent">check_box_outline_blank</md-icon>
