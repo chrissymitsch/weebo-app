@@ -5,7 +5,8 @@ service cloud.firestore {
     match /users/{userId} {
        allow get: if authenticated();
        allow create: if authenticated() && request.auth.uid == userId;
-       allow update, delete: if authenticated() && request.auth.uid == userId;
+       allow update: if authenticated();
+       allow delete: if authenticated() && request.auth.uid == userId;
     }
 
     match /users/{userId}/projects/{projectId} {
@@ -19,7 +20,8 @@ service cloud.firestore {
       allow get: if authenticated();
 			allow list: if authenticated();
       allow create: if authenticated() && request.auth.uid == userId;
-      allow update, delete: if authenticated() && request.auth.uid == userId;
+      allow delete: if authenticated() && request.auth.uid == userId;
+      allow update: if authenticated();
     }
 
     match /projects/{projectId} {

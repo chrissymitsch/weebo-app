@@ -51,7 +51,7 @@
                     <md-card-header>
                         <md-field>
                             <label>Datei hochladen</label>
-                            <md-file @change="previewFile" />
+                            <md-file @change="previewFile" v-model="inputFile" />
                         </md-field>
                     </md-card-header>
                     <md-card-content v-if="fileData">
@@ -61,9 +61,12 @@
                                     {{uploadValue.toFixed()+"%"}}
                                     <md-progress-bar md-mode="determinate" :md-value="uploadValue"></md-progress-bar>
                                 </p>
+                            </div>l
+                            <div class="md-layout-item md-small-size-100">
+                                <md-button @click="fileData=null,inputFile=null">Abbrechen</md-button>
                             </div>
                             <div class="md-layout-item md-small-size-100">
-                                <md-button @click="onUpload" class="md-accent md-raised">Datei hochladen</md-button>
+                                <md-button @click="onUpload" class="md-primary md-raised">Datei hochladen</md-button>
                             </div>
                         </div>
                     </md-card-content>
@@ -171,6 +174,7 @@
             searched: [],
             filteredFiles: null,
 
+            inputFile: null,
             fileData: null,
             uploadFile: null,
             uploadValue: 0,
