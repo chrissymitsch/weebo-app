@@ -1,31 +1,45 @@
 <template>
     <div class="Onboarding">
         <md-steppers :md-active-step.sync="active" md-linear>
-            <md-step class="without-bg" id="first" md-label="Projekt anlegen" :md-done.sync="first">
+            <md-step class="without-bg" id="first" :md-done.sync="first">
                 <md-empty-state
                         md-icon="important_devices"
                         md-label="Erstelle dein Projekt"
-                        md-description="Starte den nutzerzentrierten Gestaltprozess für dein Projekt.">
+                        md-description="Starte den nutzerzentrierten Designprozess, indem du dein Projekt in Weebo erstellst.">
                     <md-button class="md-raised md-accent" @click="setDone('first', 'second')">Weiter</md-button>
                     <router-link to="/projects"><md-button class="md-raised">Überspringen</md-button></router-link>
                 </md-empty-state>
             </md-step>
 
-            <md-step class="without-bg" id="second" md-label="Stakeholder einladen" :md-done.sync="second">
+            <md-step class="without-bg" id="second" :md-done.sync="second">
                 <md-empty-state
                         md-icon="group_add"
-                        md-label="Stakeholder einladen"
-                        md-description="Füge Auftraggeber, Nutzer, Teams usw. hinzu für Transparenz.">
+                        md-label="Nimm alle mit an Board"
+                        md-description="Füge alle Stakeholder deines Projekts hinzu. Von Nutzern über Auftraggeber, von Entwicklerteams
+                         bis ins Management, schicke ihnen allen einen Einladungslink!">
                     <md-button class="md-raised md-accent" @click="setDone('second', 'third')">Weiter</md-button>
                     <router-link to="/projects"><md-button class="md-raised">Überspringen</md-button></router-link>
                 </md-empty-state>
             </md-step>
 
-            <md-step class="without-bg" id="third" md-label="Projekt gemeinsam gestalten" :md-done.sync="third">
+            <md-step class="without-bg" id="third" :md-done.sync="third">
+                <md-empty-state
+                        md-icon="trending_up"
+                        md-label="Erhöhe die Transparenz"
+                        md-description="Erstellt und trackt Aufgaben, diskutiert im Gruppenchat, plant Events und feiert Erfolge!
+                        All das hilft euch, die Transparenz eures Projekts zu steigern.">
+                    <md-button class="md-raised md-accent" @click="setDone('third', 'fourth')">Weiter</md-button>
+                    <router-link to="/projects"><md-button class="md-raised">Überspringen</md-button></router-link>
+                </md-empty-state>
+            </md-step>
+
+            <md-step class="without-bg" id="fourth" :md-done.sync="fourth">
                 <md-empty-state
                         md-icon="emoji_events"
                         md-label="Projekt gemeinsam gestalten"
-                        md-description="Erarbeite gemeinsam Lösungen, lade Dokumente hoch und hole Feedback ein. Feiert Projekterfolge!">
+                        md-description="Analysiert die Bedürfnisse der Nutzer, erarbeitet und diskutiert gemeinsam Lösungen,
+                        ladet Dokumente hoch und holt Feedback ein.
+                        Plant Events und feiert Projekterfolge!">
                     <md-button class="button md-primary md-raised" @click="triggerReward()">Los geht's &rarr;</md-button>
                 </md-empty-state>
             </md-step>
@@ -57,6 +71,7 @@
             first: false,
             second: false,
             third: false,
+            fourth: false,
             secondStepError: null,
             rewardModalActive: false,
             rewardSaved: false

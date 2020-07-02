@@ -39,6 +39,8 @@
   .md-chip {
     white-space: break-spaces;
     height: auto;
+    line-height: inherit;
+    padding: 4px 16px 4px 16px;
   }
 
   .user-message {

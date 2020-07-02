@@ -369,9 +369,18 @@ body {
 
 .modal-wrapper.large {
   vertical-align: top;
+
   .modal-container {
-    width: 600px;
+    min-width: 600px;
+    max-width: 90%;
     margin-top: 80px;
+
+    @media (max-width: 599px) {
+      min-width: 100%;
+      width: 100%;
+      max-width: 100%;
+    }
+
   }
 }
 

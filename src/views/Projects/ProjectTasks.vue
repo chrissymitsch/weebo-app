@@ -11,12 +11,34 @@
 
         <add-task class="first-add-task-button" :id="currentProject.id" :column="null" @taskCreated="updateColumns"></add-task>
 
-        <md-chip :class="getActivatedBadge('Alle')" @click="activatedBadgeType = 'Alle'" md-clickable>
-            Alle
-        </md-chip>
-        <md-chip v-for="(badge, index) in nameMappings" :class="getActivatedBadge(index)" :key="index" @click="activatedBadgeType = index" md-clickable>
-            {{badge}}
-        </md-chip>
+        <div class="show-for-small">
+            <md-menu md-size="medium">
+                <md-button class="raised md-icon-button" md-menu-trigger>
+                    <md-icon>filter_alt</md-icon>
+                </md-button>
+
+                <md-menu-content>
+                    <md-menu-item>
+                        <md-chip :class="getActivatedBadge('Alle')" @click="activatedBadgeType = 'Alle'" md-clickable>
+                            Alle
+                        </md-chip>
+                    </md-menu-item>
+                    <md-menu-item v-for="(badge, index) in nameMappings" :key="index">
+                        <md-chip :class="getActivatedBadge(index)" @click="activatedBadgeType = index" md-clickable>
+                            {{badge}}
+                        </md-chip>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+        <div class="hide-for-small">
+            <md-chip :class="getActivatedBadge('Alle')" @click="activatedBadgeType = 'Alle'" md-clickable>
+                Alle
+            </md-chip>
+            <md-chip v-for="(badge, index) in nameMappings" :class="getActivatedBadge(index)" :key="index" @click="activatedBadgeType = index" md-clickable>
+                {{badge}}
+            </md-chip>
+        </div>
 
         <div class="md-layout" v-if="finishedLoading && columns && columns.length > 0">
             <div class="md-layout-item column-width" v-for="(column, index) in filteredTasksInColumns" :index="index" :key="column.title">
@@ -34,7 +56,7 @@
                         <!-- </transition-group> -->
                     </draggable>
                     <task-card :task="null"></task-card>
-                    <add-task :id="currentProject.id" :column="column.title" @taskCreated="updateColumns"></add-task>
+                    <add-task class="hide-for-small" :id="currentProject.id" :column="column.title" @taskCreated="updateColumns"></add-task>
                 </div>
             </div>
         </div>

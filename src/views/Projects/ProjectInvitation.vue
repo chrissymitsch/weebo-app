@@ -86,7 +86,7 @@
             <md-card-content>
                 <div class="md-layout md-gutter">
                     <div class="md-layout-item">
-                        <md-list>
+                        <md-list class="md-dense">
                             <md-subheader>Du (Admin)</md-subheader>
                             <md-list-item>
                                 <md-icon class="md-accent">check_box</md-icon>

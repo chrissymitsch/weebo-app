@@ -2,7 +2,7 @@
   <header class="navbar" :class="{ offline: !networkOnLine }">
     <md-app>
       <md-app-toolbar class="md-primary" md-elevation="0">
-        <md-button class="md-icon-button show-for-small" @click="menuVisible = true">
+        <md-button v-if="currentProject && isUserLoggedIn && user" class="md-icon-button show-for-small" @click="menuVisible = true">
           <md-icon class="navigation-icon">menu</md-icon>
         </md-button>
         <router-link to="/home">
@@ -53,13 +53,13 @@
         </md-app-toolbar>
         <md-list>
           <router-link :to="{ name: 'project-dashboard' }">
-            <md-list-item>
+            <md-list-item @click="menuVisible = false">
               <md-icon>dashboard</md-icon>
               <span class="md-list-item-text">Dashboard</span>
             </md-list-item>
           </router-link>
           <router-link :to="{ name: 'project-members', params: { project: currentProject } }">
-            <md-list-item>
+            <md-list-item @click="menuVisible = false">
               <md-icon>group</md-icon>
               <span class="md-list-item-text">Projektteilnehmer</span>
             </md-list-item>
@@ -67,7 +67,7 @@
           <router-link
                   :to="{ name: 'project-invitation' }"
                   v-if="isCreator()">
-            <md-list-item>
+            <md-list-item @click="menuVisible = false">
               <md-icon>send</md-icon>
               <span class="md-list-item-text">Einladung verschicken</span>
             </md-list-item>
@@ -88,7 +88,7 @@
           <router-link
                   :to="{ name: 'project-settings' }"
                   v-if="isCreator()">
-            <md-list-item>
+            <md-list-item @click="menuVisible = false">
               <md-icon>settings</md-icon>
               <span class="md-list-item-text">Einstellungen</span>
             </md-list-item>

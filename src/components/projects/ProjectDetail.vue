@@ -64,7 +64,7 @@
       <md-app-content>
         <md-app-toolbar md-elevation="0" class="phase-toolbar">
           <div class="md-toolbar-row">
-            <router-link :to="{ name: 'project-dashboard' }">
+            <router-link :to="{ name: 'project-dashboard' }" class="hide-for-small">
               <p v-if="project.phase === 0 || !project.phase">
                 <md-tooltip md-direction="top">Analysephase</md-tooltip>
                 <md-avatar class="md-accent">1</md-avatar>

@@ -48,7 +48,7 @@
 
         <div class="persona-layout show-for-small">
             <add-persona :id="currentProject.id" @personaCreated="updatePersona"></add-persona>
-            <md-list>
+            <md-list class="md-dense">
                 <md-list-item v-for="(persona, index) in searched" :key="index">
                     <md-button @click="triggerPersonaModal(persona)"><md-icon>message</md-icon> ({{countMessages(persona.id)}})</md-button>
                     <span class="md-list-item-text persona-name">
@@ -218,13 +218,13 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .persona-layout {
         margin-top: 24px;
     }
 
     .persona-name {
-        max-width: 200px;
+        max-width: 90%;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
