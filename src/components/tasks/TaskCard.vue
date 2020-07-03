@@ -1,6 +1,13 @@
 <template>
-  <div>
+  <div v-if="taskNotDeleted">
     <md-card v-if="task">
+      <md-dialog-confirm
+              :md-active.sync="deletionDialogActive"
+              :md-title="`Möchtest du die Aufgabe &quot;${task.title}&quot; löschen?`"
+              md-confirm-text="Ja."
+              md-cancel-text="Nein!"
+              @md-confirm="onConfirmDeletion" />
+
       <md-card-content class="task-card">
         <md-field v-if="editTask">
           <md-input v-model="editableTask.title" ref="title" maxlength="60"/>
@@ -20,6 +27,8 @@
       <md-card-content class="task-card">
         <span class="md-caption">{{format_date(task.createTimestamp)}}</span>
         <md-button v-if="!editTask" class="md-icon-button md-dense" @click="triggerEditFunctions()"><md-icon>edit</md-icon></md-button>
+        <md-progress-spinner class="md-accent" v-if="isProjectTaskDeletionPending(task.id)" :md-diameter="20" :md-stroke="2" md-mode="indeterminate"></md-progress-spinner>
+        <md-button v-if="!isProjectTaskDeletionPending(task.id)" class="md-icon-button md-dense" @click="deletionDialogActive = true"><md-icon>delete</md-icon></md-button>
         <md-button v-if="editTask" class="md-icon-button md-dense" @click="saveEditedTask()"><md-icon>check</md-icon></md-button>
         <md-menu md-size="medium" md-align-trigger>
           <badge :color="getBadgeColor()" md-menu-trigger>
@@ -43,7 +52,7 @@
   </div>
 </template>
 <script>
-  import {mapState} from "vuex";
+  import {mapActions, mapGetters, mapState} from "vuex";
   import moment from 'moment';
   import Badge from "./Badge.vue";
   import Avatar from "../users/Avatar";
@@ -61,10 +70,15 @@
     },
     computed: {
       ...mapState('authentication', ['user']),
-      ...mapState('projects', ['currentProject'])
+      ...mapState('projects', ['currentProject']),
+      ...mapState('tasks', ['projectTaskDeletionPending']),
+      ...mapGetters('tasks', ['isProjectTaskDeletionPending'])
     },
     data: () => ({
+      taskNotDeleted: true,
+      pendingDeletion: false,
       editableTask: null,
+      deletionDialogActive: false,
       colorMappings: {
         "0": "silver",
         "1": "royalblue",
@@ -84,6 +98,7 @@
       editTask: false
     }),
     methods: {
+      ...mapActions('tasks', ['deleteProjectTask']),
       getBadgeColor() {
         if (!this.task.type) {
           return this.colorMappings["0"];
@@ -96,14 +111,22 @@
         }
         return this.nameMappings[this.task.type];
       },
-      format_date(value){
+      format_date(value) {
         if (value) {
           return moment(value).format('DD.MM.YYYY')
         }
         return '';
       },
+      onConfirmDeletion() {
+        if (!this.isProjectTaskDeletionPending(this.task.id)) {
+          this.deleteProjectTask({"projectId": this.currentProject.id, "taskId": this.task.id});
+        }
+      },
       saveTask() {
-        this.$store.dispatch('tasks/updateProjectTask', {projectId: this.currentProject.id, task: this.editableTask}).then(() => {
+        this.$store.dispatch('tasks/updateProjectTask', {
+          projectId: this.currentProject.id,
+          task: this.editableTask
+        }).then(() => {
           this.$emit('taskEdited');
         });
       },
@@ -131,8 +154,20 @@
         this.editableTask.type = badge;
         this.saveTask();
       }
+    },
+    watch: {
+      projectTaskDeletionPending() {
+        if (this.task) {
+          this.pendingDeletion = this.isProjectTaskDeletionPending(this.task.id);
+        }
+      },
+      pendingDeletion(newValue, oldValue) {
+        if (!newValue && oldValue) {
+          this.taskNotDeleted = false;
+        }
+      }
     }
-  };
+  }
 </script>
 
 <style lang="scss" scoped>

@@ -1,4 +1,5 @@
 export default {
   tasks: [],
-  updatedTasks: []
+  updatedTasks: [],
+  projectTaskDeletionPending: []
 }

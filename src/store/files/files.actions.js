@@ -27,5 +27,16 @@ export default {
     const projectFilesDb = new ProjectsFilesDB(file.projectId);
     const createdFile = await projectFilesDb.create(newFile);
     commit('addProjectFile', createdFile);
-  }
+  },
+
+  /**
+   * Delete file for current project
+   */
+  deleteProjectFile: async ({ commit }, {projectId, fileId}) => {
+    commit('addProjectFileDeletionPending', fileId);
+    commit('deleteProjectFile', fileId);
+    const projectsFilesDb = new ProjectsFilesDB(projectId);
+    await projectsFilesDb.delete(fileId);
+    commit('removeProjectFileDeletionPending', fileId);
+  },
 }

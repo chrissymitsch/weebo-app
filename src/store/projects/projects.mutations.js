@@ -48,7 +48,7 @@ export default {
   addProjectDeletionPending: (state, projectId) =>
     state.projectDeletionPending.push(projectId),
   removeProjectDeletionPending: (state, projectId) => {
-    const index = state.projectDeletionPending.findIndex(project => project.id === projectId);
+    const index = state.projectDeletionPending.findIndex(project => project === projectId);
     state.projectDeletionPending.splice(index, 1)
   },
 

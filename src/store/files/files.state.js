@@ -1,3 +1,4 @@
 export default {
-  files: []
+  files: [],
+  projectFileDeletionPending: []
 }

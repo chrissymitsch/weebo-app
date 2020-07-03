@@ -37,4 +37,15 @@ export default {
     commit('updateProjectTask', task);
   },
 
+  /**
+   * Delete task for current project
+   */
+  deleteProjectTask: async ({ commit }, {projectId, taskId}) => {
+    commit('addProjectTaskDeletionPending', taskId);
+    const projectsTasksDB = new ProjectsTasksDB(projectId);
+    await projectsTasksDB.delete(taskId);
+    commit('deleteProjectTask', taskId);
+    commit('removeProjectTaskDeletionPending', taskId);
+  },
+
 }

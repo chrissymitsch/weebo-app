@@ -1,5 +1,13 @@
 <template>
     <div class="ProjectPersonas" v-if="currentProject && currentProject.phase === 1">
+        <md-dialog-confirm
+                v-if="selectedPersonaForDeletion"
+                :md-active.sync="deletionDialogActive"
+                :md-title="`Möchtest du die Persona &quot;${selectedPersonaForDeletion.name}&quot; löschen?`"
+                md-confirm-text="Ja."
+                md-cancel-text="Nein!"
+                @md-confirm="onConfirmDeletion" />
+
         <tutorial-modal tutorialName="ProjectPersonas">
             <div class="md-display-1 text-center">Es ist Zeit, Personas zu erstellen!</div>
             <p class="description"><img src="@/assets/img/astronaut1.png" width="200" /></p>
@@ -108,6 +116,9 @@
                         </md-badge>
                     </md-table-cell>
                     <md-table-cell md-label="Erstellt" md-sort-by="createTimestamp">{{ format_date(item.createTimestamp) }}</md-table-cell>
+                    <md-table-cell>
+                        <md-button v-if="!isProjectPersonaDeletionPending(item.id)" class="md-icon-button md-dense" @click="triggerDeletionDialog(item)"><md-icon>delete</md-icon></md-button>
+                    </md-table-cell>
                 </md-table-row>
             </md-table>
         </div>
@@ -115,7 +126,7 @@
 </template>
 
 <script>
-    import {mapActions, mapState} from 'vuex'
+    import {mapActions, mapGetters, mapState} from 'vuex'
     import moment from "moment";
     import AddPersona from "../../components/personas/AddPersona";
     import Avatar from "../../components/users/Avatar";
@@ -141,7 +152,8 @@
             ...mapState('authentication', ['user']),
             ...mapState('projects', ['currentProject']),
             ...mapState('personas', ['personas']),
-            ...mapState('messages', ['messages'])
+            ...mapState('messages', ['messages']),
+            ...mapGetters('personas', ['isProjectPersonaDeletionPending'])
         },
         data: () => ({
             search: null,
@@ -152,11 +164,14 @@
             form: {
                 comment: null,
             },
+            deletionDialogActive: false,
+            selectedPersonaForDeletion: null,
         }),
         methods: {
             ...mapActions('projects', ['triggerUpdateThankYouAction']),
             ...mapActions('rewards', ['triggerScoreAction']),
             ...mapActions('messages', ['createMessage']),
+            ...mapActions('personas', ['deleteProjectPersona']),
             searchOnTable () {
                 this.searched = searchByName(this.personas, this.search)
             },
@@ -224,6 +239,17 @@
                         });
                         this.getPersonaMessages(this.form.personaId);
                     });
+                }
+            },
+            triggerDeletionDialog(selectedPersona) {
+                this.deletionDialogActive = true;
+                this.selectedPersonaForDeletion = selectedPersona;
+            },
+            onConfirmDeletion() {
+                if (!this.isProjectPersonaDeletionPending(this.selectedPersonaForDeletion.id)) {
+                    this.deleteProjectPersona({"projectId": this.currentProject.id, "personaId": this.selectedPersonaForDeletion.id});
+                    this.searched = JSON.parse(JSON.stringify(this.personas));
+
                 }
             },
         },

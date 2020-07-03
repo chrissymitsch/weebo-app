@@ -1,5 +1,13 @@
 <template>
     <div class="ProjectCloud" v-if="currentProject">
+        <md-dialog-confirm
+                v-if="selectedFileForDeletion"
+                :md-active.sync="deletionDialogActive"
+                :md-title="`Möchtest du die Datei &quot;${selectedFileForDeletion.name}&quot; löschen?`"
+                md-confirm-text="Ja."
+                md-cancel-text="Nein!"
+                @md-confirm="onConfirmDeletion" />
+
         <tutorial-modal tutorialName="ProjectCloud">
             <div class="md-display-1 text-center">Willkommen in der Cloud!</div>
             <p class="description"><img src="@/assets/img/cloud.png" width="200" /></p>
@@ -142,6 +150,9 @@
                 </md-table-cell>
                 <md-table-cell md-label="Größe" md-sort-by="size">{{ formatBytes(item.size) }}</md-table-cell>
                 <md-table-cell md-label="Erstellt" md-sort-by="createTimestamp">{{ format_date(item.createTimestamp) }}</md-table-cell>
+                <md-table-cell>
+                    <md-button v-if="!isProjectFileDeletionPending(item.id)" class="md-icon-button md-dense" @click="triggerDeletionDialog(item)"><md-icon>delete</md-icon></md-button>
+                </md-table-cell>
             </md-table-row>
         </md-table>
     </div>
@@ -149,7 +160,7 @@
 
 <script>
     import firebase from 'firebase';
-    import {mapActions, mapState} from "vuex";
+    import {mapActions, mapGetters, mapState} from "vuex";
     import moment from "moment";
     import Modal from "../../components/Modal";
     import Avatar from "../../components/users/Avatar";
@@ -178,9 +189,13 @@
             ...mapState('authentication', ['user']),
             ...mapState('projects', ['currentProject', 'projectUpdatePending']),
             ...mapState('files', ['files']),
-            ...mapState('messages', ['messages'])
+            ...mapState('messages', ['messages']),
+            ...mapGetters('files', ['isProjectFileDeletionPending'])
         },
         data: () => ({
+            deletionDialogActive: false,
+            selectedFileForDeletion: null,
+
             errorMessage: null,
             search: null,
             searched: [],
@@ -200,7 +215,7 @@
         }),
         methods:{
             ...mapActions('projects', ['triggerUpdateProjectAction', 'triggerUpdateThankYouAction']),
-            ...mapActions('files', ['createProjectFile']),
+            ...mapActions('files', ['createProjectFile', 'deleteProjectFile']),
             ...mapActions('messages', ['createMessage']),
             ...mapActions('rewards', ['triggerScoreAction']),
             previewFile(event) {
@@ -339,6 +354,17 @@
                         });
                         this.getFileMessages(this.form.fileId);
                     });
+                }
+            },
+            triggerDeletionDialog(selectedFile) {
+                this.deletionDialogActive = true;
+                this.selectedFileForDeletion = selectedFile;
+            },
+            onConfirmDeletion() {
+                if (!this.isProjectFileDeletionPending(this.selectedFileForDeletion.id)) {
+                    this.deleteProjectFile({"projectId": this.currentProject.id, "fileId": this.selectedFileForDeletion.id});
+                    this.searched = this.filterFilesByPhase(this.files);
+
                 }
             },
         },
