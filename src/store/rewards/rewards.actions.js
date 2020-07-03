@@ -8,7 +8,8 @@ export default {
     const userRewardsDb = new UserRewardsDb(userId);
 
     const score = await userRewardsDb.readAll([['type', '==', 'score']]);
-    commit('setUserScore', score)
+    commit('setUserScore', score);
+    return score;
   },
 
   /**
@@ -18,7 +19,8 @@ export default {
     const userRewardsDb = new UserRewardsDb(userId);
 
     const badges = await userRewardsDb.readAll([['type', '==', 'badge']]);
-    commit('setUserBadges', badges)
+    commit('setUserBadges', badges);
+    return badges;
   },
 
   /**

@@ -33,6 +33,17 @@ export default {
   },
 
   /**
+   * Fetch user
+   */
+  getUser: async ({ commit }, userId) => {
+    commit('addUserLoading', userId);
+    const userDb = new UsersDB();
+    const user = await userDb.read(userId);
+    commit('removeUserLoading', userId);
+    return user;
+  },
+
+  /**
    * Update a user from its id
    */
   updateUser: async ({ commit, state }, user) => {

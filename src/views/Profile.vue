@@ -1,41 +1,42 @@
 <template>
-  <div class="main-wrapper">
-    <div class="page-wrapper">
+  <div class="main-wrapper" :key="rerenderProfile">
+    <md-progress-spinner v-if="!finishedLoadingUser" class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
+    <div class="page-wrapper" v-if="finishedLoadingUser">
       <div class="md-layout md-gutter">
         <div class="md-layout-item text-center profile-person">
           <md-progress-spinner v-if="userUpdatePending" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
-          <avatar v-if="!userUpdatePending" size="md-large" :key="rerenderAvatar"></avatar>
-          <p class="md-display-1">{{user.displayName}}</p>
-          <p class="md-subheading">{{user.email}}</p>
-          <div class="account-button"><md-button class="md-raised">Google-Konto verwalten</md-button></div>
+          <avatar v-if="!userUpdatePending" size="md-large" :key="rerenderAvatar" :user-id="selectedUser.id"></avatar>
+          <p class="md-display-1">{{selectedUser.displayName}}</p>
+          <p class="md-subheading" v-if="isLoggedInUserSelectedUser()">{{selectedUser.email}}</p>
+          <div class="account-button" v-if="isLoggedInUserSelectedUser()"><md-button class="md-raised">Google-Konto verwalten</md-button></div>
           <div class="md-layout md-gutter profile-stats">
             <div class="md-layout-item text-center">
               <p class="md-subheading">{{getThankYou()}}</p>
               <p class="md-caption">DANKE</p>
             </div>
             <div class="md-layout-item text-center">
-              <p class="md-subheading">{{userScore.length + userBadges.length}}</p>
+              <p class="md-subheading">{{selectedUserScore.length + selectedUserBadges.length}}</p>
               <p class="md-caption">ERFOLGE</p>
             </div>
             <div class="md-layout-item text-center">
-              <p class="md-subheading">{{user.projects.length}}</p>
+              <p class="md-subheading">{{selectedUser.projects.length}}</p>
               <p class="md-caption">PROJEKTE</p>
             </div>
           </div>
 
-          <md-card class="profile-avatar-change-card">
+          <md-card class="profile-avatar-change-card" v-if="isLoggedInUserSelectedUser()">
             <md-list>
               <md-list-item md-expand>
                 <md-icon>image</md-icon>
                 <span class="md-list-item-text">Profilbild ändern</span>
 
                 <div slot="md-expand" class="profile-avatar-change">
-                  <md-avatar :class="`md-large md-accent ${isActivated(!this.user.customAvatar)}`"
+                  <md-avatar :class="`md-large md-accent ${isActivated(!this.selectedUser.customAvatar)}`"
                              @click.native="updateCustomAvatar('')">
-                    <md-ripple><img :src="`${user.photoURL}`" /></md-ripple>
+                    <md-ripple><img :src="`${selectedUser.photoURL}`" /></md-ripple>
                   </md-avatar>
                   <md-avatar v-for="(avatar) in avatars" :key="avatar" @click.native="updateCustomAvatar(avatar)"
-                             :class="`md-large md-accent ${isActivated(user.customAvatar === avatar)}`">
+                             :class="`md-large md-accent ${isActivated(selectedUser.customAvatar === avatar)}`">
                     <md-ripple @click="updateCustomAvatar(avatar)"><img :src="avatar" /></md-ripple>
                   </md-avatar>
                 </div>
@@ -138,6 +139,11 @@ export default {
     ...mapState('rewards', ['userScore', 'userBadges']),
   },
   data: () => ({
+    rerenderProfile: 0,
+    finishedLoadingUser: false,
+    selectedUser: null,
+    selectedUserScore: null,
+    selectedUserBadges: null,
     badges: null,
     avatars: null,
     rerenderAvatar: 0,
@@ -162,7 +168,31 @@ export default {
       "Onboarding", "NewProject"
     ];
   },
+  mounted() {
+    this.getSelectedUser();
+  },
   methods: {
+    getSelectedUser() {
+      if (this.$route.params.userId) {
+        this.$store.dispatch('authentication/getUser', this.$route.params.userId).then(user => {
+          this.selectedUser = user;
+          this.$store.dispatch('rewards/getUserScore', this.$route.params.userId, { root: true }).then(score => {
+            this.selectedUserScore = score;
+            this.$store.dispatch('rewards/getUserBadges', this.$route.params.userId, { root: true }).then(badges => {
+              this.selectedUserBadges = badges;
+              this.finishedLoadingUser = true;
+            });
+          });
+
+        });
+      } else {
+        this.selectedUser = this.user;
+        this.finishedLoadingUser = true;
+      }
+    },
+    isLoggedInUserSelectedUser() {
+      return this.selectedUser && this.user.id === this.selectedUser.id;
+    },
     isActivated(constraints) {
       if (constraints)
         return "activated-avatar";
@@ -170,15 +200,15 @@ export default {
     },
     getThankYou() {
       let score = 0;
-      if (this.user.thankYou) {
-        for (let i = 0; i < this.user.thankYou.length; i += 1) {
-          score += Number(this.user.thankYou[i].score);
+      if (this.selectedUser && this.selectedUser.thankYou) {
+        for (let i = 0; i < this.selectedUser.thankYou.length; i += 1) {
+          score += Number(this.selectedUser.thankYou[i].score);
         }
       }
       return score;
     },
     hasBadge(badgeName) {
-      const checkIfUserHasBadge = this.userBadges.filter(function(elem) {
+      const checkIfUserHasBadge = this.selectedUserBadges.filter(function(elem) {
         if(elem.name === badgeName) return elem;
         return null;
       });
@@ -197,8 +227,8 @@ export default {
       }
     },
     getScores() {
-      for (let i = 0; i < this.userScore.length; i += 1) {
-        this.scores[this.userScore[i].name] = this.userScore[i].score;
+      for (let i = 0; i < this.selectedUserScore.length; i += 1) {
+        this.scores[this.selectedUserScore[i].name] = this.selectedUserScore[i].score;
       }
     },
     getLevel(levelName) {
@@ -236,6 +266,14 @@ export default {
       }
       return 0;
     }
+  },
+  watch: {
+    '$route.params.userId': function (newValue, oldValue) {
+      if (newValue !== oldValue) {
+        this.getSelectedUser();
+        this.rerenderProfile += 1;
+      }
+    }
   }
 }
 </script>
@@ -254,13 +292,13 @@ export default {
       display: inline-block;
       .md-button {
         margin-top: 20px;
-        margin-bottom: 20px;
       }
     }
 
     .profile-stats {
       width: 50%;
       display: inline-flex;
+      margin-top: 20px;
 
       @media (max-width: 865px) {
         width: 100%;

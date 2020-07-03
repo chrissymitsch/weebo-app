@@ -21,7 +21,7 @@
             <div v-if="!networkOnLine" class="nav-item offline-label">Offline</div>
 
             <md-menu v-if="isUserLoggedIn && networkOnLine" md-size="medium" md-align-trigger>
-              <avatar md-menu-trigger></avatar>
+              <avatar md-menu-trigger :disableClickToProfile="true"></avatar>
 
               <md-menu-content md-size="auto">
                 <md-menu-item><h3>{{ user.displayName }}</h3></md-menu-item>
@@ -130,7 +130,8 @@ export default {
       await firebase.auth().signOut()
     },
     openProfile() {
-      this.$router.push("/profile")
+      const location = "/profile/".concat(this.user.id);
+      this.$router.push(location)
     },
     isAdmin() {
       return this.currentProject.creator === this.user.id || this.user.role === "admin";
