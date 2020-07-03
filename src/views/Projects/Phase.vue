@@ -57,7 +57,7 @@
                 this.goBack();
             },
             isAdmin() {
-                return this.currentProject.creator === this.user.id || this.user.role === "admin";
+                return this.currentProject.creator === this.user.id;
             }
         }
     };

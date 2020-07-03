@@ -14,11 +14,14 @@ export default {
   },
 
   /* Project members */
-  addProjectMember: (state, member) => {
-    if (state.projectMembers) {
-      state.projectMembers.push(member)
+  addProjectMember: (state, memberToAdd) => {
+    if (state.projectMembers && state.projectMembers.length > 0) {
+      const index = state.projectMembers.findIndex(member => member.id === memberToAdd.id);
+      if (index < 0) {
+        state.projectMembers.push(memberToAdd)
+      }
     } else {
-      state.projectMembers =  [member]
+      state.projectMembers = [memberToAdd]
     }
   },
   removeProjectMember: (state, memberId) => {

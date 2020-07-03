@@ -155,7 +155,7 @@
     }),
     methods: {
       isAdmin() {
-        return this.project.creator === this.user.id || this.user.role === "admin";
+        return this.project.creator === this.user.id;
       }
     }
   }

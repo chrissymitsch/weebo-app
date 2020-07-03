@@ -50,10 +50,10 @@
       ...mapActions('projects', ['unsubscribeProjectMember']),
       ...mapActions('messages', ['createMessage']),
       isAdmin(){
-        return this.currentProject.creator === this.data.id || this.data.role === "admin";
+        return this.currentProject.creator === this.data.id;
       },
       deletionPossible(){
-        return this.user.id !== this.data.id && (this.currentProject.creator === this.user.id || this.user.role === "admin");
+        return this.user.id !== this.data.id && this.currentProject.creator === this.user.id;
       },
       onConfirmUnsubscription () {
         if (!this.isProjectMemberUnsubscriptionPending(this.data.id)) {

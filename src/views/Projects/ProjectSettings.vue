@@ -9,62 +9,123 @@
         </tutorial-modal>
 
         <md-chip>{{ currentProject.name }} / Einstellungen</md-chip>
-        <form novalidate class="md-layout" @submit.prevent="null">
-            <md-card class="md-layout-item md-size-50 md-small-size-100">
-                <md-card-content>
-                    <div class="md-layout md-gutter">
-                        <div class="md-layout-item md-small-size-100">
-                            <md-field>
-                                <label>Projektname</label>
-                                <md-input name="name" id="name" />
-                            </md-field>
-                        </div>
-                    </div>
-                </md-card-content>
 
-                <md-card-actions>
-                    <md-button type="submit" class="md-primary">Projekt speichern</md-button>
-                </md-card-actions>
-            </md-card>
-        </form>
+        <div class="md-layout md-gutter file-layout">
+            <div class="md-layout-item md-small-size-100">
+                <md-card>
+                    <form novalidate class="md-layout" @submit.prevent="null">
+                        <md-card class="md-layout-item md-size-50 md-small-size-100">
+                            <md-card-content>
+                                <div class="md-layout md-gutter">
+                                    <div class="md-layout-item md-small-size-100">
+                                        <md-field>
+                                            <label>Projektname</label>
+                                            <md-input name="name" id="name" />
+                                        </md-field>
+                                    </div>
+                                </div>
+                            </md-card-content>
+                        </md-card>
+                    </form>
+                </md-card>
+            </div>
+        </div>
+
+        <md-table class="role-table hide-for-small" v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
+            <md-table-toolbar>
+                <div class="md-toolbar-section-start">
+                    <h1 class="md-title">Rollen</h1>
+                </div>
+
+                <md-field md-clearable class="md-toolbar-section-end">
+                    <md-input placeholder="Nach Projektteilnehmer suchen..." v-model="search" @input="searchOnTable" />
+                </md-field>
+            </md-table-toolbar>
+
+            <md-table-empty-state
+                    v-if="search"
+                    md-label="Keine Teilnehmer gefunden."
+                    :md-description="`Niemand mit dem Namen '${search}' gefunden.`">
+            </md-table-empty-state>
+
+            <md-table-empty-state
+                    v-if="!search"
+                    md-label="Keine Teilnehmer gefunden."
+                    :md-description="`Niemand gefunden.`">
+            </md-table-empty-state>
+
+            <md-table-row slot="md-table-row" slot-scope="{ item }">
+                <md-table-cell md-sort-by="id">
+                    <avatar :user-id="item.id"></avatar>
+                </md-table-cell>
+                <md-table-cell md-label="displayName" md-sort-by="name">
+                    {{ item.displayName }}
+                </md-table-cell>
+                <md-table-cell md-label="Rolle" md-sort-by="role">
+                    {{ item.role }}
+                </md-table-cell>
+            </md-table-row>
+        </md-table>
+
+        <md-button type="submit" class="md-primary">Projekt speichern</md-button>
+
     </div>
 </template>
 
 <script>
     import {mapState} from "vuex";
     import TutorialModal from "../../components/rewards/TutorialModal";
+    import Avatar from "../../components/users/Avatar";
+
+    const toLower = text => {
+        return text.toString().toLowerCase()
+    };
+
+    const searchByName = (items, term) => {
+        if (term) {
+            return items.filter(item => {
+                if (item.name) {
+                    return toLower(item.name).includes(toLower(term));
+                }
+                return false;
+            });
+        }
+        return items
+    };
 
     export default {
         computed: {
-            ...mapState('projects', ['currentProject'])
+            ...mapState('authentication', ['user']),
+            ...mapState('projects', ['currentProject', 'projectMembers'])
         },
-        components: {TutorialModal}
+        components: {Avatar, TutorialModal},
+        data: () => ({
+            search: null,
+            searched: [],
+            members: []
+        }),
+        methods: {
+            searchOnTable () {
+                this.searched = searchByName(this.members, this.search);
+            },
+        },
+        created () {
+            this.members = JSON.parse(JSON.stringify(this.projectMembers));
+            this.searched = JSON.parse(JSON.stringify(this.projectMembers));
+
+            for (let i = 0; i < this.searched.length; i += 1) {
+                if (this.searched[i].id === this.currentProject.creator) {
+                    this.searched[i].role = "Admin";
+                } else {
+                    this.searched[i].role = "User";
+                }
+            }
+        }
     };
 </script>
 
 <style lang="scss" scoped>
-    .md-card {
-        display: inline-block;
-        vertical-align: top;
-
-        .md-card-content .md-list-item-container {
-            font-size: 12px;
-        }
-    }
-
-    .md-list-item-content {
-        min-height: 12px;
-    }
-
-    .md-button {
-        min-width: 128px;
-    }
-
-    .md-button.btn-whatsapp {
-        background-color: #2CB742!important;
-    }
-
-    .md-button.btn-telegram {
-        background-color: #2FA6DA!important;
+    .md-table.role-table {
+        margin-top: 24px;
     }
 </style>

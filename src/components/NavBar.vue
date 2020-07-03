@@ -134,7 +134,7 @@ export default {
       this.$router.push(location)
     },
     isAdmin() {
-      return this.currentProject.creator === this.user.id || this.user.role === "admin";
+      return this.currentProject.creator === this.user.id;
     }
   }
 }
