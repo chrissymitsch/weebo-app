@@ -46,15 +46,27 @@
             members: [],
             finishedLoading: 0
         }),
-        created() {
-            if (this.currentProject.members) {
-                for (let i = 0; i < this.currentProject.members.length; i += 1) {
-                    this.$store.dispatch('projects/getProjectMember', this.currentProject.members[i]).then(data => {
-                        this.members.push(data);
-                    }).finally(() => {
-                        this.finishedLoading = i + 1;
-                    });
+        methods: {
+            loadEachProjectMemberInList(projectMembers) {
+                if (projectMembers) {
+                    for (let i = 0; i < projectMembers.length; i += 1) {
+                        this.$store.dispatch('projects/getProjectMember', projectMembers[i]).then(data => {
+                            this.members.push(data);
+                        }).finally(() => {
+                            this.finishedLoading = i + 1;
+                        });
+                    }
                 }
+            }
+        },
+        mounted() {
+            if (this.networkOnLine) {
+                this.$store.dispatch('projects/getProjectById', this.currentProject.id).then(() => {
+                }).finally(() => {
+                    this.loadEachProjectMemberInList(this.currentProject.members);
+                });
+            } else {
+                this.loadEachProjectMemberInList(this.currentProject.members);
             }
         }
     }

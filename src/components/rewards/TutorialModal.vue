@@ -54,7 +54,7 @@
         }
       }
     },
-    created() {
+    mounted() {
       setTimeout(function () {
         this.triggerReward()
       }.bind(this), 1000);

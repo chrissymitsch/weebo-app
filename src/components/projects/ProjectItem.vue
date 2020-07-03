@@ -81,11 +81,19 @@
       }).finally(() => this.finishedLoading = true);
     },
     methods: {
+      ...mapActions('messages', ['createMessage']),
       onConfirmDeletion () {
         this.$emit('deleteProject', this.projectId);
       },
       onConfirmUnsubscription () {
         this.$emit('unsubscribeProject', this.projectId);
+        this.createMessage({
+          "projectId": this.projectId,
+          "type": "system",
+          "data": {
+            "text": `Oh schade, ${this.user.displayName} hat das Projekt verlassen.`
+          }
+        });
       },
       format_date(value){
         if (value) {

@@ -3,7 +3,7 @@
         <Modal :showModal="rewardModalActive" @closeModal="rewardModalActive=false" size="large">
             <md-progress-spinner v-if="!tutorialSaved" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
             <div v-if="tutorialSaved">
-                <div class="md-display-1">Starte in die 1. Phase!</div>
+                <div class="md-display-1 text-center">Starte in die 1. Phase!</div>
                 <p class="description"><img src="@/assets/img/rakete.png" width="200" /></p>
                 <p class="description md-body-2">
                     In der ersten Phase deines Projekts geht es darum, den Nutzungskontext zu verstehen.

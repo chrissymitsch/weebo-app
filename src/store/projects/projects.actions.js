@@ -131,14 +131,14 @@ export default {
       } else {
         updateProject.members = [rootState.authentication.user.id];
       }
-      const updatedProject = await projectDb.update(updateProject);
+      await projectDb.update(updateProject);
       if (user.projects) {
         user.projects.push(project.id);
       } else {
         user.projects = [project.id];
       }
       await usersDb.update(user);
-      commit('updateProject', updatedProject);
+      commit('updateProject', null);
       commit('setUserProjects', user.projects)
     }
     commit('setSubscriptionPending', false)
@@ -218,6 +218,27 @@ export default {
     commit('setUserProjects', user.projects);
     commit('removeProjectById', updatedProject);
     commit('removeProjectUnsubscriptionPending', projectId)
+  },
+
+  /**
+   * Unsubscribe a user project from its id
+   */
+  unsubscribeProjectMember: async ({ commit, getters }, {projectId, userId}) => {
+    if (getters.isProjectMemberUnsubscriptionPending(userId)) return;
+
+    const usersDb = new UsersDB();
+    const projectsDb = new ProjectsDB();
+
+    commit('addProjectMemberUnsubscriptionPending', userId);
+    const user = await usersDb.read(userId);
+    user.projects = user.projects.filter(e => e !== projectId);
+    await usersDb.update(user);
+    const project = await projectsDb.read(projectId);
+    project.members = project.members.filter(e => e !== userId);
+    await projectsDb.update(project);
+
+    commit('removeProjectMember', userId);
+    commit('removeProjectMemberUnsubscriptionPending', userId)
   },
 
   /**

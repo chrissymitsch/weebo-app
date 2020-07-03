@@ -25,10 +25,11 @@ export default {
   /**
    * Create a message for current project
    */
-  createMessage: async ({ commit }, message) => {
+  createMessage: async ({ rootState, commit }, message) => {
     commit('addMessageCreationPending', message);
     const messagesDb = new MessagesDb(message.projectId);
     const projectsDb = new ProjectsDB();
+    message.creator = rootState.authentication.user.id;
     const newMessage = await messagesDb.create(message);
 
     await projectsDb.update({

@@ -23,7 +23,7 @@
           </router-link>
           <router-link
                   :to="{ name: 'project-invitation' }"
-                  v-if="isCreator()">
+                  v-if="isAdmin()">
             <md-list-item>
               <md-icon>send</md-icon>
               <span class="md-list-item-text">Einladung verschicken</span>
@@ -52,7 +52,7 @@
           </md-list>
           <router-link
                   :to="{ name: 'project-settings' }"
-                  v-if="isCreator()">
+                  v-if="isAdmin()">
             <md-list-item>
               <md-icon>settings</md-icon>
               <span class="md-list-item-text">Einstellungen</span>
@@ -154,8 +154,8 @@
       expandProcess: true
     }),
     methods: {
-      isCreator() {
-        return this.project.creator === this.user.id;
+      isAdmin() {
+        return this.project.creator === this.user.id || this.user.role === "admin";
       }
     }
   }

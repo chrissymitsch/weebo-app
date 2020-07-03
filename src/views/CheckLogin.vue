@@ -43,7 +43,7 @@ export default {
   }
 
   .page-wrapper {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     justify-content: start;
     flex-direction: column;

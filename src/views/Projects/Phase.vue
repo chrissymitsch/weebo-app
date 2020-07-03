@@ -25,7 +25,7 @@
             <p class="md-title">Endgame: Softwareeinführung</p>
         </div>
         <p v-if="(!currentProject.phase && $zircle.getParams().currentPhase === 0) || currentProject.phase === $zircle.getParams().currentPhase">
-            <md-button class="md-accent md-raised" @click="finishPhaseDialogActive = true" v-if="isCreator()">
+            <md-button class="md-accent md-raised" @click="finishPhaseDialogActive = true" v-if="isAdmin()">
                 <md-icon>check</md-icon> Phase abschließen
             </md-button>
         </p>
@@ -56,8 +56,8 @@
                 this.finishPhaseDialogActive = false;
                 this.goBack();
             },
-            isCreator() {
-                return this.currentProject.creator === this.user.id;
+            isAdmin() {
+                return this.currentProject.creator === this.user.id || this.user.role === "admin";
             }
         }
     };

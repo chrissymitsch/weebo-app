@@ -32,8 +32,8 @@ body {
   }
 
   .main-wrapper {
-    margin-top: 3rem;
-    padding: 20px;
+    padding: 3rem 20px 20px 20px;
+    min-height: 100vh;
 
     .page-wrapper {
       margin: auto;
@@ -57,6 +57,7 @@ body {
 /** HOME PAGE **/
 .md-app {
   position: inherit;
+  min-height: 100vh;
 }
 
 .md-app-scroller, .md-app-content {

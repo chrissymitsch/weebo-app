@@ -156,6 +156,14 @@
                     message => message.id === newestMessage &&
                             (message.type === 'text' || message.type === 'emoji' || message.type === 'system')).length > 0) {
               this.newMessagesCount += 1;
+              const indexOfNewestMessage = this.messageList.findIndex(message => message.id === newestMessage);
+              if (this.messageList[indexOfNewestMessage].type === "system" &&
+                      this.messageList[indexOfNewestMessage].creator !== this.user.id) {
+                this.$toast.info('Das Projekt wurde aktualisiert.', {
+                  position: 'top-right',
+                  duration: 60000 // 1 minute
+                });
+              }
             }
             this.finishedLoading = true;
           });
@@ -164,17 +172,16 @@
     },
     watch: {
       currentProject(newValue, oldValue) {
-        if (newValue !== oldValue) {
+        if (this.currentProject && newValue !== oldValue) {
           this.newestMessage = this.currentProject.newMessage;
           this.getAllMessages();
 
-          if (this.currentProject) {
-            fire.collection("projects").doc(this.currentProject.id).onSnapshot(data => {
-              if (this.newestMessage !== data.data().newMessage) {
-                this.getAllMessages(this.newestMessage);
-              }
-            });
-          }
+          fire.collection("projects").doc(this.currentProject.id).onSnapshot(data => {
+            if (this.newestMessage !== data.data().newMessage) {
+              this.newestMessage = data.data().newMessage;
+              this.getAllMessages(this.newestMessage);
+            }
+          });
         }
       }
     }

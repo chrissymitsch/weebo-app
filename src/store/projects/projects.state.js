@@ -7,6 +7,7 @@ export default {
   projectNameToCreate: '',
   projectDeletionPending: [],
   projectUnsubscriptionPending: [],
+  projectMemberUnsubscriptionPending: [],
   projectCreationPending: false,
   projectUpdatePending: [],
   subscriptionPending: false

@@ -21,11 +21,20 @@ export default {
       state.projectMembers =  [member]
     }
   },
+  removeProjectMember: (state, memberId) => {
+    const index = state.projectMembers.findIndex(member => member.id === memberId);
+    state.projectMembers.splice(index, 1)
+  },
   addProjectMemberLoading: (state, memberId) =>
       state.projectMemberLoading.push(memberId),
   removeProjectMemberLoading: (state, memberId) => {
     const index = state.projectMemberLoading.findIndex(member => member.id === memberId);
     state.projectMemberLoading.splice(index, 1)
+  },
+  addProjectMemberUnsubscriptionPending: (state, memberId) => state.projectMemberUnsubscriptionPending.push(memberId),
+  removeProjectMemberUnsubscriptionPending: (state, memberId) => {
+    const index = state.projectMemberUnsubscriptionPending.findIndex(member => member.id === memberId);
+    state.projectMemberUnsubscriptionPending.splice(index, 1)
   },
 
   addProjectMemberUpdatePending: (state, memberId) =>

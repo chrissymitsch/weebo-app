@@ -12,6 +12,12 @@ export default {
     state.projectUnsubscriptionPending.includes(projectId),
 
   /**
+   * Check if a project has unsubscription of a member pending
+   */
+  isProjectMemberUnsubscriptionPending: state => userId =>
+    state.projectMemberUnsubscriptionPending.includes(userId),
+
+  /**
    * Check if a project has update pending
    */
   isProjectUpdatePending: state => projectId =>

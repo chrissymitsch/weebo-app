@@ -25,7 +25,7 @@
   import ProjectDetail from '@/components/projects/ProjectDetail'
 
   export default {
-    components: { ProjectDetail },
+    components: {ProjectDetail},
     computed: {
       ...mapActions('projects', ['getProjectById']),
       ...mapState('projects', ['currentProject', 'userProjects'])
@@ -49,6 +49,6 @@
       } else {
         this.$router.push('/projects')
       }
-    }
+    },
   }
 </script>

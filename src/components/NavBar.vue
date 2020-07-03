@@ -66,7 +66,7 @@
           </router-link>
           <router-link
                   :to="{ name: 'project-invitation' }"
-                  v-if="isCreator()">
+                  v-if="isAdmin()">
             <md-list-item @click="menuVisible = false">
               <md-icon>send</md-icon>
               <span class="md-list-item-text">Einladung verschicken</span>
@@ -87,7 +87,7 @@
           </md-list>
           <router-link
                   :to="{ name: 'project-settings' }"
-                  v-if="isCreator()">
+                  v-if="isAdmin()">
             <md-list-item @click="menuVisible = false">
               <md-icon>settings</md-icon>
               <span class="md-list-item-text">Einstellungen</span>
@@ -132,8 +132,8 @@ export default {
     openProfile() {
       this.$router.push("/profile")
     },
-    isCreator() {
-      return this.currentProject.creator === this.user.id;
+    isAdmin() {
+      return this.currentProject.creator === this.user.id || this.user.role === "admin";
     }
   }
 }
