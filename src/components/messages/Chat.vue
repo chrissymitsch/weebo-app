@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$route.params.id && currentProject">
+  <div v-if="$route.params.id && currentProject && currentProject.phase && currentProject.phase !== 0">
     <beautiful-chat
             :participants="participants"
             :onMessageWasSent="onMessageWasSent"

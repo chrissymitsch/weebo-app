@@ -9,10 +9,16 @@
                 Projektteilnehmer anzeigen lassen.
                 Das obere Menü dient dazu, in deiner aktuellen Phase Aktionen auszuführen.
                 Schau dich doch mal um, du kannst Aufgaben anlegen, Dateien hochladen, Termine planen und mehr.
-                Und vergiss nicht, alle Projektteilnehmer über den Chat unten rechts zu begrüßen!
             </p>
         </tutorial-modal>
 
+        <md-dialog-confirm
+                :md-active.sync="finishPhaseDialogActive"
+                :md-title="`Möchtest du Phase ${currentProject.phase + 1} wirklich beenden?`"
+                md-content="Alle Dateien, Kommentare etc. werden weiterhin abrufbar sein."
+                md-confirm-text="Okay"
+                md-cancel-text="Abbrechen!"
+                @md-confirm="onConfirmFinishPhase" />
 
         <Modal :showModal="congratulationsModalActive" @closeModal="congratulationsModalActive=false" size="large">
             <md-empty-state
@@ -26,6 +32,14 @@
 
 
         <md-chip>{{ currentProject.name }} / Dashboard</md-chip>
+
+        <md-card class="welcome-card" v-if="currentProject && currentProject.phase === 1">
+            <md-card-content>
+                <p class="md-body-2">Neu!</p>
+                Ab sofort kannst du dich mit allen Projektteilnehmern im Gruppenchat (Button am unteren rechten Rand)
+                unterhalten! Außerdem kannst du nun Personas und Dateien kommentieren.
+            </md-card-content>
+        </md-card>
 
         <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
@@ -133,11 +147,174 @@
                 </md-card>
             </div>
         </div>
+
+
+        <div class="md-layout md-gutter welcome-card">
+            <div class="md-layout-item md-small-size-100">
+                <md-card>
+                    <md-card-content>
+                        <p class="md-title">Willkommen auf dem Dashboard deines Projekts.</p>
+                        <p class="md-body-1">
+                            Sieh dir hier an, was du und alle anderen Teilnehmer in dieser Phase alles erledigen
+                            können und sollten!
+                        </p>
+                        <div class="md-layout md-gutter welcome-card">
+                            <div class="md-layout-item md-small-size-100 md-body-2">
+                                <p v-if="currentProject.phase === 0 || !currentProject.phase">
+                                    Analysephase
+                                </p>
+                                <p v-if="currentProject.phase === 1">
+                                    Spezifikationsphase
+                                </p>
+                                <p v-if="currentProject.phase === 2">
+                                    Modellierungsphase
+                                </p>
+                                <p v-if="currentProject.phase === 3">
+                                    Evaluationsphase
+                                </p>
+                                <p v-if="currentProject.phase === 4">
+                                    Softwareeinführung
+                                </p>
+                            </div>
+                        </div>
+                        <div class="md-layout md-gutter welcome-card">
+                            <div class="md-layout-item md-small-size-100">
+                                <md-list class="md-dense" v-if="currentProject.phase === 0 || !currentProject.phase">
+                                    <md-list-item>
+                                        <md-icon class="md-accent" v-if="projectMembers.length > 1">check_box</md-icon>
+                                        <md-icon class="md-accent" v-if="projectMembers.length <= 1">check_box_outline_blank</md-icon>
+                                        <span class="md-list-item-text">Stakeholder einladen</span>
+                                    </md-list-item>
+                                    <md-list-item>
+                                        <md-icon class="md-accent" v-if="getPhaseTasks('Neu').length > 0">check_box</md-icon>
+                                        <md-icon class="md-accent" v-if="getPhaseTasks('Neu').length <= 0">check_box_outline_blank</md-icon>
+                                        <span class="md-list-item-text">Aufgaben erstellen</span>
+                                    </md-list-item>
+                                    <md-list-item>
+                                        <md-icon class="md-accent" v-if="personas.length > 0">check_box</md-icon>
+                                        <md-icon class="md-accent" v-if="personas.length <= 0">check_box_outline_blank</md-icon>
+                                        <span class="md-list-item-text">Personas anlegen</span>
+                                    </md-list-item>
+                                    <md-list-item>
+                                        <md-icon class="md-accent" v-if="getPhaseFiles().length > 0">check_box</md-icon>
+                                        <md-icon class="md-accent" v-if="getPhaseFiles().length <= 0">check_box_outline_blank</md-icon>
+                                        <span class="md-list-item-text">Dateien zur Analyse hochladen</span>
+                                    </md-list-item>
+                                    <md-list-item>
+                                        <md-icon class="md-accent" v-if="events.length > 0">check_box</md-icon>
+                                        <md-icon class="md-accent" v-if="events.length <= 0">check_box_outline_blank</md-icon>
+                                        <span class="md-list-item-text">Termine planen (z.B. Deadlines, Meilensteine)</span>
+                                    </md-list-item>
+                                </md-list>
+                                <md-list class="md-dense" v-if="currentProject.phase === 1">
+                                    <md-list-item>
+                                        <md-icon class="md-accent"
+                                                 v-if="getPhaseTasks('In Bearbeitung').length > 0 || getPhaseTasks('Geschafft!').length > 0">
+                                            check_box
+                                        </md-icon>
+                                        <md-icon class="md-accent"
+                                                 v-if="getPhaseTasks('In Bearbeitung').length <= 0 && getPhaseTasks('Geschafft!').length <= 0">
+                                            check_box_outline_blank
+                                        </md-icon>
+                                        <span class="md-list-item-text">Aufgaben bearbeiten und beenden</span>
+                                    </md-list-item>
+                                    <md-list-item>
+                                        <md-icon class="md-accent" v-if="getPersonaMessages().length > 0">check_box</md-icon>
+                                        <md-icon class="md-accent" v-if="getPersonaMessages().length <= 0">check_box_outline_blank</md-icon>
+                                        <span class="md-list-item-text">Personas diskutieren</span>
+                                    </md-list-item>
+                                    <md-list-item>
+                                        <md-icon class="md-accent" v-if="getPhaseFiles().length > 0">check_box</md-icon>
+                                        <md-icon class="md-accent" v-if="getPhaseFiles().length <= 0">check_box_outline_blank</md-icon>
+                                        <span class="md-list-item-text">Dateien hochladen und diskutieren (z.B. Anforderungen)</span>
+                                    </md-list-item>
+                                    <md-list-item>
+                                        <md-icon class="md-accent" v-if="events.length > 0">check_box</md-icon>
+                                        <md-icon class="md-accent" v-if="events.length <= 0">check_box_outline_blank</md-icon>
+                                        <span class="md-list-item-text">Weitere Termine planen (z.B. Deadlines, Meilensteine)</span>
+                                    </md-list-item>
+                                </md-list>
+                                <md-list class="md-dense" v-if="currentProject.phase === 2">
+                                    <md-list-item>
+                                        <md-icon class="md-accent"
+                                                 v-if="getPhaseTasks('In Bearbeitung').length > 0 || getPhaseTasks('Geschafft!').length > 0">
+                                            check_box
+                                        </md-icon>
+                                        <md-icon class="md-accent"
+                                                 v-if="getPhaseTasks('In Bearbeitung').length <= 0 && getPhaseTasks('Geschafft!').length <= 0">
+                                            check_box_outline_blank
+                                        </md-icon>
+                                        <span class="md-list-item-text">Aufgaben bearbeiten und beenden</span>
+                                    </md-list-item>
+                                    <md-list-item>
+                                        <md-icon class="md-accent" v-if="getPhaseFiles().length > 0">check_box</md-icon>
+                                        <md-icon class="md-accent" v-if="getPhaseFiles().length <= 0">check_box_outline_blank</md-icon>
+                                        <span class="md-list-item-text">Dateien hochladen und an alle vermitteln (z.B. Prototypen, Wireframes)</span>
+                                    </md-list-item>
+                                    <md-list-item>
+                                        <md-icon class="md-accent" v-if="events.length > 0">check_box</md-icon>
+                                        <md-icon class="md-accent" v-if="events.length <= 0">check_box_outline_blank</md-icon>
+                                        <span class="md-list-item-text">Weitere Termine planen (z.B. User-Test)</span>
+                                    </md-list-item>
+                                </md-list>
+                                <md-list class="md-dense" v-if="currentProject.phase === 3">
+                                    <md-list-item>
+                                        <md-icon class="md-accent"
+                                                 v-if="getPhaseTasks('In Bearbeitung').length > 0 || getPhaseTasks('Geschafft!').length > 0">
+                                            check_box
+                                        </md-icon>
+                                        <md-icon class="md-accent"
+                                                 v-if="getPhaseTasks('In Bearbeitung').length <= 0 || getPhaseTasks('Geschafft!').length <= 0">
+                                            check_box_outline_blank
+                                        </md-icon>
+                                        <span class="md-list-item-text">Aufgaben bearbeiten und beenden</span>
+                                    </md-list-item>
+                                    <md-list-item>
+                                        <md-icon class="md-accent" v-if="getPhaseFiles().length > 0">check_box</md-icon>
+                                        <md-icon class="md-accent" v-if="getPhaseFiles().length <= 0">check_box_outline_blank</md-icon>
+                                        <span class="md-list-item-text">Dateien hochladen und diskutieren (z.B. Testergebnisse)</span>
+                                    </md-list-item>
+                                    <md-list-item>
+                                        <md-icon class="md-accent" v-if="events.length > 0">check_box</md-icon>
+                                        <md-icon class="md-accent" v-if="events.length <= 0">check_box_outline_blank</md-icon>
+                                        <span class="md-list-item-text">Termine planen (z.B. User-Test, Deadlines)</span>
+                                    </md-list-item>
+                                </md-list>
+                                <md-list class="md-dense" v-if="currentProject.phase === 4">
+                                    <md-list-item>
+                                        <md-icon class="md-accent"
+                                                 v-if="getPhaseTasks('Neu').length > 0 || getPhaseTasks('Geschafft!').length > 0">
+                                            check_box
+                                        </md-icon>
+                                        <md-icon class="md-accent"
+                                                 v-if="getPhaseTasks('Neu').length <= 0 || getPhaseTasks('Geschafft!').length <= 0">
+                                            check_box_outline_blank
+                                        </md-icon>
+                                        <span class="md-list-item-text">Aufgaben beenden oder neue erstellen</span>
+                                    </md-list-item>
+                                    <md-list-item>
+                                        <md-icon class="md-accent">help</md-icon>
+                                        <span class="md-list-item-text">Prozessphasen erneut durchlaufen</span>
+                                    </md-list-item>
+                                </md-list>
+                            </div>
+                        </div>
+                    </md-card-content>
+                    <md-card-actions>
+                        <md-button class="md-accent md-raised" @click="finishPhaseDialogActive = true"
+                                   v-if="isAdmin() && (!currentProject.phase || currentProject.phase < 4)">
+                            <md-icon>check</md-icon> Phase abschließen
+                        </md-button>
+                    </md-card-actions>
+                </md-card>
+            </div>
+        </div>
+
     </div>
 </template>
 
 <script>
-    import {mapState} from "vuex";
+    import {mapActions, mapState} from "vuex";
     import moment from 'moment';
     import Modal from "../../components/Modal";
     import Avatar from "../../components/users/Avatar";
@@ -146,9 +323,13 @@
 
     export default {
         computed: {
+            ...mapState('authentication', ['user']),
             ...mapState('messages', ['messages']),
             ...mapState('projects', ['currentProject', 'projectMembers']),
-            ...mapState('tasks', ['tasks'])
+            ...mapState('tasks', ['tasks']),
+            ...mapState('personas', ['personas']),
+            ...mapState('files', ['files']),
+            ...mapState('events', ['events'])
         },
         components: {
             TutorialModal,
@@ -169,9 +350,11 @@
                 "3": "EVALUATION",
                 "4": "SOFTWAREEINFÜHRUNG"
             },
-            congratulationsModalActive: false
+            congratulationsModalActive: false,
+            finishPhaseDialogActive: false
         }),
         methods: {
+            ...mapActions('projects', ['triggerUpdateProjectAction']),
             format_date(value) {
                 if (value) {
                     return (moment(value).format('DD.MM.YYYY, HH:mm')).concat(" Uhr");
@@ -222,7 +405,29 @@
                 });
                 const maxScore = allScores.indexOf(Math.max(...allScores));
                 return {"winner": allMembers[maxScore], "winnerScore": Math.max(...allScores)};
-            }
+            },
+            isAdmin() {
+                return this.currentProject.creator === this.user.id;
+            },
+            onConfirmFinishPhase () {
+                const projectToUpdate = JSON.parse(JSON.stringify(this.currentProject));
+                projectToUpdate.phase = this.currentProject.phase + 1;
+                this.triggerUpdateProjectAction(projectToUpdate);
+                this.finishPhaseDialogActive = false;
+            },
+            getPhaseTasks(status) {
+                let phase = 1;
+                if (this.currentProject.phase) {
+                    phase = Number(this.currentProject.phase);
+                }
+                return this.tasks.filter(task => (Number(task.type) === phase + 1) && task.column === status);
+            },
+            getPhaseFiles() {
+                return this.files.filter(file => file.phase === (this.currentProject.phase || 0));
+            },
+            getPersonaMessages() {
+                return this.messages.filter(message => message.type === "personaComment");
+            },
         },
         mounted() {
             this.$zircle.config({
@@ -247,6 +452,11 @@
 
 <style lang="scss" scoped>
     @import '@/theme/variables.scss';
+
+    .welcome-card {
+        margin-top: 24px;
+        margin-bottom: 24px;
+    }
 
     .opentasks-phasename {
         word-break: break-all;

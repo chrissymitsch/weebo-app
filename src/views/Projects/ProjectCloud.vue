@@ -13,8 +13,8 @@
             <p class="description"><img src="@/assets/img/cloud.png" width="200" /></p>
             <p class="description md-body-2">
                 Du kannst hier Dateien hochladen, z.B. PDFs, Grafiken, Präsentationen, Excel-Tabellen usw.<br />
-                Teile einfach alles mit den anderen Projektteilnehmern und diskutiere darüber, um Kommunikation und
-                Transparenz zu fördern.
+                Teile einfach alles mit den anderen Projektteilnehmern und diskutiere ab Phase 2 darüber, um
+                Kommunikation und Transparenz in deinem Projekt zu fördern.
             </p>
         </tutorial-modal>
 
@@ -33,16 +33,19 @@
                         <md-table-cell>{{ format_date(selectedFile.createTimestamp) }}</md-table-cell>
                     </md-table-row>
                 </md-table>
-                <p>
+                <p v-if="!currentProject.phase || currentProject.phase === 0">
+                    Bedanke dich für diese Datei!
+                </p>
+                <p v-if="currentProject.phase && currentProject.phase !== 0">
                     Du kannst hier die Datei <i>{{selectedFile.name}}</i> kommentieren oder dich dafür bedanken!
                 </p>
                 <md-button v-if="selectedFile.creator === user.id" class="md-raised" disabled><md-icon>favorite_border</md-icon>Danke</md-button>
-                <md-button v-if="selectedFile.creator === user.id" class="md-raised md-accent" @click="addThankYou(selectedFile.creator)">
+                <md-button v-if="selectedFile.creator !== user.id" class="md-raised md-accent" @click="addThankYou(selectedFile.creator)">
                     <md-icon>favorite_border</md-icon>
                     Danke
                 </md-button>
 
-                <md-card>
+                <md-card v-if="currentProject.phase && currentProject.phase !== 0">
                     <md-card-content>
                         <md-field>
                             <label>Kommentar</label>
@@ -100,7 +103,7 @@
         <div class="show-for-small">
             <md-list>
                 <md-list-item v-for="(file, index) in searched" :key="index">
-                    <md-button @click="triggerFileModal(file)"><md-icon>message</md-icon> ({{countMessages(file.id)}})</md-button>
+                    <md-button v-if="currentProject.phase && currentProject.phase !== 0" @click="triggerFileModal(file)"><md-icon>message</md-icon> ({{countMessages(file.id)}})</md-button>
                     <span class="md-list-item-text persona-name">
                         <a href="#" @click="triggerFileModal(persona)">{{ file.name }}</a>
                     </span>
@@ -143,10 +146,13 @@
                 <md-table-cell md-label="Dateiname" md-sort-by="name">
                     <a :href="item.url" target=_blank>{{ item.name }}</a>
                 </md-table-cell>
-                <md-table-cell md-label="Kommentare" md-sort-by="type">
+                <md-table-cell v-if="currentProject.phase && currentProject.phase !== 0" md-label="Kommentare" md-sort-by="type">
                     <md-badge md-dense :md-content="countMessages(item.id)">
                         <md-button class="md-icon-button" @click="triggerFileModal(item)"><md-icon>message</md-icon></md-button>
                     </md-badge>
+                </md-table-cell>
+                <md-table-cell v-if="!currentProject.phase || currentProject.phase === 0" md-label="Details" md-sort-by="type">
+                    <md-button class="md-icon-button" @click="triggerFileModal(item)"><md-icon>search</md-icon></md-button>
                 </md-table-cell>
                 <md-table-cell md-label="Größe" md-sort-by="size">{{ formatBytes(item.size) }}</md-table-cell>
                 <md-table-cell md-label="Erstellt" md-sort-by="createTimestamp">{{ format_date(item.createTimestamp) }}</md-table-cell>
@@ -225,7 +231,7 @@
             },
             filterFilesByPhase(files) {
                 const filesToFilter = JSON.parse(JSON.stringify(files));
-                return filesToFilter.filter(file => file.phase === this.currentProject.phase);
+                return filesToFilter.filter(file => file.phase === (this.currentProject.phase || 0));
             },
             countMessages(fileId) {
                 return this.messages.filter(message => message.type === "fileComment" && message.fileId === fileId).length;
@@ -247,7 +253,7 @@
                         storageRef.snapshot.ref.getDownloadURL().then((url) => {
                             this.uploadFile = url;
                             this.$store.dispatch('files/createProjectFile', {
-                                "phase": this.currentProject.phase,
+                                "phase": this.currentProject.phase || 0,
                                 "url": url,
                                 "projectId": this.currentProject.id,
                                 "name": metaData[0].name,

@@ -1,5 +1,5 @@
 <template>
-    <div class="ProjectPersonas" v-if="currentProject && currentProject.phase === 1">
+    <div class="ProjectPersonas" v-if="currentProject">
         <md-dialog-confirm
                 v-if="selectedPersonaForDeletion"
                 :md-active.sync="deletionDialogActive"
@@ -12,12 +12,13 @@
             <div class="md-display-1 text-center">Es ist Zeit, Personas zu erstellen!</div>
             <p class="description"><img src="@/assets/img/astronaut1.png" width="200" /></p>
             <p class="description md-body-2">
-                In Phase 2 des nutzerzentrierten Designprozesses, der Spezifikationsphase, geht es darum, die
-                Anforderungen deiner Nutzer festzulegen.<br />
+                In Phase 1 des nutzerzentrierten Designprozesses, der Analysephase, geht es darum, den Kontext der
+                Nutzung deines Systems festzulegen.<br />
                 Personas stellen fiktive Repräsentationen potenzieller Nutzer dar. Um herauszufinden, welche Bedürfnisse
-                deine späteren Nutzer haben, solltest du mit deinem Projektteam Personas erarbeiten.<br />
+                deine potenziellen Nutzer haben, solltest du mit deinem Projektteam Personas erarbeiten.<br />
                 Damit es einfacher geht, steht dir ein vorstrukturiertes Formular mit allen nötigen Inhalten zur
-                Verfügung. Außerdem kannst du mit allen Projektteilnehmern über die fertigen Personas diskutieren.
+                Verfügung. Außerdem kannst du ab Phase 2 mit allen Projektteilnehmern über die fertigen Personas
+                diskutieren, um Anforderungen zu erarbeiten.
             </p>
         </tutorial-modal>
 
@@ -38,8 +39,11 @@
                         <md-table-cell>{{ format_date(selectedPersona.createTimestamp) }}</md-table-cell>
                     </md-table-row>
                 </md-table>
-                <p>
+                <p v-if="currentProject.phase && currentProject.phase !== 0">
                     Du kannst hier Persona <i>{{selectedPersona.name}}</i> kommentieren oder dich dafür bedanken!
+                </p>
+                <p v-if="!currentProject.phase || currentProject.phase === 0">
+                    Bedanke dich für diese Persona!
                 </p>
                 <md-button v-if="selectedPersona.creator === user.id" class="md-raised" disabled><md-icon>favorite_border</md-icon>Danke</md-button>
                 <md-button v-if="selectedPersona.creator !== user.id" class="md-raised md-accent" @click="addThankYou(selectedPersona.creator)">
@@ -47,7 +51,7 @@
                     Danke
                 </md-button>
 
-                <md-card>
+                <md-card v-if="currentProject.phase && currentProject.phase !== 0">
                     <md-card-content>
                         <md-field>
                             <label>Kommentar</label>
@@ -72,7 +76,7 @@
             <add-persona :id="currentProject.id" @personaCreated="updatePersona"></add-persona>
             <md-list class="md-dense">
                 <md-list-item v-for="(persona, index) in searched" :key="index">
-                    <md-button @click="triggerPersonaModal(persona)"><md-icon>message</md-icon> ({{countMessages(persona.id)}})</md-button>
+                    <md-button v-if="currentProject.phase && currentProject.phase !== 0" @click="triggerPersonaModal(persona)"><md-icon>message</md-icon> ({{countMessages(persona.id)}})</md-button>
                     <span class="md-list-item-text persona-name">
                         <a href="#" @click="triggerPersonaModal(persona)">{{ persona.name }}</a>
                     </span>
@@ -110,7 +114,7 @@
                     <md-table-cell md-label="Name" md-sort-by="name">
                         <a href="#" @click="triggerPersonaModal(item)">{{ item.name }}</a>
                     </md-table-cell>
-                    <md-table-cell md-label="Kommentare">
+                    <md-table-cell md-label="Kommentare" v-if="currentProject.phase && currentProject.phase !== 0">
                         <md-badge md-dense :md-content="countMessages(item.id)">
                             <md-button class="md-icon-button" @click="triggerPersonaModal(item)"><md-icon>message</md-icon></md-button>
                         </md-badge>
