@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$route.params.id && currentProject && currentProject.phase && currentProject.phase !== 0">
+  <div v-if="isMounted && $route.params.id && currentProject && currentProject.phase && currentProject.phase !== 0">
     <beautiful-chat
             :participants="participants"
             :onMessageWasSent="onMessageWasSent"
@@ -17,6 +17,7 @@
             :colors="colors"
             :alwaysScrollToBottom="alwaysScrollToBottom"
             :messageStyling="messageStyling">
+      PLUS
       <template v-slot:header>
         <div class="sc-header--title">
           {{ currentProject.name }}-Gruppenchat
@@ -53,6 +54,7 @@
     },
     data() {
       return {
+        isMounted: false,
         icons: {
           open: {
             img: OpenIcon,
@@ -103,7 +105,8 @@
         alwaysScrollToBottom: true, // when set to true always scrolls the chat to the bottom when new events are in (new message, user starts typing...)
         messageStyling: true, // enables *bold* /emph/ _underline_ and such (more info at github.com/mattezza/msgdown)
         finishedLoading: false,
-        newestMessage: null
+        newestMessage: null,
+        limit: 20
       }
     },
     methods: {
@@ -150,7 +153,8 @@
         if (this.currentProject) {
           this.$store.dispatch('messages/getMessages', this.currentProject.id).then(() => {
             const messageToSort = JSON.parse(JSON.stringify(this.messages));
-            this.messageList = this.sortMessageList(this.filterMessageList(messageToSort));
+            const list = this.sortMessageList(this.filterMessageList(messageToSort));
+            this.messageList = list.filter((message, index) => index >= list.length - this.limit);
           }).finally(() => {
             if (newestMessage && this.messageList.filter(
                     message => message.id === newestMessage &&
@@ -169,6 +173,9 @@
           });
         }
       }
+    },
+    mounted() {
+      this.isMounted = true;
     },
     watch: {
       currentProject(newValue, oldValue) {

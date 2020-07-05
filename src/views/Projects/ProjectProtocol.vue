@@ -10,22 +10,41 @@
             </p>
         </tutorial-modal>
 
-
         <md-chip>{{ currentProject.name }} / Aktivitätsprotokoll</md-chip>
-        <div class="md-layout md-gutter protocol-layout">
-            <div class="md-layout-item">
-                <p v-if="!finishedLoading" class="text-center">
-                    <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
-                    Aktivitäten werden geladen...
-                </p>
+        <p v-if="!finishedLoading" class="text-center">
+            <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
+            Aktivitäten werden geladen...
+        </p>
 
-                <md-card class="discussion" v-if="finishedLoading">
-                    <md-card-content v-for="(message) in messageList" :key="message.id">
-                        <message :message="message"></message>
-                    </md-card-content>
-                </md-card>
-            </div>
-        </div>
+        <md-table v-if="finishedLoading" v-model="messageList" md-sort="createTimestamp" md-sort-order="desc" md-card md-fixed-header>
+            <md-table-toolbar>
+                <div class="md-toolbar-section-start">
+                    <h1 class="md-title">Aktivitäten und Nachrichten</h1>
+                </div>
+
+                <md-field md-clearable class="md-toolbar-section-end">
+                    <md-input placeholder="Nach Nachrichten suchen..." v-model="search" @input="searchOnTable" />
+                </md-field>
+            </md-table-toolbar>
+
+            <md-table-empty-state
+                    v-if="search"
+                    md-label="Keine Nachrichten gefunden."
+                    :md-description="`Für '${search}' wurden keine Nachrichten gefunden.`">
+            </md-table-empty-state>
+
+            <md-table-empty-state
+                    v-if="!search"
+                    md-label="Keine Nachrichten gefunden."
+                    :md-description="`Für dieses Projekt wurden keine Nachrichten gefunden.`">
+            </md-table-empty-state>
+
+            <md-table-row slot="md-table-row" slot-scope="{ item }">
+                <md-table-cell md-sort-by="createTimestamp">
+                    <message :message="item"></message>
+                </md-table-cell>
+            </md-table-row>
+        </md-table>
     </div>
 </template>
 
@@ -33,6 +52,22 @@
     import { mapState } from 'vuex'
     import Message from "../../components/messages/Message";
     import TutorialModal from "../../components/rewards/TutorialModal";
+
+    const toLower = text => {
+        return text.toString().toLowerCase()
+    };
+
+    const searchByText = (items, term) => {
+        if (term) {
+            return items.filter(item => {
+                if (item.data.text) {
+                    return toLower(item.data.text).includes(toLower(term));
+                }
+                return false;
+            });
+        }
+        return items
+    };
 
     export default {
         components: {TutorialModal, Message},
@@ -43,7 +78,8 @@
         },
         data: () => ({
             finishedLoading: 0,
-            messageList: []
+            messageList: [],
+            search: null
         }),
         methods: {
             sortMessageList(list) {
@@ -57,14 +93,17 @@
                 return list.sort(compare);
             },
             filterMessageList(list) {
-                return list.filter(message => message.projectId === this.currentProject.id && message.type !== "fileComment")
+                return list.filter(message => message.projectId === this.currentProject.id && message.type !== "fileComment" && message.type !== "personaComment")
+            },
+            searchOnTable () {
+                this.messageList = searchByText(this.filterMessageList(this.messages), this.search);
             },
         },
         created() {
             if (this.currentProject) {
                 this.$store.dispatch('messages/getMessages', this.currentProject.id).then(() => {
                     const messageToSort = JSON.parse(JSON.stringify(this.messages));
-                    this.messageList = this.sortMessageList(this.filterMessageList(messageToSort));
+                    this.messageList = this.filterMessageList(messageToSort);
                 }).finally(() => {
                     this.finishedLoading = true;
                 });

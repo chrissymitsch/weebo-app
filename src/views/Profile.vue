@@ -87,6 +87,46 @@
                 </p>
               </md-card-content>
             </md-card>
+            <md-card>
+              <md-card-media>
+                <img src="@/assets/img/badges/badge.png" :class="hasBadge('Phase0')" />
+              </md-card-media>
+              <md-card-content>
+                <p class="md-body-2">
+                  Du hast dir Prozessphase 1: Analyse angesehen
+                </p>
+              </md-card-content>
+            </md-card>
+            <md-card>
+              <md-card-media>
+                <img src="@/assets/img/badges/badge.png" :class="hasBadge('Phase1')" />
+              </md-card-media>
+              <md-card-content>
+                <p class="md-body-2">
+                  Du hast dir Prozessphase 2: Spezifikation angesehen
+                </p>
+              </md-card-content>
+            </md-card>
+            <md-card>
+              <md-card-media>
+                <img src="@/assets/img/badges/badge.png" :class="hasBadge('Phase2')" />
+              </md-card-media>
+              <md-card-content>
+                <p class="md-body-2">
+                  Du hast dir Prozessphase 3: Modellierung angesehen
+                </p>
+              </md-card-content>
+            </md-card>
+            <md-card>
+              <md-card-media>
+                <img src="@/assets/img/badges/badge.png" :class="hasBadge('Phase3')" />
+              </md-card-media>
+              <md-card-content>
+                <p class="md-body-2">
+                  Du hast dir Prozessphase 4: Evaluation angesehen
+                </p>
+              </md-card-content>
+            </md-card>
           </div>
         </div>
       </div>

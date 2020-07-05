@@ -296,6 +296,10 @@
                                         <md-icon class="md-accent">help</md-icon>
                                         <span class="md-list-item-text">Prozessphasen erneut durchlaufen</span>
                                     </md-list-item>
+                                    <md-list-item>
+                                        <md-icon class="md-accent">help</md-icon>
+                                        <span class="md-list-item-text">Maßnahmen für den nutzerzentrierten Softwareeinführungsprozess ergreifen</span>
+                                    </md-list-item>
                                 </md-list>
                             </div>
                         </div>

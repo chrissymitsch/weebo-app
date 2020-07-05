@@ -58,7 +58,7 @@
                 <md-table-cell md-sort-by="id">
                     <avatar :user-id="item.id"></avatar>
                 </md-table-cell>
-                <md-table-cell md-label="displayName" md-sort-by="name">
+                <md-table-cell md-label="Name" md-sort-by="displayName">
                     {{ item.displayName }}
                 </md-table-cell>
                 <md-table-cell md-label="Rolle" md-sort-by="role">
