@@ -13,14 +13,7 @@
         </tutorial-modal>
 
         <md-chip>{{ currentProject.name }} / Prozess / 3. Modellierung</md-chip>
-        <md-list class="files-list">
-            <md-list-item md-expand>
-                <span class="md-list-item-text">Dateien</span>
-
-                <div slot="md-expand">
-                </div>
-            </md-list-item>
-        </md-list>
+        <phase-files :given-phase="2"></phase-files>
 
         <p class="text-center"><img src="@/assets/img/phase3.png" class="phase-image" /></p>
         <md-card>
@@ -39,21 +32,17 @@
 <script>
     import {mapState} from "vuex";
     import TutorialModal from "../../components/rewards/TutorialModal";
+    import PhaseFiles from "../../components/projects/PhaseFiles";
 
     export default {
         computed: {
-            ...mapState('rewards', ['tutorials']),
             ...mapState('projects', ['currentProject'])
         },
-        components: {TutorialModal},
+        components: {PhaseFiles, TutorialModal},
     };
 </script>
 
 <style lang="scss" scoped>
-    .files-list {
-        margin-top: 24px;
-    }
-
     .phase-image {
         margin-top: 24px;
         margin-bottom: 24px;
