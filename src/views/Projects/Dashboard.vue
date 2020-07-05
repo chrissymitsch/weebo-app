@@ -41,6 +41,13 @@
             </md-card-content>
         </md-card>
 
+        <md-card class="welcome-card" v-if="currentProject && currentProject.level === 1">
+            <md-card-content>
+                <p class="md-body-2">Neu!</p>
+                Ab sofort kannst du dich im Kreativmodus austoben und Entwürfe, Skizzen, Wireframes o.ä. zeichnen.
+            </md-card-content>
+        </md-card>
+
         <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
                 <z-canvas :views="$options.components"></z-canvas>
@@ -173,7 +180,7 @@
                                     Evaluationsphase
                                 </p>
                                 <p v-if="currentProject.phase === 4">
-                                    Softwareeinführung
+                                    Anforderungen prüfen
                                 </p>
                             </div>
                         </div>
@@ -294,7 +301,7 @@
                                     </md-list-item>
                                     <md-list-item>
                                         <md-icon class="md-accent">help</md-icon>
-                                        <span class="md-list-item-text">Prozessphasen erneut durchlaufen</span>
+                                        <span class="md-list-item-text">Anforderungen prüfen und Prozessphasen erneut durchlaufen</span>
                                     </md-list-item>
                                     <md-list-item>
                                         <md-icon class="md-accent">help</md-icon>
@@ -416,6 +423,11 @@
             onConfirmFinishPhase () {
                 const projectToUpdate = JSON.parse(JSON.stringify(this.currentProject));
                 projectToUpdate.phase = this.currentProject.phase + 1;
+                if (projectToUpdate.phase === 4 && projectToUpdate.level) {
+                    projectToUpdate.level += projectToUpdate.level;
+                } else if (projectToUpdate.phase === 4 && !projectToUpdate.level) {
+                    projectToUpdate.level = 1;
+                }
                 this.triggerUpdateProjectAction(projectToUpdate);
                 this.finishPhaseDialogActive = false;
             },

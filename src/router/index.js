@@ -144,7 +144,7 @@ const router = new Router({
           name: 'project-creativemode',
           props: true,
           component: () =>
-              import(/* webpackChunkName: "client-chunk-project-creativemode" */ '@/views/Projects/ProjectMembers.vue')
+              import(/* webpackChunkName: "client-chunk-project-creativemode" */ '@/views/Projects/ProjectCreativeMode.vue')
         },
         {
           path: 'schedules',

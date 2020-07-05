@@ -66,7 +66,7 @@
             </div>
         </Modal>
 
-        <md-chip>{{ currentProject.name }} / Dateilen und Dokumente</md-chip>
+        <md-chip>{{ currentProject.name }} / Dateien und Dokumente</md-chip>
         <div class="md-layout md-gutter file-layout">
             <div class="md-layout-item md-small-size-100">
                 <md-card>

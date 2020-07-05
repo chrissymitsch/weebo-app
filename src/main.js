@@ -8,6 +8,7 @@ import 'zircle/dist/zircle.css'
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-default.css';
 import VCalendar from 'v-calendar';
+import VueSignaturePad from 'vue-signature-pad';
 
 import App from './App.vue'
 import router from './router'
@@ -26,6 +27,7 @@ Vue.use(Chat);
 Vue.use(zircle);
 Vue.use(VueToast);
 Vue.use(VCalendar);
+Vue.use(VueSignaturePad);
 
 new Vue({
   router,

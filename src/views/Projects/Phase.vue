@@ -52,6 +52,11 @@
             onConfirm () {
                 const projectToUpdate = JSON.parse(JSON.stringify(this.currentProject));
                 projectToUpdate.phase = this.$zircle.getParams().currentPhase + 1;
+                if (projectToUpdate.phase === 4 && projectToUpdate.level) {
+                    projectToUpdate.level += projectToUpdate.level;
+                } else if (projectToUpdate.phase === 4 && !projectToUpdate.level) {
+                    projectToUpdate.level = 1;
+                }
                 this.triggerUpdateProjectAction(projectToUpdate);
                 this.finishPhaseDialogActive = false;
                 this.goBack();

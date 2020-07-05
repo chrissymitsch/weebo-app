@@ -82,7 +82,7 @@
                 <md-avatar class="md-accent">4</md-avatar>
               </p>
               <p v-if="project.phase === 4">
-                <md-tooltip md-direction="top">Softwareeinführung</md-tooltip>
+                <md-tooltip md-direction="top">Anforderungen prüfen</md-tooltip>
                 <md-avatar class="md-accent">5</md-avatar>
               </p>
             </router-link>
@@ -112,10 +112,12 @@
               </md-button>
             </router-link>
             <router-link v-if="project.level && project.level > 0" :to="{ name: 'project-creativemode', params: { project: project } }">
-              <md-button class="md-icon-button md-primary">
-                <md-icon class="navigation-icon">category</md-icon>
-                <md-tooltip md-direction="top">Kreativmodus</md-tooltip>
-              </md-button>
+              <md-badge class="md-primary" md-content="neu">
+                <md-button class="md-icon-button md-primary">
+                  <md-icon class="navigation-icon">category</md-icon>
+                  <md-tooltip md-direction="top">Kreativmodus</md-tooltip>
+                </md-button>
+              </md-badge>
             </router-link>
             <router-link :to="{ name: 'project-schedules', params: { project: project } }">
               <md-button class="md-icon-button md-primary">
