@@ -12,21 +12,20 @@
 
         <div class="md-layout md-gutter file-layout">
             <div class="md-layout-item md-small-size-100">
-                <md-card>
-                    <form novalidate class="md-layout" @submit.prevent="null">
-                        <md-card class="md-layout-item md-size-50 md-small-size-100">
-                            <md-card-content>
-                                <div class="md-layout md-gutter">
-                                    <div class="md-layout-item md-small-size-100">
-                                        <md-field>
-                                            <label>Projektname</label>
-                                            <md-input name="name" id="name" />
-                                        </md-field>
-                                    </div>
-                                </div>
-                            </md-card-content>
-                        </md-card>
-                    </form>
+                <md-card class="md-layout-item md-size-50 md-small-size-100">
+                    <md-card-content>
+                        <div class="md-layout md-gutter">
+                            <div class="md-layout-item md-small-size-100">
+                                <md-field>
+                                    <label>Projektname</label>
+                                    <md-input v-model="projectToChange.name" name="name" id="name" />
+                                </md-field>
+                            </div>
+                        </div>
+                    </md-card-content>
+                    <md-card-actions>
+                        <md-button class="md-primary" @click="onSave()">Projekt speichern</md-button>
+                    </md-card-actions>
                 </md-card>
             </div>
         </div>
@@ -67,13 +66,11 @@
             </md-table-row>
         </md-table>
 
-        <md-button type="submit" class="md-primary">Projekt speichern</md-button>
-
     </div>
 </template>
 
 <script>
-    import {mapState} from "vuex";
+    import {mapActions, mapState} from "vuex";
     import TutorialModal from "../../components/rewards/TutorialModal";
     import Avatar from "../../components/users/Avatar";
 
@@ -102,14 +99,20 @@
         data: () => ({
             search: null,
             searched: [],
-            members: []
+            members: [],
+            projectToChange: null
         }),
         methods: {
+            ...mapActions('projects', ['triggerUpdateProjectAction']),
             searchOnTable () {
                 this.searched = searchByName(this.members, this.search);
             },
+            onSave () {
+                this.triggerUpdateProjectAction(this.projectToChange);
+            }
         },
         created () {
+            this.projectToChange = JSON.parse(JSON.stringify(this.currentProject));
             this.members = JSON.parse(JSON.stringify(this.projectMembers));
             this.searched = JSON.parse(JSON.stringify(this.projectMembers));
 
