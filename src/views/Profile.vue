@@ -45,60 +45,26 @@
           </md-card>
         </div>
         <div class="md-layout-item text-center">
-          <div class="badge-list">
-            <md-card>
+          <div class="badge-list" v-if="finishedLoadingUser">
+            <md-card v-for="(badge, index) in allBadges" :key="index">
               <md-card-media>
-                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('addTask')" />
+                <img src="@/assets/img/badges/badge.png" :class="hasBadge(badge.name)" />
               </md-card-media>
               <md-card-content>
-                <p class="md-body-2">Aufgaben erstellen</p>
-                <p class="md-caption">Level {{getLevel('addTask')}}</p>
-                <md-progress-bar md-mode="determinate" :md-value="getLevelPercentage('addTask')"></md-progress-bar>
-                <md-tooltip>({{scores['addTask'] || 0}} von {{levelBounds[getLevel('addTask') - 1]}} Punkten)</md-tooltip>
-              </md-card-content>
-            </md-card>
-            <md-card>
-              <md-card-media>
-                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('finishTask')" />
-              </md-card-media>
-              <md-card-content>
-                <p class="md-body-2">Aufgaben abschließen</p>
-                <p class="md-caption">Level {{getLevel('finishTask')}}</p>
-                <md-progress-bar md-mode="determinate" :md-value="getLevelPercentage('finishTask')"></md-progress-bar>
-                <md-tooltip>({{scores['finishTask'] || 0}} von {{levelBounds[getLevel('finishTask') - 1]}} Punkten)</md-tooltip>
-              </md-card-content>
-            </md-card>
-            <md-card>
-              <md-card-media>
-                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('addMessage')" />
-              </md-card-media>
-              <md-card-content>
-                <p class="md-body-2">Diskutieren</p>
-                <p class="md-caption">Level {{getLevel('addMessage')}}</p>
-                <md-progress-bar md-mode="determinate" :md-value="getLevelPercentage('addMessage')"></md-progress-bar>
-                <md-tooltip>({{scores['addMessage'] || 0}} von {{levelBounds[getLevel('addMessage') - 1]}} Punkten)</md-tooltip>
-              </md-card-content>
-            </md-card>
-            <md-card>
-              <md-card-media>
-                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('addFile')" />
-              </md-card-media>
-              <md-card-content>
-                <p class="md-body-2">Dateien hochladen</p>
-                <p class="md-caption">Level {{getLevel('addFile')}}</p>
-                <md-progress-bar md-mode="determinate" :md-value="getLevelPercentage('addFile')"></md-progress-bar>
-                <md-tooltip>({{scores['addFile'] || 0}} von {{levelBounds[getLevel('addFile') - 1]}} Punkten)</md-tooltip>
-              </md-card-content>
-            </md-card>
-            <md-card>
-              <md-card-media>
-                <img src="@/assets/img/badges/Onboarding.png" :class="hasBadge('thankYou')" />
-              </md-card-media>
-              <md-card-content>
-                <p class="md-body-2">&quot;Danke&quot; verteilt</p>
-                <p class="md-caption">Level {{getLevel('thankYou')}}</p>
-                <md-progress-bar md-mode="determinate" :md-value="getLevelPercentage('thankYou')"></md-progress-bar>
-                <md-tooltip>({{scores['thankYou'] || 0}} von {{levelBounds[getLevel('thankYou') - 1]}} Punkten)</md-tooltip>
+                <p class="md-body-2">{{badge.description}}</p>
+                <p class="md-caption" v-if="!scores[badge.name] || scores[badge.name] <= 1000">Level {{getLevel(badge.name)}}</p>
+                <md-progress-bar v-if="!scores[badge.name] || scores[badge.name] <= 1000" md-mode="determinate" :md-value="getLevelPercentage(badge.name)"></md-progress-bar>
+                <p class="md-caption" v-if="!scores[badge.name]"></p>
+                <p class="md-caption" v-if="scores[badge.name] && scores[badge.name] >= levelBoundsBronze && scores[badge.name] < levelBoundsSilver">
+                  BRONZE
+                </p>
+                <p class="md-caption" v-if="scores[badge.name] && scores[badge.name] >= levelBoundsSilver && scores[badge.name] < levelBoundsGold">
+                  SILBER
+                </p>
+                <p class="md-caption" v-if="scores[badge.name] && scores[badge.name] >= levelBoundsGold">
+                  GOLD
+                </p>
+                <md-tooltip v-if="!scores[badge.name] || scores[badge.name] <= 1000">({{scores[badge.name] || 0}} von {{levelBounds[getLevel(badge.name) - 1]}} Punkten)</md-tooltip>
               </md-card-content>
             </md-card>
             <md-card>
@@ -139,6 +105,13 @@ export default {
     ...mapState('rewards', ['userScore', 'userBadges']),
   },
   data: () => ({
+    allBadges: [
+      { name: 'addTask', description: 'Aufgaben erstellen' },
+      { name: 'finishTask', description: 'Aufgaben abschließen' },
+      { name: 'addMessage', description: 'Diskutieren' },
+      { name: 'addFile', description: 'Dateien hochladen' },
+      { name: 'thankYou', description: '"Danke" verteilen' },
+    ],
     rerenderProfile: 0,
     finishedLoadingUser: false,
     selectedUser: null,
@@ -149,9 +122,9 @@ export default {
     rerenderAvatar: 0,
     scores: [],
     levelBounds: [2, 5, 10, 15, 20, 30, 50, 75, 100, 150, 200, 300, 500, 1000],
-    levelBoundsBronze: [2, 5, 10, 15],
-    levelBoundsSilver: [20, 30, 50, 75, 100],
-    levelBoundsGold: [150, 200, 300, 500, 1000]
+    levelBoundsBronze: 2,
+    levelBoundsSilver: 20,
+    levelBoundsGold: 150
   }),
   created() {
     this.avatars = [
@@ -178,6 +151,7 @@ export default {
           this.selectedUser = user;
           this.$store.dispatch('rewards/getUserScore', this.$route.params.userId, { root: true }).then(score => {
             this.selectedUserScore = score;
+            this.getScores();
             this.$store.dispatch('rewards/getUserBadges', this.$route.params.userId, { root: true }).then(badges => {
               this.selectedUserBadges = badges;
               this.finishedLoadingUser = true;
@@ -187,6 +161,9 @@ export default {
         });
       } else {
         this.selectedUser = this.user;
+        this.selectedUserScore = this.userScore;
+        this.selectedUserBadges = this.userBadges;
+        this.getScores();
         this.finishedLoadingUser = true;
       }
     },
@@ -212,8 +189,17 @@ export default {
         if(elem.name === badgeName) return elem;
         return null;
       });
-      if (checkIfUserHasBadge.length > 0 || this.scores[badgeName] >= 1000) {
+      if (checkIfUserHasBadge.length > 0) {
         return "activated-badge";
+      }
+      if (this.scores[badgeName] >= this.levelBoundsBronze && this.scores[badgeName] < this.levelBoundsSilver) {
+        return "activated-bronze-badge";
+      }
+      if (this.scores[badgeName] >= this.levelBoundsSilver && this.scores[badgeName] < this.levelBoundsGold) {
+        return "activated-silver-badge";
+      }
+      if (this.scores[badgeName] >= this.levelBoundsGold) {
+        return "activated-gold-badge";
       }
       return "not-activated-badge";
     },
@@ -331,6 +317,27 @@ export default {
   .activated-badge {
     -webkit-filter: grayscale(0%); /* Safari 6.0 - 9.0 */
     filter: grayscale(0%);
+    opacity: 1;
+    -moz-opacity: 1;
+  }
+
+  .activated-bronze-badge {
+    -webkit-filter: hue-rotate(160deg) brightness(110%) contrast(70%); /* Safari 6.0 - 9.0 */
+    filter: hue-rotate(160deg) brightness(110%) contrast(70%);
+    opacity: 1;
+    -moz-opacity: 1;
+  }
+
+  .activated-silver-badge {
+    -webkit-filter: hue-rotate(250deg) grayscale(80%) brightness(110%) contrast(70%); /* Safari 6.0 - 9.0 */
+    filter: hue-rotate(250deg) grayscale(80%) brightness(110%) contrast(70%);
+    opacity: 1;
+    -moz-opacity: 1;
+  }
+
+  .activated-gold-badge {
+    -webkit-filter: hue-rotate(200deg) brightness(140%) contrast(90%); /* Safari 6.0 - 9.0 */
+    filter: hue-rotate(200deg) brightness(140%) contrast(90%);
     opacity: 1;
     -moz-opacity: 1;
   }
