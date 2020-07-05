@@ -46,16 +46,12 @@
         type: null,
         column: null
       },
-      taskSaved: false
     }),
     methods: {
       ...mapActions('tasks', ['createProjectTask']),
       ...mapActions('rewards', ['triggerScoreAction']),
       openModal() {
         this.active = true;
-        this.$nextTick(() => {
-          this.$refs.title.$el.focus();
-        });
       },
       addTask () {
         if (this.form.title != null) {
@@ -63,7 +59,6 @@
           this.form.position = this.tasks.length;
           this.form.projectId = this.id;
           this.$store.dispatch('tasks/createProjectTask', this.form).then(() => {
-            this.taskSaved = true;
             this.active = false;
           }).finally(() => {
             this.triggerScoreAction({name: "addTask", score: 1, type: "score"});

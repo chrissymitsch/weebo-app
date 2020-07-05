@@ -39,6 +39,7 @@
         if (this.userProjects.includes(projectId)) {
           this.$store.dispatch('projects/getProjectById', projectId)
                   .finally(() => this.settingCurrentProject = false);
+          this.$store.dispatch('events/getEvents', projectId);
           this.$store.dispatch('files/getFiles', projectId);
           this.$store.dispatch('messages/getMessages', projectId);
           this.$store.dispatch('personas/getPersonas', projectId);

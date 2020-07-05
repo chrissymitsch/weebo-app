@@ -4,6 +4,7 @@ import VueSocialSharing from 'vue-social-sharing'
 
 import authentication from './authentication'
 import app from './app'
+import events from './events'
 import files from './files'
 import messages from './messages'
 import personas from './personas'
@@ -19,6 +20,7 @@ export default new Vuex.Store({
   modules: {
     authentication,
     app,
+    events,
     files,
     messages,
     personas,

@@ -51,7 +51,14 @@ service cloud.firestore {
        allow update, delete: if authenticated();
     }
 
-    match /projects/{projectId}/personas/{personasId} {
+    match /projects/{projectId}/personas/{personaId} {
+       allow get: if authenticated();
+	        allow list: if authenticated();
+       allow create: if authenticated();
+       allow update, delete: if authenticated();
+    }
+
+    match /projects/{projectId}/events/{eventId} {
        allow get: if authenticated();
 	        allow list: if authenticated();
        allow create: if authenticated();

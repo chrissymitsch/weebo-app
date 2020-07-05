@@ -2,7 +2,7 @@ import ProjectsFilesDB from '@/firebase/project-files-db'
 
 export default {
   /**
-   * Fetch tasks for project id
+   * Fetch files for project id
    */
   getFiles: async ({ commit }, projectId) => {
     const projectFilesDb = new ProjectsFilesDB(projectId);
