@@ -21,11 +21,11 @@
       <md-field>
         <label>Beschreibung</label>
         <md-input v-model="description" ref="description"
-                  maxlength="60"
+                  maxlength="60" required
         />
       </md-field>
 
-      <md-autocomplete v-model="color" :md-options="types" :md-fuzzy-search="false" :aria-readonly="true">
+      <md-autocomplete v-model="color" :md-options="types" :md-fuzzy-search="false" readonly>
         <label>Typ</label>
 
         <template slot="md-autocomplete-item" slot-scope="{ item, term }">
@@ -94,6 +94,12 @@
       },
       addEvent () {
         if (this.description != null) {
+          if (!this.color) {
+            this.color = "Allgemein";
+          }
+          if (!this.selectedDate) {
+            this.selectedDate = new Date();
+          }
           if (this.mode === "single") {
             this.form = {
               dot: this.colors[this.color],

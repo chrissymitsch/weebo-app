@@ -5,7 +5,7 @@
       <md-field>
         <label>Was gibt's zu tun?</label>
         <md-input v-model="form.title" ref="title"
-                  maxlength="60"
+                  maxlength="60" required
         />
       </md-field>
       <md-field>

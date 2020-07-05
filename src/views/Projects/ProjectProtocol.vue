@@ -12,7 +12,7 @@
 
 
         <md-chip>{{ currentProject.name }} / Aktivitätsprotokoll</md-chip>
-        <div class="md-layout md-gutter">
+        <div class="md-layout md-gutter protocol-layout">
             <div class="md-layout-item">
                 <p v-if="!finishedLoading" class="text-center">
                     <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
@@ -72,3 +72,9 @@
         }
     }
 </script>
+
+<style scoped>
+    .protocol-layout {
+        margin-top: 24px;
+    }
+</style>

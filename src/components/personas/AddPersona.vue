@@ -52,7 +52,7 @@
                         <p class="md-subheading">Persönliche Information</p>
                         <md-field>
                             <label>Name</label>
-                            <md-input v-model="form.name" ref="name" maxlength="30" />
+                            <md-input v-model="form.name" ref="name" maxlength="30" required />
                         </md-field>
                         <md-field>
                             <label>Alter</label>
