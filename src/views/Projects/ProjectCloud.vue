@@ -58,8 +58,8 @@
                         <md-button class="md-raised md-primary" @click="addComment()">Kommentieren</md-button>
                     </md-card-actions>
                 </md-card>
-                <md-card>
-                    <md-card-content v-for="selectedFileMessage in selectedFileMessages" :key="selectedFileMessage.id">
+                <md-card :key="rerenderMessages">
+                    <md-card-content v-for="(selectedFileMessage, index) in selectedFileMessages" :key="index">
                         <avatar :user-id="selectedFileMessage.author"></avatar> {{selectedFileMessage.data.text}}
                     </md-card-content>
                 </md-card>
@@ -218,6 +218,7 @@
             form: {
                 comment: null,
             },
+            rerenderMessages: 0
         }),
         methods:{
             ...mapActions('projects', ['triggerUpdateProjectAction', 'triggerUpdateThankYouAction']),
@@ -336,6 +337,7 @@
             },
             addComment () {
                 if (this.form.comment != null) {
+                    this.selectedFileMessages = null;
                     this.form.fileId = this.selectedFile.id;
                     this.form.projectId = this.currentProject.id;
                     this.form.type = "fileComment";
@@ -359,6 +361,7 @@
                             }
                         });
                         this.getFileMessages(this.form.fileId);
+                        this.rerenderMessages += 1;
                     });
                 }
             },

@@ -64,8 +64,8 @@
                         <md-button class="md-raised md-primary" @click="addComment()">Kommentieren</md-button>
                     </md-card-actions>
                 </md-card>
-                <md-card>
-                    <md-card-content v-for="selectedPersonaMessage in selectedPersonaMessages" :key="selectedPersonaMessage.id">
+                <md-card :key="rerenderMessages">
+                    <md-card-content v-for="(selectedPersonaMessage, index) in selectedPersonaMessages" :key="index">
                         <avatar :user-id="selectedPersonaMessage.author"></avatar> {{selectedPersonaMessage.data.text}}
                     </md-card-content>
                 </md-card>
@@ -170,6 +170,7 @@
             },
             deletionDialogActive: false,
             selectedPersonaForDeletion: null,
+            rerenderMessages: 0
         }),
         methods: {
             ...mapActions('projects', ['triggerUpdateThankYouAction']),
@@ -219,6 +220,7 @@
             },
             addComment () {
                 if (this.form.comment != null) {
+                    this.selectedPersonaMessages = null;
                     this.form.personaId = this.selectedPersona.id;
                     this.form.projectId = this.currentProject.id;
                     this.form.type = "personaComment";
@@ -242,6 +244,7 @@
                             }
                         });
                         this.getPersonaMessages(this.form.personaId);
+                        this.rerenderMessages += 1;
                     });
                 }
             },
