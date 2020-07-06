@@ -28,7 +28,11 @@
         <span class="md-caption">{{format_date(task.createTimestamp)}}</span>
         <md-button v-if="!editTask" class="md-icon-button md-dense" @click="triggerEditFunctions()"><md-icon>edit</md-icon></md-button>
         <md-progress-spinner class="md-accent" v-if="isProjectTaskDeletionPending(task.id)" :md-diameter="20" :md-stroke="2" md-mode="indeterminate"></md-progress-spinner>
-        <md-button v-if="!isProjectTaskDeletionPending(task.id)" class="md-icon-button md-dense" @click="deletionDialogActive = true"><md-icon>delete</md-icon></md-button>
+        <md-button v-if="!isProjectTaskDeletionPending(task.id) && task.creator === user.id"
+                   class="md-icon-button md-dense"
+                   @click="deletionDialogActive = true">
+          <md-icon>delete</md-icon>
+        </md-button>
         <md-button v-if="editTask" class="md-icon-button md-dense" @click="saveEditedTask()"><md-icon>check</md-icon></md-button>
         <md-menu md-size="medium" md-align-trigger>
           <badge :color="getBadgeColor()" md-menu-trigger>
