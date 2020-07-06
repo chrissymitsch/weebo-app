@@ -78,10 +78,18 @@
               <span class="md-list-item-text">Prozess</span>
 
               <md-list slot="md-expand">
-                <md-list-item class="md-inset">1. Analyse</md-list-item>
-                <md-list-item class="md-inset">2. Spezifikation</md-list-item>
-                <md-list-item class="md-inset">3. Modellierung</md-list-item>
-                <md-list-item class="md-inset">4. Evaluation</md-list-item>
+                <md-list-item class="md-inset" @click="menuVisible = false">
+                  <router-link :to="{ name: 'project-phase-1' }">1. Analyse</router-link>
+                </md-list-item>
+                <md-list-item class="md-inset" @click="menuVisible = false">
+                  <router-link :to="{ name: 'project-phase-2' }">2. Spezifikation</router-link>
+                </md-list-item>
+                <md-list-item class="md-inset" @click="menuVisible = false">
+                  <router-link :to="{ name: 'project-phase-3' }">3. Modellierung</router-link>
+                </md-list-item>
+                <md-list-item class="md-inset" @click="menuVisible = false">
+                  <router-link :to="{ name: 'project-phase-4' }">4. Evaluation</router-link>
+                </md-list-item>
               </md-list>
             </md-list-item>
           </md-list>

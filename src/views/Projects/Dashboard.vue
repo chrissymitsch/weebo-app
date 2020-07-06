@@ -14,7 +14,7 @@
 
         <md-dialog-confirm
                 :md-active.sync="finishPhaseDialogActive"
-                :md-title="`Möchtest du Phase ${currentProject.phase + 1} wirklich beenden?`"
+                :md-title="`Möchtest du Phase ${getCurrentProjectPhase()} wirklich beenden?`"
                 md-content="Alle Dateien, Kommentare etc. werden weiterhin abrufbar sein."
                 md-confirm-text="Okay"
                 md-cancel-text="Abbrechen!"
@@ -33,7 +33,8 @@
 
         <md-chip>{{ currentProject.name }} / Dashboard</md-chip>
 
-        <md-card class="welcome-card" v-if="currentProject && currentProject.phase === 1">
+        <md-card class="welcome-card" v-if="currentProject && currentProject.phase === 1 &&
+        (!currentProject.level || currentProject.level < 1)">
             <md-card-content>
                 <p class="md-body-2">Neu!</p>
                 Ab sofort kannst du dich mit allen Projektteilnehmern im Gruppenchat (Button am unteren rechten Rand)
@@ -41,7 +42,7 @@
             </md-card-content>
         </md-card>
 
-        <md-card class="welcome-card" v-if="currentProject && currentProject.level === 1">
+        <md-card class="welcome-card" v-if="currentProject && currentProject.level >= 1">
             <md-card-content>
                 <p class="md-body-2">Neu!</p>
                 Ab sofort kannst du dich im Kreativmodus austoben und Entwürfe, Skizzen, Wireframes o.ä. zeichnen.
@@ -125,16 +126,22 @@
         <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
                 <md-card class="project-status margin8" md-with-hover>
-                    <md-ripple>
-                        <md-card-header class="md-subheading">
-                            14
-                        </md-card-header>
+                    <div @click="routeTo('schedules')">
+                        <md-ripple>
+                            <md-card-header class="md-subheading">
+                                <md-icon>insert_invitation</md-icon> Nächster Termin
+                            </md-card-header>
 
-                        <md-card-content>
-                            Noch 13 Tage bis
-                            <p class="md-display-1">Usability-Test</p>
-                        </md-card-content>
-                    </md-ripple>
+                            <md-card-content v-if="getNextEvent().length > 0">
+                                <p class="md-body-2">{{format_date(getNextEvent()[0].date)}}</p>
+                                <p class="md-body-2">{{getNextEvent()[0].description}}</p>
+                                <p class="md-caption">(Noch {{getDaysBetween(getNextEvent()[0].date)}} Tage bis zum Termin)</p>
+                            </md-card-content>
+                            <md-card-content v-if="getNextEvent().length === 0">
+                                <p class="md-body-2">Noch keine Termine erstellt.</p>
+                            </md-card-content>
+                        </md-ripple>
+                    </div>
                 </md-card>
             </div>
 
@@ -143,7 +150,7 @@
                     <div @click="routeTo('discussion')">
                         <md-ripple>
                             <md-card-header class="md-subheading">
-                                Neuste Beiträge
+                                <md-icon>message</md-icon> Neuster Beitrag
                             </md-card-header>
 
                             <md-card-content v-if="getLatestMessage()">
@@ -366,9 +373,10 @@
         }),
         methods: {
             ...mapActions('projects', ['triggerUpdateProjectAction']),
+            ...mapActions('messages', ['createMessage']),
             format_date(value) {
                 if (value) {
-                    return (moment(value).format('DD.MM.YYYY, HH:mm')).concat(" Uhr");
+                    return (moment(value).format('DD.MM.YYYY'));
                 }
                 return '';
             },
@@ -420,14 +428,27 @@
             isAdmin() {
                 return this.currentProject.creator === this.user.id;
             },
+            getCurrentProjectPhase() {
+                if (this.currentProject.phase) {
+                    return this.currentProject.phase + 1;
+                }
+                return 1;
+            },
             onConfirmFinishPhase () {
                 const projectToUpdate = JSON.parse(JSON.stringify(this.currentProject));
-                projectToUpdate.phase = this.currentProject.phase + 1;
+                projectToUpdate.phase = this.getCurrentProjectPhase();
                 if (projectToUpdate.phase === 4 && projectToUpdate.level) {
                     projectToUpdate.level += projectToUpdate.level;
                 } else if (projectToUpdate.phase === 4 && !projectToUpdate.level) {
                     projectToUpdate.level = 1;
                 }
+                this.createMessage({
+                    "projectId": this.currentProject.id,
+                    "type": "system",
+                    "data": {
+                        "text": `${this.user.displayName} hat die Projektphase "${this.getCurrentProjectPhase()}" abgeschlossen.`
+                    }
+                });
                 this.triggerUpdateProjectAction(projectToUpdate);
                 this.finishPhaseDialogActive = false;
             },
@@ -444,6 +465,57 @@
             getPersonaMessages() {
                 return this.messages.filter(message => message.type === "personaComment");
             },
+            sortEventsList(list) {
+                function compare(a, b) {
+                    if (moment(a.date).isBefore(b.date))
+                        return -1;
+                    if (moment(a.date).isAfter(b.date))
+                        return 1;
+                    return 0;
+                }
+                return list.sort(compare);
+            },
+            getNextEvent() {
+                const filteredEvents = [];
+                for (let i = 0; i < this.events.length; i += 1) {
+                    if (this.events[i].dates && this.events[i].dates.start) {
+                        if (moment(this.events[i].dates.start).isValid() &&
+                            moment().isBefore(moment(this.events[i].dates.start))) {
+                            filteredEvents.push({
+                                date: moment(this.events[i].dates.start),
+                                description: this.events[i].description
+                            });
+                        } else if (!moment(this.events[i].dates.start).isValid() &&
+                            moment().isBefore(moment.unix(this.events[i].dates.start.seconds))) {
+                            filteredEvents.push({
+                                date: moment.unix(this.events[i].dates.start.seconds),
+                                description: this.events[i].description
+                            });
+                        }
+                    } else if (this.events[i].dates && !this.events[i].dates.start) {
+                        if (moment(this.events[i].dates).isValid() &&
+                            moment().isBefore(moment(this.events[i].dates))) {
+                            filteredEvents.push({
+                                date: moment(this.events[i].dates),
+                                description: this.events[i].description
+                            });
+                        } else if (!moment(this.events[i].dates).isValid() &&
+                            moment().isBefore(moment.unix(this.events[i].dates.seconds))) {
+                            filteredEvents.push({
+                                date: moment.unix(this.events[i].dates.seconds),
+                                description: this.events[i].description
+                            });
+                        }
+                    }
+                }
+                if (filteredEvents.length > 0) {
+                    return this.sortEventsList(filteredEvents);
+                }
+                return filteredEvents;
+            },
+            getDaysBetween(date) {
+                return date.diff(moment(), 'days') + 1;
+            }
         },
         mounted() {
             this.$zircle.config({
@@ -457,7 +529,7 @@
         watch: {
             currentProject(newValue, oldValue) {
                 if (newValue !== oldValue) {
-                    if (newValue.phase !== oldValue.phase) {
+                    if (newValue.phase !== oldValue.phase && (!newValue.level || newValue.level < 1)) {
                         this.congratulationsModalActive = true;
                     }
                 }

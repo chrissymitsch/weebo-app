@@ -10,7 +10,7 @@
 
         <md-chip>{{ currentProject.name }} / Einstellungen</md-chip>
 
-        <div class="md-layout md-gutter file-layout">
+        <div class="md-layout md-gutter settings-layout">
             <div class="md-layout-item md-small-size-100">
                 <md-card class="md-layout-item md-size-50 md-small-size-100">
                     <md-card-content>
@@ -30,7 +30,7 @@
             </div>
         </div>
 
-        <md-table class="role-table hide-for-small" v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
+        <md-table class="role-table" v-model="searched" md-sort="name" md-sort-order="asc" md-card md-fixed-header>
             <md-table-toolbar>
                 <div class="md-toolbar-section-start">
                     <h1 class="md-title">Rollen</h1>
@@ -128,7 +128,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .md-table.role-table {
+    .settings-layout, .md-table.role-table {
         margin-top: 24px;
     }
 </style>

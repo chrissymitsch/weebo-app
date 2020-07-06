@@ -8,6 +8,15 @@
                 md-cancel-text="Abbrechen!"
                 @md-confirm="onConfirm" />
 
+        <md-dialog-confirm
+                :md-active.sync="startPhaseDialogActive"
+                :md-title="`Möchtest du Phase ${$zircle.getParams().currentPhase + 1} erneut starten?`"
+                md-content="Iterationen sind in einem nutzerzentrierten Prozess notwendig, um entsprechend auf Feedback
+                zu reagieren und das Design anzupassen."
+                md-confirm-text="Okay"
+                md-cancel-text="Abbrechen!"
+                @md-confirm="onConfirmStart" />
+
         <p><md-button class="md-icon-button" @click="goBack()"><md-icon>close</md-icon></md-button></p>
         <div class="phase1" v-if="$zircle.getParams().currentPhase == null || $zircle.getParams().currentPhase === 0">
             <p class="md-title">Phase 1: Analyse</p>
@@ -29,6 +38,11 @@
                 <md-icon>check</md-icon> Phase abschließen
             </md-button>
         </p>
+        <p v-if="(currentProject.phase === 4)">
+            <md-button class="md-accent md-raised" @click="startPhaseDialogActive = true" v-if="isAdmin()">
+                <md-icon>check</md-icon> Diese Phase starten
+            </md-button>
+        </p>
     </z-view>
 </template>
 
@@ -42,10 +56,12 @@
             ...mapState('projects', ['currentProject'])
         },
         data: () => ({
-            finishPhaseDialogActive: false
+            finishPhaseDialogActive: false,
+            startPhaseDialogActive: false
         }),
         methods: {
             ...mapActions('projects', ['triggerUpdateProjectAction']),
+            ...mapActions('messages', ['createMessage']),
             goBack() {
                 this.$zircle.goBack();
             },
@@ -59,6 +75,32 @@
                 }
                 this.triggerUpdateProjectAction(projectToUpdate);
                 this.finishPhaseDialogActive = false;
+                this.createMessage({
+                    "projectId": this.currentProject.id,
+                    "type": "system",
+                    "data": {
+                        "text": `${this.user.displayName} hat die Projektphase "${projectToUpdate.phase}" abgeschlossen.`
+                    }
+                });
+                this.goBack();
+            },
+            onConfirmStart() {
+                const projectToUpdate = JSON.parse(JSON.stringify(this.currentProject));
+                projectToUpdate.phase = this.$zircle.getParams().currentPhase;
+                if (projectToUpdate.phase === 4 && projectToUpdate.level) {
+                    projectToUpdate.level += projectToUpdate.level;
+                } else if (projectToUpdate.phase === 4 && !projectToUpdate.level) {
+                    projectToUpdate.level = 1;
+                }
+                this.triggerUpdateProjectAction(projectToUpdate);
+                this.startPhaseDialogActive = false;
+                this.createMessage({
+                    "projectId": this.currentProject.id,
+                    "type": "system",
+                    "data": {
+                        "text": `${this.user.displayName} hat die Projektphase "${projectToUpdate.phase}" erneut gestartet.`
+                    }
+                });
                 this.goBack();
             },
             isAdmin() {
