@@ -157,7 +157,11 @@
                 <md-table-cell md-label="Größe" md-sort-by="size">{{ formatBytes(item.size) }}</md-table-cell>
                 <md-table-cell md-label="Erstellt" md-sort-by="createTimestamp">{{ format_date(item.createTimestamp) }}</md-table-cell>
                 <md-table-cell>
-                    <md-button v-if="!isProjectFileDeletionPending(item.id)" class="md-icon-button md-dense" @click="triggerDeletionDialog(item)"><md-icon>delete</md-icon></md-button>
+                    <md-button v-if="!isProjectFileDeletionPending(item.id) && item.creator === user.id"
+                               class="md-icon-button md-dense"
+                               @click="triggerDeletionDialog(item)">
+                        <md-icon>delete</md-icon>
+                    </md-button>
                 </md-table-cell>
             </md-table-row>
         </md-table>

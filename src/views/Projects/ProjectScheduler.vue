@@ -41,7 +41,11 @@
                         <md-table-cell><avatar :user-id="selectedDay.creator"></avatar></md-table-cell>
                         <md-table-cell>{{ format_date(selectedDay.createTimestamp) }}</md-table-cell>
                         <md-table-cell>
-                            <md-button v-if="!isProjectEventDeletionPending(selectedDay.id)" class="md-icon-button md-dense" @click="triggerDeletionDialog()"><md-icon>delete</md-icon></md-button>
+                            <md-button v-if="!isProjectEventDeletionPending(selectedDay.id) && selectedDay.creator === user.id"
+                                       class="md-icon-button md-dense"
+                                       @click="triggerDeletionDialog()">
+                                <md-icon>delete</md-icon>
+                            </md-button>
                         </md-table-cell>
                     </md-table-row>
                 </md-table>
@@ -84,6 +88,7 @@
 
     export default {
         computed: {
+            ...mapState('authentication', ['user']),
             ...mapState('projects', ['currentProject']),
             ...mapState('events', ['events']),
             ...mapGetters('events', ['isProjectEventDeletionPending'])

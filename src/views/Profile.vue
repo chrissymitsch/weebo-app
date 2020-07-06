@@ -89,7 +89,7 @@
             </md-card>
             <md-card>
               <md-card-media>
-                <img src="@/assets/img/badges/badge.png" :class="hasBadge('Phase0')" />
+                <img src="@/assets/img/badges/badge.png" :class="hasTutorial('Phase0')" />
               </md-card-media>
               <md-card-content>
                 <p class="md-body-2">
@@ -99,7 +99,7 @@
             </md-card>
             <md-card>
               <md-card-media>
-                <img src="@/assets/img/badges/badge.png" :class="hasBadge('Phase1')" />
+                <img src="@/assets/img/badges/badge.png" :class="hasTutorial('Phase1')" />
               </md-card-media>
               <md-card-content>
                 <p class="md-body-2">
@@ -109,7 +109,7 @@
             </md-card>
             <md-card>
               <md-card-media>
-                <img src="@/assets/img/badges/badge.png" :class="hasBadge('Phase2')" />
+                <img src="@/assets/img/badges/badge.png" :class="hasTutorial('Phase2')" />
               </md-card-media>
               <md-card-content>
                 <p class="md-body-2">
@@ -119,7 +119,7 @@
             </md-card>
             <md-card>
               <md-card-media>
-                <img src="@/assets/img/badges/badge.png" :class="hasBadge('Phase3')" />
+                <img src="@/assets/img/badges/badge.png" :class="hasTutorial('Phase3')" />
               </md-card-media>
               <md-card-content>
                 <p class="md-body-2">
@@ -142,7 +142,7 @@ export default {
   components: {Avatar},
   computed: {
     ...mapState('authentication', ['user', 'userUpdatePending']),
-    ...mapState('rewards', ['userScore', 'userBadges']),
+    ...mapState('rewards', ['userScore', 'userBadges', 'tutorials']),
   },
   data: () => ({
     allBadges: [
@@ -157,6 +157,7 @@ export default {
     selectedUser: null,
     selectedUserScore: null,
     selectedUserBadges: null,
+    selectedUserTutorials: null,
     badges: null,
     avatars: null,
     rerenderAvatar: 0,
@@ -194,7 +195,10 @@ export default {
             this.getScores();
             this.$store.dispatch('rewards/getUserBadges', this.$route.params.userId, { root: true }).then(badges => {
               this.selectedUserBadges = badges;
-              this.finishedLoadingUser = true;
+              this.$store.dispatch('rewards/getUserTutorials', this.$route.params.userId, { root: true }).then(tutorials => {
+                this.selectedUserTutorials = tutorials;
+                this.finishedLoadingUser = true;
+              });
             });
           });
 
@@ -203,6 +207,7 @@ export default {
         this.selectedUser = this.user;
         this.selectedUserScore = this.userScore;
         this.selectedUserBadges = this.userBadges;
+        this.selectedUserTutorials = this.tutorials;
         this.getScores();
         this.finishedLoadingUser = true;
       }
@@ -223,6 +228,16 @@ export default {
         }
       }
       return score;
+    },
+    hasTutorial(tutorialName) {
+      const checkIfUserHasTutorial = this.selectedUserTutorials.filter(function (elem) {
+        if (elem.name === tutorialName) return elem;
+        return null;
+      });
+      if (checkIfUserHasTutorial.length > 0) {
+        return "activated-badge";
+      }
+      return "not-activated-badge";
     },
     hasBadge(badgeName) {
       const checkIfUserHasBadge = this.selectedUserBadges.filter(function(elem) {

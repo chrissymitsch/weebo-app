@@ -24,6 +24,17 @@ export default {
   },
 
   /**
+   * Fetch tutorials for user
+   */
+  getUserTutorials: async ({ commit }, userId) => {
+    const userRewardsDb = new UserRewardsDb(userId);
+
+    const tutorials = await userRewardsDb.readAll([['type', '==', 'tutorial']]);
+    commit('setFinishedTutorials', tutorials);
+    return tutorials;
+  },
+
+  /**
    * Fetch finished tutorials for user
    */
   getFinishedTutorials: async ({ commit }, userId) => {

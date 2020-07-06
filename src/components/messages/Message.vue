@@ -59,6 +59,7 @@
       border-radius: .4em;
       padding: 8px;
       min-width: 50px;
+      margin-left: 12px;
     }
 
     .user-message-text.user-message-text-emoji {
