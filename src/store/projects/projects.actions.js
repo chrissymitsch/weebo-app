@@ -53,8 +53,8 @@ export default {
   /**
    * Fetch project
    */
-  getProject: async ({ rootState }, projectId) => {
-    console.log("getProject", rootState.authentication.user.id);
+  getProject: async ({ commit }, projectId) => {
+    commit('setProjectLoading', projectId);
     const projectDb = new ProjectsDB();
     return projectDb.read(projectId);
   },

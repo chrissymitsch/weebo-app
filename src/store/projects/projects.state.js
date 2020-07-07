@@ -1,6 +1,7 @@
 export default {
   currentProject: null,
   userProjects: null,
+  projectLoading: [],
   projectMembers: [],
   projectMemberLoading: [],
   projectMemberUpdatePending: [],

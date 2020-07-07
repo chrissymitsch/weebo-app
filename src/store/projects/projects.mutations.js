@@ -12,6 +12,7 @@ export default {
       state.currentProject = null;
     }
   },
+  setProjectLoading: (state, projectId) => state.projectLoading.push(projectId),
 
   /* Project members */
   addProjectMember: (state, memberToAdd) => {

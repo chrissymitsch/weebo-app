@@ -318,6 +318,12 @@
                             </div>
                         </div>
                     </md-card-content>
+                    <md-card-content class="md-title text-center" v-if="isAdmin() && currentProject.phase && currentProject.phase === 4">
+                        <p>Sind alle Anforderungen erfüllt?</p>
+                        <md-button class="md-accent md-raised" @click="finishPhaseDialogActive = true">
+                            <md-icon>check</md-icon> Das Projekt abschließen
+                        </md-button>
+                    </md-card-content>
                     <md-card-actions>
                         <md-button class="md-accent md-raised" @click="finishPhaseDialogActive = true"
                                    v-if="isAdmin() && (!currentProject.phase || currentProject.phase < 4)">

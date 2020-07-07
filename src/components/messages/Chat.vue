@@ -16,15 +16,21 @@
             :showCloseButton="true"
             :colors="colors"
             :alwaysScrollToBottom="alwaysScrollToBottom"
-            :messageStyling="messageStyling">
-      PLUS
+            :messageStyling="messageStyling"
+            v-if="finishedLoading">
       <template v-slot:header>
         <div class="sc-header--title">
           {{ currentProject.name }}-Gruppenchat
         </div>
       </template>
       <template v-slot:user-avatar="{ message }">
-        <avatar v-if="message.type !== 'system'" :user-id="message.author"></avatar>
+        <md-avatar :class="`md-accent`" v-if="message.author">
+          <md-ripple>
+            <img v-if="!message.customAvatar && message.photoURL" :src="message.photoURL" alt="Avatar">
+            <img v-if="message.customAvatar" :src="message.customAvatar" alt="Avatar">
+            <md-tooltip md-direction="top">{{message.authorName}}</md-tooltip>
+          </md-ripple>
+        </md-avatar>
       </template>
       <template v-slot:text-message-body="{ message }">
         {{message.data.text}}
@@ -41,12 +47,10 @@
   import FileIcon from 'vue-beautiful-chat/src/assets/file.svg'
   import CloseIconSvg from 'vue-beautiful-chat/src/assets/close.svg'
   import {mapActions, mapState} from "vuex";
-  import Avatar from "../users/Avatar";
   import fire from "../../firebase/init";
 
   export default {
     name: 'Chat',
-    components: {Avatar},
     computed: {
       ...mapState('authentication', ['user']),
       ...mapState('projects', ['currentProject', 'projectMembers']),
@@ -105,8 +109,8 @@
         alwaysScrollToBottom: true, // when set to true always scrolls the chat to the bottom when new events are in (new message, user starts typing...)
         messageStyling: true, // enables *bold* /emph/ _underline_ and such (more info at github.com/mattezza/msgdown)
         finishedLoading: false,
-        newestMessage: null,
-        limit: 20
+        newestMessages: [],
+        limit: 20,
       }
     },
     methods: {
@@ -116,6 +120,9 @@
         this.messageList = [...this.messageList, message];
         message.projectId = this.currentProject.id;
         message.author = this.user.id;
+        message.authorName = this.user.displayName;
+        message.customAvatar = this.user.customAvatar;
+        message.photoURL = this.user.photoURL;
         this.createMessage(message);
       },
       openChat() {
@@ -127,11 +134,6 @@
         // called when the user clicks on the botton to close the chat
         this.isChatOpen = false;
         this.newMessagesCount = 0;
-      },
-      handleScrollToTop() {
-        console.log("top")
-        // called when the user scrolls message list to top
-        // leverage pagination for loading another page of messages
       },
       sortMessageList(list) {
         function compare(a, b) {
@@ -180,13 +182,13 @@
     watch: {
       currentProject(newValue, oldValue) {
         if (this.currentProject && newValue !== oldValue) {
-          this.newestMessage = this.currentProject.newMessage;
+          this.newestMessages.push(newValue.newMessage);
           this.getAllMessages();
 
           fire.collection("projects").doc(this.currentProject.id).onSnapshot(data => {
-            if (this.newestMessage !== data.data().newMessage) {
-              this.newestMessage = data.data().newMessage;
-              this.getAllMessages(this.newestMessage);
+            if (!this.newestMessages.includes(data.data().newMessage)) {
+              this.newestMessages.push(data.data().newMessage);
+              this.getAllMessages(data.data().newMessage);
             }
           });
         }
