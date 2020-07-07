@@ -11,12 +11,12 @@
         </tutorial-modal>
 
         <md-chip>{{ currentProject.name }} / Aktivitätsprotokoll</md-chip>
-        <p v-if="!finishedLoading" class="text-center">
+        <p v-if="!finishedLoading" class="text-center protocol-layout">
             <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
             Aktivitäten werden geladen...
         </p>
 
-        <md-table v-if="finishedLoading" v-model="messageList" md-sort="createTimestamp" md-sort-order="desc" md-card md-fixed-header>
+        <md-table class="protocol-layout" v-if="finishedLoading" v-model="messageList" md-sort="createTimestamp" md-sort-order="desc" md-card md-fixed-header>
             <md-table-toolbar>
                 <div class="md-toolbar-section-start">
                     <h1 class="md-title">Aktivitäten und Nachrichten</h1>
@@ -96,7 +96,7 @@
                 return list.filter(message => message.projectId === this.currentProject.id && message.type !== "fileComment" && message.type !== "personaComment")
             },
             searchOnTable () {
-                this.messageList = searchByText(this.filterMessageList(this.messages), this.search);
+                this.messageList = searchByText(this.messageList, this.search);
             },
         },
         created() {
@@ -112,7 +112,13 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss">
+
+    .md-table table {
+        max-width: 100%!important;
+        width: 100%!important;
+    }
+
     .protocol-layout {
         margin-top: 24px;
     }

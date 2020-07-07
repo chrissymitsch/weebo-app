@@ -1,6 +1,7 @@
 import ProjectsDB from '@/firebase/projects-db'
 import UsersDB from "@/firebase/users-db";
 import moment from 'moment'
+import axios from "axios";
 
 export default {
   /**
@@ -111,6 +112,16 @@ export default {
     commit('setProjectCreationPending', true);
     project.members = [rootState.authentication.user.id];
     const createdProject = await projectDb.create(project);
+    if (rootState.authentication.user.token) {
+      await axios.post(`https://iid.googleapis.com/iid/v1/${rootState.authentication.user.token}/rel/topics/weebo/${createdProject.id}`,
+          {},
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `key=AAAAoR5OX9Q:APA91bGRAJLk7CIuIaRkVTsTqTKM8wa6vjnTBMzX4BZEis27Da4cJicr4ggkt32blBTUwi7omqmQtEwQIFmTmObsbS0vFs0rx1YRFzGvRvQZzcCs_MO9vwkhYrVQ0RoiiA8fsjjQ91uB`
+            },
+          });
+    }
     dispatch("updateUserProjects", createdProject);
   },
 

@@ -333,6 +333,7 @@
 
 <script>
     import {mapActions, mapState} from "vuex";
+    import axios from "axios";
     import moment from 'moment';
     import Modal from "../../components/Modal";
     import Avatar from "../../components/users/Avatar";
@@ -446,9 +447,25 @@
                     "projectId": this.currentProject.id,
                     "type": "system",
                     "data": {
-                        "text": `${this.user.displayName} hat die Projektphase "${this.getCurrentProjectPhase()}" abgeschlossen.`
+                        "text": `${this.user.displayName} hat die Projektphase ${this.getCurrentProjectPhase()} abgeschlossen.`
                     }
                 });
+
+                axios.post(`https://fcm.googleapis.com/fcm/send`,
+                    {
+                        "to": `/topics/${this.currentProject.id}`,
+                        "notification": {
+                            "title": `${this.currentProject.name}`,
+                            "body": `${this.user.displayName} hat die Projektphase ${this.getCurrentProjectPhase()} abgeschlossen.`,
+                            "icon": "./img/icons/android-chrome-192x192.png"
+                        }
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `key=AAAAoR5OX9Q:APA91bGRAJLk7CIuIaRkVTsTqTKM8wa6vjnTBMzX4BZEis27Da4cJicr4ggkt32blBTUwi7omqmQtEwQIFmTmObsbS0vFs0rx1YRFzGvRvQZzcCs_MO9vwkhYrVQ0RoiiA8fsjjQ91uB`
+                        },
+                    });
                 this.triggerUpdateProjectAction(projectToUpdate);
                 this.finishPhaseDialogActive = false;
             },

@@ -48,6 +48,7 @@
 
 <script>
     import { mapActions, mapState } from 'vuex'
+    import axios from "axios";
 
     export default {
         name: "Phase",
@@ -79,9 +80,25 @@
                     "projectId": this.currentProject.id,
                     "type": "system",
                     "data": {
-                        "text": `${this.user.displayName} hat die Projektphase "${projectToUpdate.phase}" abgeschlossen.`
+                        "text": `${this.user.displayName} hat die Projektphase ${projectToUpdate.phase} abgeschlossen.`
                     }
                 });
+
+                axios.post(`https://fcm.googleapis.com/fcm/send`,
+                    {
+                        "to": `/topics/${this.currentProject.id}`,
+                        "notification": {
+                            "title": `${this.currentProject.name}`,
+                            "body": `${this.user.displayName} hat die Projektphase ${projectToUpdate.phase} abgeschlossen.`,
+                            "icon": "./img/icons/android-chrome-192x192.png"
+                        }
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `key=AAAAoR5OX9Q:APA91bGRAJLk7CIuIaRkVTsTqTKM8wa6vjnTBMzX4BZEis27Da4cJicr4ggkt32blBTUwi7omqmQtEwQIFmTmObsbS0vFs0rx1YRFzGvRvQZzcCs_MO9vwkhYrVQ0RoiiA8fsjjQ91uB`
+                        },
+                    });
                 this.goBack();
             },
             onConfirmStart() {
@@ -98,9 +115,26 @@
                     "projectId": this.currentProject.id,
                     "type": "system",
                     "data": {
-                        "text": `${this.user.displayName} hat die Projektphase "${projectToUpdate.phase}" erneut gestartet.`
+                        "text": `${this.user.displayName} hat die Projektphase ${projectToUpdate.phase + 1} erneut gestartet.`
                     }
                 });
+
+                axios.post(`https://fcm.googleapis.com/fcm/send`,
+                    {
+                        "to": `/topics/${this.currentProject.id}`,
+                        "notification": {
+                            "title": `${this.currentProject.name}`,
+                            "body": `${this.user.displayName} hat die Projektphase ${projectToUpdate.phase + 1} erneut gestartet.`,
+                            "icon": "./img/icons/android-chrome-192x192.png"
+                        }
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `key=AAAAoR5OX9Q:APA91bGRAJLk7CIuIaRkVTsTqTKM8wa6vjnTBMzX4BZEis27Da4cJicr4ggkt32blBTUwi7omqmQtEwQIFmTmObsbS0vFs0rx1YRFzGvRvQZzcCs_MO9vwkhYrVQ0RoiiA8fsjjQ91uB`
+                        },
+                    });
+
                 this.goBack();
             },
             isAdmin() {

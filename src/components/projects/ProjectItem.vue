@@ -56,6 +56,7 @@
 <script>
   import moment from 'moment'
   import {mapState, mapActions} from "vuex";
+  import axios from "axios";
 
   export default {
     computed: {
@@ -84,6 +85,15 @@
       ...mapActions('messages', ['createMessage']),
       onConfirmDeletion () {
         this.$emit('deleteProject', this.projectId);
+        if (this.user.token) {
+          axios.delete(`https://iid.googleapis.com/iid/v1/${this.user.token}/rel/topics/${this.projectId}`,
+                  {
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `key=AAAAoR5OX9Q:APA91bGRAJLk7CIuIaRkVTsTqTKM8wa6vjnTBMzX4BZEis27Da4cJicr4ggkt32blBTUwi7omqmQtEwQIFmTmObsbS0vFs0rx1YRFzGvRvQZzcCs_MO9vwkhYrVQ0RoiiA8fsjjQ91uB`
+                    },
+                  });
+        }
       },
       onConfirmUnsubscription () {
         this.$emit('unsubscribeProject', this.projectId);
@@ -94,6 +104,15 @@
             "text": `Oh schade, ${this.user.displayName} hat das Projekt verlassen.`
           }
         });
+        if (this.user.token) {
+          axios.delete(`https://iid.googleapis.com/iid/v1/${this.user.token}/rel/topics/${this.projectId}`,
+                  {
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `key=AAAAoR5OX9Q:APA91bGRAJLk7CIuIaRkVTsTqTKM8wa6vjnTBMzX4BZEis27Da4cJicr4ggkt32blBTUwi7omqmQtEwQIFmTmObsbS0vFs0rx1YRFzGvRvQZzcCs_MO9vwkhYrVQ0RoiiA8fsjjQ91uB`
+                    },
+                  });
+        }
       },
       format_date(value){
         if (value) {

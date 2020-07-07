@@ -33,10 +33,10 @@
                         <md-table-cell>{{ format_date(selectedFile.createTimestamp) }}</md-table-cell>
                     </md-table-row>
                 </md-table>
-                <p v-if="!currentProject.phase || currentProject.phase === 0">
+                <p v-if="(!currentProject.phase || currentProject.phase === 0) && currentProject.level < 1">
                     Bedanke dich für diese Datei!
                 </p>
-                <p v-if="currentProject.phase && currentProject.phase !== 0">
+                <p v-if="(currentProject.phase && currentProject.phase !== 0) || currentProject.level > 0">
                     Du kannst hier die Datei <i>{{selectedFile.name}}</i> kommentieren oder dich dafür bedanken!
                 </p>
                 <md-button v-if="selectedFile.creator === user.id" class="md-raised" disabled><md-icon>favorite_border</md-icon>Danke</md-button>
@@ -45,7 +45,7 @@
                     Danke
                 </md-button>
 
-                <md-card v-if="currentProject.phase && currentProject.phase !== 0">
+                <md-card v-if="(currentProject.phase && currentProject.phase !== 0) || currentProject.level > 0">
                     <md-card-content>
                         <md-field>
                             <label>Kommentar</label>
@@ -103,7 +103,7 @@
         <div class="show-for-small">
             <md-list>
                 <md-list-item v-for="(file, index) in searched" :key="index">
-                    <md-button v-if="currentProject.phase && currentProject.phase !== 0" @click="triggerFileModal(file)"><md-icon>message</md-icon> ({{countMessages(file.id)}})</md-button>
+                    <md-button v-if="(currentProject.phase && currentProject.phase !== 0) || currentProject.level > 0" @click="triggerFileModal(file)"><md-icon>message</md-icon> ({{countMessages(file.id)}})</md-button>
                     <span class="md-list-item-text persona-name">
                         <a href="#" @click="triggerFileModal(persona)">{{ file.name }}</a>
                     </span>
@@ -146,7 +146,7 @@
                 <md-table-cell md-label="Dateiname" md-sort-by="name">
                     <a :href="item.url" target=_blank>{{ item.name }}</a>
                 </md-table-cell>
-                <md-table-cell v-if="currentProject.phase && currentProject.phase !== 0" md-label="Kommentare" md-sort-by="type">
+                <md-table-cell v-if="(currentProject.phase && currentProject.phase !== 0) || currentProject.level > 0" md-label="Kommentare" md-sort-by="type">
                     <md-badge md-dense :md-content="countMessages(item.id)">
                         <md-button class="md-icon-button" @click="triggerFileModal(item)"><md-icon>message</md-icon></md-button>
                     </md-badge>

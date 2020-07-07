@@ -18,11 +18,11 @@
 </template>
 
 <script>
-import NavBar from '@/components/NavBar'
-import NewContentAvailableToastr from '@/components/NewContentAvailableToastr'
-import AppleAddToHomeScreenModal from '@/components/AppleAddToHomeScreenModal'
-import Chat from '@/components/messages/Chat'
-import { mapState, mapActions, mapGetters } from 'vuex'
+  import { mapState, mapActions, mapGetters } from 'vuex'
+  import NavBar from '@/components/NavBar'
+  import NewContentAvailableToastr from '@/components/NewContentAvailableToastr'
+  import AppleAddToHomeScreenModal from '@/components/AppleAddToHomeScreenModal'
+  import Chat from '@/components/messages/Chat'
 
 export default {
   components: { NavBar, NewContentAvailableToastr, AppleAddToHomeScreenModal, Chat },

@@ -39,10 +39,10 @@
                         <md-table-cell>{{ format_date(selectedPersona.createTimestamp) }}</md-table-cell>
                     </md-table-row>
                 </md-table>
-                <p v-if="currentProject.phase && currentProject.phase !== 0">
+                <p v-if="(currentProject.phase && currentProject.phase !== 0) || currentProject.level > 0">
                     Du kannst hier Persona <i>{{selectedPersona.name}}</i> kommentieren oder dich dafür bedanken!
                 </p>
-                <p v-if="!currentProject.phase || currentProject.phase === 0">
+                <p v-if="(!currentProject.phase || currentProject.phase === 0) && currentProject.level < 1">
                     Bedanke dich für diese Persona!
                 </p>
                 <md-button v-if="selectedPersona.creator === user.id" class="md-raised" disabled><md-icon>favorite_border</md-icon>Danke</md-button>
@@ -51,7 +51,7 @@
                     Danke
                 </md-button>
 
-                <md-card v-if="currentProject.phase && currentProject.phase !== 0">
+                <md-card v-if="(currentProject.phase && currentProject.phase !== 0) || currentProject.level > 0">
                     <md-card-content>
                         <md-field>
                             <label>Kommentar</label>
@@ -76,7 +76,7 @@
             <add-persona :id="currentProject.id" @personaCreated="updatePersona"></add-persona>
             <md-list class="md-dense">
                 <md-list-item v-for="(persona, index) in searched" :key="index">
-                    <md-button v-if="currentProject.phase && currentProject.phase !== 0" @click="triggerPersonaModal(persona)"><md-icon>message</md-icon> ({{countMessages(persona.id)}})</md-button>
+                    <md-button v-if="(currentProject.phase && currentProject.phase !== 0) || currentProject.level > 0" @click="triggerPersonaModal(persona)"><md-icon>message</md-icon> ({{countMessages(persona.id)}})</md-button>
                     <span class="md-list-item-text persona-name">
                         <a href="#" @click="triggerPersonaModal(persona)">{{ persona.name }}</a>
                     </span>
@@ -114,7 +114,7 @@
                     <md-table-cell md-label="Name" md-sort-by="name">
                         <a href="#" @click="triggerPersonaModal(item)">{{ item.name }}</a>
                     </md-table-cell>
-                    <md-table-cell md-label="Kommentare" v-if="currentProject.phase && currentProject.phase !== 0">
+                    <md-table-cell md-label="Kommentare" v-if="(currentProject.phase && currentProject.phase !== 0) || currentProject.level > 0">
                         <md-badge md-dense :md-content="countMessages(item.id)">
                             <md-button class="md-icon-button" @click="triggerPersonaModal(item)"><md-icon>message</md-icon></md-button>
                         </md-badge>
