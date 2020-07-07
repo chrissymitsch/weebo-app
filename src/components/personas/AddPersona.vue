@@ -1,5 +1,5 @@
 <template>
-    <div class="AddPersona">
+    <div class="AddPersona" v-if="!currentProject.finished">
         <md-card v-if="active" class="persona-form">
             <md-card-header>
                 <div class="md-title">Neue Persona hinzufügen</div>

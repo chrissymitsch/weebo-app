@@ -78,7 +78,6 @@
       },
       unsubscribeToPushNotifications() {
         this.messaging.getToken().then((token) => {
-          console.log(token);
           this.messaging.deleteToken(token).then(() => {
             console.log('Notification permission deleted.');
             this.errorMessage = null;
@@ -110,6 +109,10 @@
       if (this.user) {
         this.messaging = firebase.messaging();
         this.messaging.usePublicVapidKey("BJUO7PUotO39x5pcAYho0dVruCSulk09F5k1LBNLqAG1CqJWF6l4QH3MFTGOv3DNMdgIikB3C9HZ6yf6IxT7-BU");
+
+        if (this.user.token) {
+          this.notificationsActive = true;
+        }
 
         this.messaging.onTokenRefresh(() => {
           this.messaging.getToken().then((refreshedToken) => {

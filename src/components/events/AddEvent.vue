@@ -1,5 +1,5 @@
 <template>
-  <div class="AddEvent">
+  <div class="AddEvent" v-if="!currentProject.finished">
     <Modal :showModal="active" @closeModal="active=false" size="large">
       <div class="md-display-1">Neuen Termin hinzufügen</div>
       <div class="mode-radios">

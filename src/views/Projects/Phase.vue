@@ -30,15 +30,12 @@
         <div class="phase4" v-if="$zircle.getParams().currentPhase === 3">
             <p class="md-title">Phase 4: Evaluation</p>
         </div>
-        <div class="phase5" v-if="$zircle.getParams().currentPhase === 4">
-            <p class="md-title">Endgame: Softwareeinführung</p>
-        </div>
-        <p v-if="(!currentProject.phase && $zircle.getParams().currentPhase === 0) || currentProject.phase === $zircle.getParams().currentPhase">
+        <p v-if="(!currentProject.finished && !currentProject.phase && $zircle.getParams().currentPhase === 0) || currentProject.phase === $zircle.getParams().currentPhase">
             <md-button class="md-accent md-raised" @click="finishPhaseDialogActive = true" v-if="isAdmin()">
                 <md-icon>check</md-icon> Phase abschließen
             </md-button>
         </p>
-        <p v-if="(currentProject.phase === 4)">
+        <p v-if="(!currentProject.finished && currentProject.phase === 4)">
             <md-button class="md-accent md-raised" @click="startPhaseDialogActive = true" v-if="isAdmin()">
                 <md-icon>check</md-icon> Diese Phase starten
             </md-button>
@@ -70,7 +67,7 @@
                 const projectToUpdate = JSON.parse(JSON.stringify(this.currentProject));
                 projectToUpdate.phase = this.$zircle.getParams().currentPhase + 1;
                 if (projectToUpdate.phase === 4 && projectToUpdate.level) {
-                    projectToUpdate.level += projectToUpdate.level;
+                    projectToUpdate.level += 1;
                 } else if (projectToUpdate.phase === 4 && !projectToUpdate.level) {
                     projectToUpdate.level = 1;
                 }
@@ -104,11 +101,6 @@
             onConfirmStart() {
                 const projectToUpdate = JSON.parse(JSON.stringify(this.currentProject));
                 projectToUpdate.phase = this.$zircle.getParams().currentPhase;
-                if (projectToUpdate.phase === 4 && projectToUpdate.level) {
-                    projectToUpdate.level += projectToUpdate.level;
-                } else if (projectToUpdate.phase === 4 && !projectToUpdate.level) {
-                    projectToUpdate.level = 1;
-                }
                 this.triggerUpdateProjectAction(projectToUpdate);
                 this.startPhaseDialogActive = false;
                 this.createMessage({

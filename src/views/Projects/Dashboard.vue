@@ -13,6 +13,14 @@
         </tutorial-modal>
 
         <md-dialog-confirm
+                :md-active.sync="finishProjectDialogActive"
+                :md-title="`Möchtest du Phase ${getCurrentProjectPhase()} wirklich abschließen?`"
+                md-content="Alle Dateien, Kommentare etc. werden weiterhin abrufbar sein, du kannst aber nichts mehr am Projekt verändern."
+                md-confirm-text="Okay"
+                md-cancel-text="Abbrechen!"
+                @md-confirm="onConfirmFinishProject" />
+
+        <md-dialog-confirm
                 :md-active.sync="finishPhaseDialogActive"
                 :md-title="`Möchtest du Phase ${getCurrentProjectPhase()} wirklich beenden?`"
                 md-content="Alle Dateien, Kommentare etc. werden weiterhin abrufbar sein."
@@ -33,7 +41,7 @@
 
         <md-chip>{{ currentProject.name }} / Dashboard</md-chip>
 
-        <md-card class="welcome-card" v-if="currentProject && currentProject.phase === 1 &&
+        <md-card class="welcome-card" v-if="currentProject && !currentProject.finished && currentProject.phase === 1 &&
         (!currentProject.level || currentProject.level < 1)">
             <md-card-content>
                 <p class="md-body-2">Neu!</p>
@@ -42,10 +50,16 @@
             </md-card-content>
         </md-card>
 
-        <md-card class="welcome-card" v-if="currentProject && currentProject.level >= 1">
+        <md-card class="welcome-card" v-if="currentProject && !currentProject.finished && currentProject.level >= 1">
             <md-card-content>
                 <p class="md-body-2">Neu!</p>
                 Ab sofort kannst du dich im Kreativmodus austoben und Entwürfe, Skizzen, Wireframes o.ä. zeichnen.
+            </md-card-content>
+        </md-card>
+
+        <md-card class="welcome-card" v-if="currentProject.finished">
+            <md-card-content>
+                <p class="md-body-2">Das Projekt wurde beendet</p>
             </md-card-content>
         </md-card>
 
@@ -163,7 +177,7 @@
         </div>
 
 
-        <div class="md-layout md-gutter welcome-card">
+        <div class="md-layout md-gutter welcome-card" v-if="!currentProject.finished">
             <div class="md-layout-item md-small-size-100">
                 <md-card>
                     <md-card-content>
@@ -320,7 +334,7 @@
                     </md-card-content>
                     <md-card-content class="md-title text-center" v-if="isAdmin() && currentProject.phase && currentProject.phase === 4">
                         <p>Sind alle Anforderungen erfüllt?</p>
-                        <md-button class="md-accent md-raised" @click="finishPhaseDialogActive = true">
+                        <md-button class="md-accent md-raised" @click="finishProjectDialogActive = true">
                             <md-icon>check</md-icon> Das Projekt abschließen
                         </md-button>
                     </md-card-content>
@@ -376,7 +390,8 @@
                 "4": "SOFTWAREEINFÜHRUNG"
             },
             congratulationsModalActive: false,
-            finishPhaseDialogActive: false
+            finishPhaseDialogActive: false,
+            finishProjectDialogActive: false
         }),
         methods: {
             ...mapActions('projects', ['triggerUpdateProjectAction']),
@@ -445,7 +460,7 @@
                 const projectToUpdate = JSON.parse(JSON.stringify(this.currentProject));
                 projectToUpdate.phase = this.getCurrentProjectPhase();
                 if (projectToUpdate.phase === 4 && projectToUpdate.level) {
-                    projectToUpdate.level += projectToUpdate.level;
+                    projectToUpdate.level += 1;
                 } else if (projectToUpdate.phase === 4 && !projectToUpdate.level) {
                     projectToUpdate.level = 1;
                 }
@@ -474,6 +489,35 @@
                     });
                 this.triggerUpdateProjectAction(projectToUpdate);
                 this.finishPhaseDialogActive = false;
+            },
+            onConfirmFinishProject () {
+                const projectToUpdate = JSON.parse(JSON.stringify(this.currentProject));
+                projectToUpdate.finished = true;
+                this.createMessage({
+                    "projectId": this.currentProject.id,
+                    "type": "system",
+                    "data": {
+                        "text": `${this.user.displayName} hat das Projekt beendet.`
+                    }
+                });
+
+                axios.post(`https://fcm.googleapis.com/fcm/send`,
+                    {
+                        "to": `/topics/${this.currentProject.id}`,
+                        "notification": {
+                            "title": `${this.currentProject.name}`,
+                            "body": `${this.user.displayName} hat das Projekt beendet.`,
+                            "icon": "./img/icons/android-chrome-192x192.png"
+                        }
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `key=AAAAoR5OX9Q:APA91bGRAJLk7CIuIaRkVTsTqTKM8wa6vjnTBMzX4BZEis27Da4cJicr4ggkt32blBTUwi7omqmQtEwQIFmTmObsbS0vFs0rx1YRFzGvRvQZzcCs_MO9vwkhYrVQ0RoiiA8fsjjQ91uB`
+                        },
+                    });
+                this.triggerUpdateProjectAction(projectToUpdate);
+                this.finishProjectDialogActive = false;
             },
             getPhaseTasks(status) {
                 let phase = 1;

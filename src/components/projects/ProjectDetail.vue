@@ -23,7 +23,7 @@
           </router-link>
           <router-link
                   :to="{ name: 'project-invitation' }"
-                  v-if="isAdmin()">
+                  v-if="isAdmin() && !project.finished">
             <md-list-item>
               <md-icon>send</md-icon>
               <span class="md-list-item-text">Einladung verschicken</span>

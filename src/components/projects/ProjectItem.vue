@@ -30,6 +30,8 @@
           <p class="md-title project-title">{{ project.name }}</p>
         </router-link>
         <p class="md-caption">Letzte Aktualisierung: {{ format_date(project.updateTimestamp) }}</p>
+        <p class="md-body-2" v-if="!project.finished">Level: {{ project.level || 0 }}</p>
+        <p class="md-body-2" v-if="project.finished">Beendet</p>
       </md-card-content>
       <md-card-actions>
         <div>

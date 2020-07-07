@@ -1,5 +1,5 @@
 <template>
-  <div class="AddTask">
+  <div class="AddTask" v-if="!currentProject.finished">
     <Modal :showModal="active" @closeModal="active=false" size="large">
       <div class="md-display-1">Neue Aufgabe hinzufügen</div>
       <md-field>
@@ -33,6 +33,7 @@
     components: {Modal},
     computed: {
       ...mapState('tasks', ['tasks']),
+      ...mapState('projects', ['currentProject']),
     },
     props: {
       column: String,
