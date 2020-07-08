@@ -1,6 +1,6 @@
 <template>
     <div class="Invitation">
-        <md-empty-state v-if="isUserLoggedIn && !currentProject">
+        <md-empty-state v-if="isUserLoggedIn && !currentProject && !error">
             <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
             Laden...
         </md-empty-state>

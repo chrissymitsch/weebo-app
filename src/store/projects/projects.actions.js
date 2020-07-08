@@ -113,7 +113,7 @@ export default {
     project.members = [rootState.authentication.user.id];
     const createdProject = await projectDb.create(project);
     if (rootState.authentication.user.token) {
-      await axios.post(`https://iid.googleapis.com/iid/v1/${rootState.authentication.user.token}/rel/topics/weebo/${createdProject.id}`,
+      await axios.post(`https://iid.googleapis.com/iid/v1/${rootState.authentication.user.token}/rel/topics/${createdProject.id}`,
           {},
           {
             headers: {

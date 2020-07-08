@@ -23,7 +23,7 @@
       </form>
     </md-card>
 
-    <Modal :showModal="rewardModalActive" @closeModal="rewardModalActive=false">
+    <Modal :showModal="!projectCreationPending && rewardModalActive" @closeModal="rewardModalActive=false">
       <md-progress-spinner v-if="!rewardSaved" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
       <div v-if="rewardSaved">
         <div class="md-display-1">Bravo!</div>
@@ -31,8 +31,6 @@
         <p class="description"><img src="@/assets/img/pokal.png" /></p>
       </div>
     </Modal>
-
-    <md-snackbar :md-active.sync="projectSaved">Das Projekt wurde erfolgreich erstellt.</md-snackbar>
   </div>
 </template>
 
@@ -121,7 +119,7 @@
 
 <style lang="scss" scoped>
   .md-card {
-    min-height: 200px;
+    min-height: 220px;
   }
 
   @media (max-width: 600px) {
@@ -134,7 +132,7 @@
     }
   }
 
-  .md-field {
+  .md-field .md-input {
     width: 80%;
   }
 

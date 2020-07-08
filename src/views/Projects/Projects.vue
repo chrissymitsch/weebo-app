@@ -42,7 +42,8 @@
     data: () => ({
       messaging: null,
       notificationsActive: false,
-      errorMessage: null
+      errorMessage: null,
+      readyForNotifying: false
     }),
     methods: {
       ...mapActions('authentication', ['updateUser']),
@@ -110,9 +111,13 @@
         this.messaging = firebase.messaging();
         this.messaging.usePublicVapidKey("BJUO7PUotO39x5pcAYho0dVruCSulk09F5k1LBNLqAG1CqJWF6l4QH3MFTGOv3DNMdgIikB3C9HZ6yf6IxT7-BU");
 
-        if (this.user.token) {
-          this.notificationsActive = true;
-        }
+        this.messaging.getToken().then((token) => {
+          if (this.user.token && this.user.token === token) {
+            this.notificationsActive = true;
+          } else {
+            this.readyForNotifying = true;
+          }
+        });
 
         this.messaging.onTokenRefresh(() => {
           this.messaging.getToken().then((refreshedToken) => {
@@ -132,6 +137,11 @@
           this.subscribeToPushNotifications();
         } else if (newValue !== oldValue && !newValue) {
           this.unsubscribeToPushNotifications();
+        }
+      },
+      readyForNotifying(newValue, oldValue) {
+        if (newValue !== oldValue && newValue && this.notificationsActive) {
+          this.subscribeToPushNotifications();
         }
       }
     }

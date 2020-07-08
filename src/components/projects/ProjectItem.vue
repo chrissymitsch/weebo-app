@@ -140,7 +140,7 @@
 }
 
   .project-title {
-    max-width: 200px;
+    max-width: 220px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -148,7 +148,7 @@
   }
 
   .md-card {
-    min-height: 200px;
+    min-height: 220px;
   }
 
 </style>
