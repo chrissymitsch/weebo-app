@@ -8,7 +8,11 @@
           <avatar v-if="!userUpdatePending" size="md-large" :key="rerenderAvatar" :user-id="selectedUser.id"></avatar>
           <p class="md-display-1">{{selectedUser.displayName}}</p>
           <p class="md-subheading" v-if="isLoggedInUserSelectedUser()">{{selectedUser.email}}</p>
-          <div class="account-button" v-if="isLoggedInUserSelectedUser()"><md-button class="md-raised">Google-Konto verwalten</md-button></div>
+          <div class="account-button" v-if="isLoggedInUserSelectedUser()">
+            <a href="https://myaccount.google.com/" target=_blank>
+              <md-button class="md-raised">Google-Konto verwalten</md-button>
+            </a>
+          </div>
           <div class="md-layout md-gutter profile-stats">
             <div class="md-layout-item text-center">
               <p class="md-subheading">{{getThankYou()}}</p>
