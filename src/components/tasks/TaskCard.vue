@@ -14,7 +14,7 @@
         </md-field>
         <p v-if="!editTask">{{task.title}}</p>
         <md-menu md-size="medium" md-align-trigger>
-          <div md-menu-trigger><avatar :user-id="task.creator"></avatar></div>
+          <div md-menu-trigger><avatar :user-id="task.creator" :disableClickToProfile="true"></avatar></div>
 
           <md-menu-content>
             <md-menu-item @click="changeCreator()">
