@@ -96,7 +96,8 @@
                 return list.filter(message => message.projectId === this.currentProject.id && message.type !== "fileComment" && message.type !== "personaComment")
             },
             searchOnTable () {
-                this.messageList = searchByText(this.messageList, this.search);
+                const messageToSort = JSON.parse(JSON.stringify(this.messages));
+                this.messageList = searchByText(this.filterMessageList(messageToSort), this.search);
             },
         },
         created() {

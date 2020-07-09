@@ -214,8 +214,14 @@
                                         <span class="md-list-item-text">Stakeholder einladen</span>
                                     </md-list-item>
                                     <md-list-item>
-                                        <md-icon class="md-accent" v-if="getPhaseTasks('Neu').length > 0">check_box</md-icon>
-                                        <md-icon class="md-accent" v-if="getPhaseTasks('Neu').length <= 0">check_box_outline_blank</md-icon>
+                                        <md-icon class="md-accent"
+                                                 v-if="getPhaseTasks('Neu').length > 0 || getPhaseTasks('In Bearbeitung').length > 0 || getPhaseTasks('Geschafft!').length > 0">
+                                            check_box
+                                        </md-icon>
+                                        <md-icon class="md-accent"
+                                                 v-if="getPhaseTasks('Neu').length <= 0 && getPhaseTasks('In Bearbeitung').length <= 0 && getPhaseTasks('Geschafft!').length <= 0">
+                                            check_box_outline_blank
+                                        </md-icon>
                                         <span class="md-list-item-text">Aufgaben erstellen</span>
                                     </md-list-item>
                                     <md-list-item>

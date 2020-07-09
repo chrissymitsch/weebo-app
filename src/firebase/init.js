@@ -17,4 +17,8 @@ const config = {
 firebase.initializeApp(config);
 
 const fire = firebase.firestore();
-export default fire;
+
+const messaging = firebase.messaging();
+messaging.usePublicVapidKey("BJUO7PUotO39x5pcAYho0dVruCSulk09F5k1LBNLqAG1CqJWF6l4QH3MFTGOv3DNMdgIikB3C9HZ6yf6IxT7-BU");
+
+export { fire, messaging };

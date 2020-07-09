@@ -41,7 +41,9 @@
             save() {
                 const { isEmpty, data } = this.$refs.signaturePad.saveSignature();
                 if (!isEmpty) {
-                    window.open(data, '_blank');
+                    const newWindow = window.open();
+                    const imgstring = "<img src='".concat(data).concat("' />");
+                    newWindow.document.write(imgstring);
                 }
             }
         }

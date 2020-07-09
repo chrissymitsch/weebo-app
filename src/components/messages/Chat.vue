@@ -47,7 +47,7 @@
   import FileIcon from 'vue-beautiful-chat/src/assets/file.svg'
   import CloseIconSvg from 'vue-beautiful-chat/src/assets/close.svg'
   import {mapActions, mapState} from "vuex";
-  import fire from "../../firebase/init";
+  import {fire} from "../../firebase/init";
 
   export default {
     name: 'Chat',
@@ -165,7 +165,7 @@
               const indexOfNewestMessage = this.messageList.findIndex(message => message.id === newestMessage);
               if (this.messageList[indexOfNewestMessage].type === "system" &&
                       this.messageList[indexOfNewestMessage].creator !== this.user.id) {
-                this.$toast.info(`Das Projekt ${this.currentProject.name} wurde aktualisiert.`, {
+                this.$toast.info(`Das Projekt ${this.currentProject.name} wurde aktualisiert. Bitte neu laden.`, {
                   position: 'top-right',
                   duration: 60000 // 1 minute
                 });
