@@ -48,7 +48,7 @@
         <Modal :showModal="rewardModalActive" @closeModal="closeModal()">
             <md-progress-spinner v-if="!rewardSaved" class="md-accent" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
             <div v-if="rewardSaved">
-                <div class="md-display-1">Bravo!</div>
+                <div class="md-display-1 text-center">Bravo!</div>
                 <p class="description md-body-2">Du hast eine Trophäe erhalten!</p>
                 <p class="description"><img src="@/assets/img/pokal.png" /></p>
             </div>
