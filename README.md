@@ -7,13 +7,13 @@ Weebo-App ist eine im Rahmen meiner Masterarbeit entwickelte Progressive Web-App
 
 Die Anmeldung ist per Google-Konto möglich und über einen Einladungslink können alle ProjektteilnehmerInnen eingeladen werden.
 
-#### Demo
+### Demo
 https://weebo-b37d8.firebaseapp.com/
 
 Gehostet auf Google Firebase.
 
 
-#### Die PWA umfasst folgende Funktionen:
+### Die PWA umfasst folgende Funktionen:
 
 - Erstellen eines Projekts
 - Einladen von ProjektteilnehmerInnen
