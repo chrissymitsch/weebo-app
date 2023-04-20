@@ -1,11 +1,11 @@
 <template>
   <div class="wrapper">
     <template v-if="refreshingApp">
-      Loading new content...
+      Neue Inhalte laden...
     </template>
     <template v-else>
-      New content available. Please
-      <span class="refresh-btn" @click="$emit('refresh')">REFRESH</span>
+      Neue Inhalte verfügbar, bitte
+      <span class="refresh-btn" @click="$emit('refresh')">NEU LADEN</span>
     </template>
   </div>
 </template>

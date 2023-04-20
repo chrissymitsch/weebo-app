@@ -1,0 +1,408 @@
+@import "~vue-material/dist/theme/engine"; // Import the theme engine
+
+@include md-register-theme("default", (
+        primary: #2E3A4D,
+        accent: #039BE5
+));
+
+@import "~vue-material/dist/theme/all"; // Apply the theme
+
+@import 'src/theme/variables';
+
+body {
+  margin: 0;
+  position: inherit;
+
+  .new-content-available-toastr {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+
+  .apple-add-to-home-screen-modal {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    top: 0;
+    left: 0;
+    height: fit-content;
+    width: fit-content;
+    margin: auto;
+    z-index: 1000;
+  }
+
+  .main-wrapper {
+    padding: 3rem 20px 20px 20px;
+    min-height: 100vh;
+
+    .page-wrapper {
+      margin: auto;
+
+      @media screen and (max-width: 1000px) {
+        width: 100%;
+      }
+    }
+  }
+
+  .project-details-wrapper {
+    margin-top: 1rem;
+    padding: 1rem;
+  }
+}
+
+.md-accent .md-button-content, .md-accent .md-button-content .md-icon {
+  color: #ffffff!important;
+}
+
+/** HOME PAGE **/
+.md-app {
+  position: inherit;
+  min-height: 100vh;
+}
+
+.md-app-scroller, .md-app-content {
+  background-color: $light-grey-color!important;
+  padding: 0;
+}
+
+/** AVATAR **/
+
+.md-avatar.md-accent {
+  color: #ffffff!important;
+}
+
+/** GENERAL **/
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+
+.title {
+  text-align: center;
+  font-size: 26px;
+}
+
+.md-button:not(.md-icon-button) .md-button-content .md-icon, .md-button:not(.md-icon-button) .md-button-content .button-logo {
+  height: 28px;
+  margin-right: 8px;
+}
+
+@media (min-width: 600px) {
+  .hide-for-small {
+    display: inherit;
+  }
+  .show-for-small {
+    display: none;
+  }
+}
+
+@media (max-width: 599px) {
+  .hide-for-small {
+    display: none;
+  }
+  .show-for-small {
+    display: inherit;
+  }
+}
+
+.button-tutorial-help {
+  position: absolute;
+  right: 4px;
+  margin-top: -24px;
+}
+
+/** NAVBAR **/
+
+.navbar {
+  .title-desktop {
+    display: inline;
+  }
+
+  .title-mobile {
+    display: none;
+  }
+
+  @media (max-width: 500px) {
+    .title-desktop {
+      display: none;
+    }
+
+    .title-mobile {
+      display: block;
+    }
+  }
+
+  .logo {
+    height: 24px;
+    padding-right: 8px;
+  }
+
+  .links {
+    padding-left: 1.5rem;
+    box-sizing: border-box;
+    white-space: nowrap;
+    font-size: 0.9rem;
+    display: flex;
+
+    .nav-links {
+      display: inherit;
+      align-items: end;
+
+      .nav-item {
+        position: relative;
+        display: inline-block;
+        margin-right: 1.5rem;
+        line-height: 2.2rem;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        a {
+          text-decoration: none;
+          color: #ffffff;
+          line-height: 1.4rem;
+        }
+
+        @mixin activatedLink() {
+          margin-bottom: -2px;
+          border-bottom: 2px solid $vue-color;
+        }
+
+        .router-link-active {
+          @include activatedLink;
+        }
+
+        @media (hover) {
+          :hover {
+            @include activatedLink;
+          }
+        }
+      }
+    }
+  }
+
+  &.offline {
+    background: $navbar-offline-color;
+    .links .nav-links .nav-item a,
+    .site-name {
+      color: white;
+    }
+  }
+
+  .offline-label {
+    padding: 0 10px;
+    border: 1px solid white;
+    border-radius: 5px;
+    color: white;
+    margin-left: 1.5rem;
+  }
+}
+
+.md-menu-content-container .md-list a.logout-link {
+  color: $danger-color;
+}
+
+.md-list.md-dense .md-list-item-text {
+  white-space: break-spaces;
+}
+
+/** PROFILE PAGE **/
+.badge-list {
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+
+  .md-card {
+    max-width: 45%;
+    min-width: 220px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+
+    .md-card-content {
+      min-width: 120px;
+      max-width: 120px;
+    }
+
+    .md-card-media {
+      width: 100px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .md-card {
+      max-width: 90%;
+      min-width: 90%;
+
+      .md-card-content {
+        min-width: auto;
+        max-width: 50%;
+      }
+    }
+  }
+}
+
+
+/** PROJECTS & MEMBERS PAGE **/
+.project-list, .member-list {
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+
+  .md-card {
+    width: 200px;
+    display: inline-block;
+    margin: 8px;
+
+    .md-card-content {
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .width-100 {
+      width: 100%;
+    }
+
+    .md-card {
+      width: 100%;
+    }
+  }
+}
+
+.project-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  margin: 10px auto;
+  justify-content: space-between;
+}
+
+/** MESSENGER **/
+
+.messenger {
+  position: fixed;
+  right: 8px;
+  bottom: 68px;
+  z-index: 100;
+  background-color: #F49463;
+  width: 300px;
+  max-height: 450px;
+  overflow: auto;
+}
+
+.btn-messenger {
+  position: fixed;
+  right: 8px;
+  bottom: 8px;
+  z-index: 100;
+  background-color: #F49463;
+  width: 52px;
+  height: 52px;
+
+  .md-icon {
+    color: #ffffff!important;
+  }
+}
+
+/** MODAL **/
+
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: table;
+  transition: opacity 0.3s ease;
+}
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.modal-container {
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px 20px 30px;
+  box-shadow: 0 0 20px 0 #656565;
+  background: white;
+
+  .close {
+    opacity: 0.3;
+    justify-content: right;
+    display: flex;
+    width: 100%;
+    height: 20px;
+    margin-top: -12px;
+    margin-left: 20px;
+  }
+
+  .close:hover {
+    opacity: 1;
+  }
+
+  .main-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .app-logo {
+      max-width: 50px;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      margin: 5px 0;
+      text-align: center;
+    }
+
+    .description {
+      margin: 5px 0;
+      text-align: center;
+    }
+  }
+
+  .footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: #f9f9f9;
+    font-size: 12px;
+
+    .apple-navigation-action-img {
+      max-width: 15px;
+      margin: 0 10px;
+    }
+  }
+}
+
+.modal-wrapper.large {
+  vertical-align: top;
+
+  .modal-container {
+    min-width: 600px;
+    max-width: 90%;
+    margin-top: 80px;
+
+    @media (max-width: 599px) {
+      min-width: 100%;
+      width: 100%;
+      max-width: 100%;
+    }
+
+  }
+}
+

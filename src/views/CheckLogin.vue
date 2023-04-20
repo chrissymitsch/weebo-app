@@ -1,7 +1,12 @@
 <template>
-  <h1 class="loading-title">
-    Loading...
-  </h1>
+  <div class="main-wrapper">
+    <div class="page-wrapper">
+      <h1 class="title">
+        <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner>
+        Laden...
+      </h1>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -13,7 +18,7 @@ export default {
   watch: {
     user: {
       handler(user) {
-        if (user === undefined) return
+        if (user === undefined) return;
 
         if (this.$route.query.redirectUrl === this.$route.path) {
           this.$router.push('/')
@@ -21,7 +26,7 @@ export default {
 
         const redirectUrl = isNil(user)
           ? `/login?redirectUrl=${this.$route.query.redirectUrl}`
-          : this.$route.query.redirectUrl
+          : this.$route.query.redirectUrl;
 
         this.$router.push(redirectUrl)
       },
@@ -30,9 +35,17 @@ export default {
   }
 }
 </script>
-
 <style lang="scss" scoped>
-.loading-title {
-  text-align: center;
-}
+  @import '@/theme/variables.scss';
+
+  .title {
+    text-align: center;
+  }
+
+  .page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+  }
 </style>

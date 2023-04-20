@@ -1,12 +1,12 @@
-workbox.core.setCacheNameDetails({ prefix: 'bento-starter' })
+workbox.core.setCacheNameDetails({ prefix: 'weebo' });
 
 /**
  * The workboxSW.precacheAndRoute() method efficiently caches and responds to
  * requests for URLs in the manifest.
  * See https://goo.gl/S9QRab
  */
-self.__precacheManifest = [].concat(self.__precacheManifest || [])
-workbox.precaching.precacheAndRoute(self.__precacheManifest, {})
+self.__precacheManifest = [].concat(self.__precacheManifest || []);
+workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
 // Redirect to index.html if sw cannot find matching route
 workbox.routing.registerNavigationRoute('/index.html', {
@@ -16,7 +16,7 @@ workbox.routing.registerNavigationRoute('/index.html', {
     new RegExp('/__/auth/iframe'),
     new RegExp('/.well-known')
   ]
-})
+});
 
 workbox.routing.registerRoute(
   /^https:\/\/fonts/,
@@ -25,8 +25,8 @@ workbox.routing.registerRoute(
     plugins: []
   }),
   'GET'
-)
+);
 
 addEventListener('message', messageEvent => {
   if (messageEvent.data === 'skipWaiting') return self.skipWaiting()
-})
+});

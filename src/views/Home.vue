@@ -1,15 +1,20 @@
 <template>
-  <div class="page-wrapper">
-    <h1 class="home-page-title">{{ appTitle }}</h1>
-    <img alt="logo-bento" class="logo" src="@/assets/img/bento-starter.svg" />
-
-    <a
-      rel="noopener"
-      class="documentation-link"
-      target="_blank"
-      href="https://bento-starter.netlify.com/"
-      >Documentation →</a
-    >
+  <div class="main-wrapper">
+    <div class="page-wrapper">
+      <div class="md-layout md-gutter md-alignment-center-center">
+        <div class="md-layout-item">
+          <div class="text-center"><img alt="logo" src="@/assets/img/weebo.svg" class="logo-weebo" /></div>
+        </div>
+        <div class="md-layout-item text-center">
+          <p class="md-display-1">Human-Centered Design</p>
+          <p class="md-caption">FÜR DEIN PROJEKT</p>
+          <md-empty-state
+                  md-description="Verwalte den Gestaltungsprozess deines Projekts und arbeite gemeinsam mit allen Stakeholdern am Projekterfolg!">
+            <router-link to="/onboarding"><md-button class="button md-accent md-raised">Starte dein Projekt</md-button></router-link>
+          </md-empty-state>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -36,34 +41,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/theme/variables.scss';
-
-.page-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  .logo {
+  .md-layout {
+    width: 80%;
     margin-bottom: 3rem;
-  }
 
-  .home-page-title {
-    text-align: center;
+    .logo-weebo {
+      width: 100%;
+      min-width: 200px;
+      margin-bottom: 24px;
+    }
   }
-
-  .documentation-link {
-    display: inline-block;
-    font-size: 1.2rem;
-    color: #fff;
-    background-color: #5d6788;
-    padding: 0.8rem 1.6rem;
-    border-radius: 4px;
-    transition: background-color 0.1s ease;
-    box-sizing: border-box;
-    text-decoration: none;
-    width: fit-content;
-    font-weight: 500;
-  }
-}
 </style>

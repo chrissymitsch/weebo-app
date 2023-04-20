@@ -1,187 +1,149 @@
 <template>
   <header class="navbar" :class="{ offline: !networkOnLine }">
-    <router-link to="/home">
-      <img alt="logo-bento" class="logo" src="@/assets/img/bento-starter.svg" />
-      <span class="site-name title-desktop">{{ appTitle }}</span>
-      <span class="site-name title-mobile">{{ appShortTitle }}</span>
-    </router-link>
-    <div class="links">
-      <nav class="nav-links">
-        <div class="nav-item">
-          <router-link to="/products">Products</router-link>
-        </div>
-        <div v-if="!isUserLoggedIn && networkOnLine" class="nav-item">
-          <router-link to="/login">Login</router-link>
-        </div>
-        <div
-          v-if="isUserLoggedIn && networkOnLine"
-          class="nav-item logout-item"
-          @click="logout"
-        >
-          <a>Logout</a>
-        </div>
-        <div v-if="!networkOnLine" class="nav-item offline-label">Offline</div>
-      </nav>
+    <md-app>
+      <md-app-toolbar class="md-primary" md-elevation="0">
+        <md-button v-if="currentProject && isUserLoggedIn && user" class="md-icon-button show-for-small" @click="menuVisible = true">
+          <md-icon class="navigation-icon">menu</md-icon>
+        </md-button>
+        <router-link to="/home">
+          <span class="md-title title-desktop md-xsmall-hide">{{ appTitle }}</span>
+          <span class="md-title title-mobile md-xsmall-size">{{ appShortTitle }}</span>
+        </router-link>
+        <div class="links md-toolbar-section-end">
+          <nav class="nav-links">
+            <div class="nav-item" v-if="isUserLoggedIn">
+              <router-link to="/projects">Projekte</router-link>
+            </div>
+            <div v-if="!isUserLoggedIn && networkOnLine" class="nav-item">
+              <router-link to="/login">Anmelden</router-link>
+            </div>
 
-      <img
-        v-if="isUserLoggedIn && networkOnLine"
-        class="user-picture can-hide"
-        :src="user.photoURL"
-        alt="Avatar"
-      />
-    </div>
+            <div v-if="!networkOnLine" class="nav-item offline-label">Offline</div>
+
+            <md-menu v-if="isUserLoggedIn && networkOnLine" md-size="medium" md-align-trigger>
+              <avatar md-menu-trigger :disableClickToProfile="true"></avatar>
+
+              <md-menu-content md-size="auto">
+                <md-menu-item><h3>{{ user.displayName }}</h3></md-menu-item>
+                <md-menu-item @click="openProfile()">Profil</md-menu-item>
+                <md-menu-item
+                          class="nav-item logout-item"
+                          @click="logout"
+                >
+                  <a class="logout-link">Ausloggen</a>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+
+          </nav>
+        </div>
+      </md-app-toolbar>
+
+      <md-app-drawer v-if="currentProject && isUserLoggedIn && user" :md-active.sync="menuVisible">
+        <md-app-toolbar md-elevation="0" class="md-accent">
+          <span class="md-title" v-if="currentProject.name">
+            <md-avatar class="md-avatar-icon md-primary">{{ currentProject.name.charAt(0) }}</md-avatar>
+           {{ currentProject.name }}
+          </span>
+          <div class="md-toolbar-section-end">
+            <md-button class="md-icon-button md-dense" @click="menuVisible = false">
+              <md-icon>keyboard_arrow_left</md-icon>
+            </md-button>
+          </div>
+        </md-app-toolbar>
+        <md-list>
+          <router-link :to="{ name: 'project-dashboard' }">
+            <md-list-item @click="menuVisible = false">
+              <md-icon>dashboard</md-icon>
+              <span class="md-list-item-text">Dashboard</span>
+            </md-list-item>
+          </router-link>
+          <router-link :to="{ name: 'project-members', params: { project: currentProject } }">
+            <md-list-item @click="menuVisible = false">
+              <md-icon>group</md-icon>
+              <span class="md-list-item-text">Projektteilnehmer</span>
+            </md-list-item>
+          </router-link>
+          <router-link
+                  :to="{ name: 'project-invitation' }"
+                  v-if="isAdmin() && !currentProject.finished">
+            <md-list-item @click="menuVisible = false">
+              <md-icon>send</md-icon>
+              <span class="md-list-item-text">Einladung verschicken</span>
+            </md-list-item>
+          </router-link>
+          <md-list :md-expand-single="true">
+            <md-list-item md-expand :md-expanded.sync="expandProcess">
+              <md-icon>forward</md-icon>
+              <span class="md-list-item-text">Prozess</span>
+
+              <md-list slot="md-expand">
+                <md-list-item class="md-inset" @click="menuVisible = false">
+                  <router-link :to="{ name: 'project-phase-1' }">1. Analyse</router-link>
+                </md-list-item>
+                <md-list-item class="md-inset" @click="menuVisible = false">
+                  <router-link :to="{ name: 'project-phase-2' }">2. Spezifikation</router-link>
+                </md-list-item>
+                <md-list-item class="md-inset" @click="menuVisible = false">
+                  <router-link :to="{ name: 'project-phase-3' }">3. Modellierung</router-link>
+                </md-list-item>
+                <md-list-item class="md-inset" @click="menuVisible = false">
+                  <router-link :to="{ name: 'project-phase-4' }">4. Evaluation</router-link>
+                </md-list-item>
+              </md-list>
+            </md-list-item>
+          </md-list>
+          <router-link
+                  :to="{ name: 'project-settings' }"
+                  v-if="isAdmin()">
+            <md-list-item @click="menuVisible = false">
+              <md-icon>settings</md-icon>
+              <span class="md-list-item-text">Einstellungen</span>
+            </md-list-item>
+          </router-link>
+        </md-list>
+      </md-app-drawer>
+
+      <md-app-content>
+        <router-view></router-view>
+      </md-app-content>
+    </md-app>
+    <md-card class="md-primary">
+      <md-card-content>
+        &copy; Doofenshmirtz Evil Incorporated
+      </md-card-content>
+    </md-card>
   </header>
 </template>
 
 <script>
 import firebase from 'firebase/app'
 import { mapGetters, mapState } from 'vuex'
+import Avatar from '@/components/users/Avatar'
 
 export default {
   computed: {
     ...mapGetters('authentication', ['isUserLoggedIn']),
     ...mapState('authentication', ['user']),
-    ...mapState('app', ['networkOnLine', 'appTitle', 'appShortTitle'])
+    ...mapState('app', ['networkOnLine', 'appTitle', 'appShortTitle']),
+    ...mapState('projects', ['currentProject'])
   },
+  components: {Avatar},
+  data: () => ({
+    menuVisible: false,
+    expandProcess: false
+  }),
   methods: {
     async logout() {
       await firebase.auth().signOut()
+    },
+    openProfile() {
+      const location = "/profile/".concat(this.user.id);
+      this.$router.push(location)
+    },
+    isAdmin() {
+      return this.currentProject.creator === this.user.id;
     }
   }
 }
 </script>
-
-<style lang="scss" scoped>
-@import '@/theme/variables.scss';
-
-.navbar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 20;
-  right: 0;
-  height: $navbar-height;
-  background-color: $navbar-color;
-  box-sizing: border-box;
-  border-bottom: 1px solid #eaecef;
-  padding: 0.7rem 1.5rem;
-  line-height: 2.2rem;
-
-  a {
-    display: flex;
-    align-items: center;
-  }
-
-  .title-desktop {
-    display: inline;
-  }
-
-  .title-mobile {
-    display: none;
-  }
-
-  @media (max-width: 500px) {
-    padding: 0.7rem 0.7rem;
-
-    .can-hide {
-      display: none;
-    }
-
-    .title-desktop {
-      display: none;
-    }
-
-    .title-mobile {
-      display: block;
-    }
-  }
-
-  .site-name {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: #2c3e50;
-    position: relative;
-  }
-
-  .logo {
-    height: 24px;
-    padding-right: 8px;
-  }
-
-  .links {
-    padding-left: 1.5rem;
-    box-sizing: border-box;
-    white-space: nowrap;
-    font-size: 0.9rem;
-    position: absolute;
-    right: 1.5rem;
-    top: 0.7rem;
-    display: flex;
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      .nav-item {
-        position: relative;
-        display: inline-block;
-        margin-left: 1.5rem;
-        line-height: 2.2rem;
-
-        &:first-child {
-          margin-left: 0;
-        }
-
-        a {
-          font-weight: 500;
-          font-size: 0.9rem;
-          text-decoration: none;
-          color: $navbar-link-color;
-          border-color: #2c3e50;
-          line-height: 1.4rem;
-          display: inline-block;
-          cursor: pointer;
-        }
-
-        @mixin activatedLink() {
-          margin-bottom: -2px;
-          border-bottom: 2px solid $vue-color;
-        }
-
-        .router-link-active {
-          @include activatedLink;
-        }
-
-        @media (hover) {
-          :hover {
-            @include activatedLink;
-          }
-        }
-      }
-    }
-  }
-
-  &.offline {
-    background: $navbar-offline-color;
-    .links .nav-links .nav-item a,
-    .site-name {
-      color: white;
-    }
-  }
-
-  .user-picture {
-    max-height: 32px;
-    margin-left: 1.5rem;
-    border-radius: 50%;
-  }
-
-  .offline-label {
-    padding: 0px 10px;
-    border: 1px solid white;
-    border-radius: 5px;
-    color: white;
-    margin-left: 1.5rem;
-  }
-}
-</style>

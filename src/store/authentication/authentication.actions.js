@@ -8,26 +8,52 @@ export default {
    * Callback fired when user login
    */
   login: async ({ commit, dispatch }, firebaseAuthUser) => {
-    const userFromFirebase = await new UsersDB().read(firebaseAuthUser.uid)
+    const userFromFirebase = await new UsersDB().read(firebaseAuthUser.uid);
 
     const user = isNil(userFromFirebase)
       ? await createNewUserFromFirebaseAuthUser(firebaseAuthUser)
-      : userFromFirebase
+      : userFromFirebase;
 
-    commit('setUser', user)
-    dispatch('products/getUserProducts', null, { root: true })
+    commit('setUser', user);
+    dispatch('rewards/getUserScore', user.id, { root: true });
+    dispatch('rewards/getUserBadges', user.id, { root: true });
+    dispatch('rewards/getFinishedTutorials', user.id, { root: true });
   },
 
   /**
    * Callback fired when user logout
    */
   logout: ({ commit }) => {
-    commit('setUser', null)
-    commit('products/setProducts', null, { root: true })
+    commit('setUser', null);
 
-    const currentRouter = router.app.$route
+    const currentRouter = router.app.$route;
     if (!(currentRouter.meta && currentRouter.meta.authNotRequired)) {
       router.push('/login')
     }
-  }
+  },
+
+  /**
+   * Fetch user
+   */
+  getUser: async ({ commit }, userId) => {
+    commit('addUserLoading', userId);
+    const userDb = new UsersDB();
+    const user = await userDb.read(userId);
+    commit('removeUserLoading', userId);
+    return user;
+  },
+
+  /**
+   * Update a user from its id
+   */
+  updateUser: async ({ commit, state }, user) => {
+    if (state.userUpdatePending) return;
+
+    const userDb = new UsersDB();
+
+    commit('setUserUpdatePending', true);
+    await userDb.update(user);
+    commit('setUser', user);
+    commit('setUserUpdatePending', false)
+  },
 }

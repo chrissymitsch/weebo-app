@@ -1,24 +1,33 @@
 <template>
-  <div class="page-wrapper">
-    <h1 class="login-page-title">Login page</h1>
+  <div class="main-wrapper">
+    <div class="page-wrapper">
+      <div class="md-layout md-gutter">
+        <div class="md-layout-item">
+          <p class="md-display-1">Anmelden</p>
 
-    <!-- Loader -->
-    <div v-show="user === undefined" data-test="loader">Authenticating...</div>
+          <!-- Loader -->
+          <h1 class="title" v-show="user === undefined" data-test="loader">
+            <md-progress-spinner class="md-accent" :md-diameter="30" :md-stroke="3" md-mode="indeterminate"></md-progress-spinner><br />
+          </h1>
 
-    <!-- Offline instruction -->
-    <div v-show="!networkOnLine" data-test="offline-instruction">
-      Please check your connection, login feature is not available offline.
-    </div>
+          <!-- Offline instruction -->
+          <div v-show="!networkOnLine" data-test="offline-instruction">
+            Bitte prüfe deine Internetverbindung. Anmelden ist offline nicht möglich.
+          </div>
 
-    <p v-if="loginError">{{ loginError }}</p>
-    <!-- Auth UI -->
-    <div
-      v-show="user !== undefined && !user && networkOnLine"
-      data-test="login-btn"
-      class="login-btn"
-      @click="login"
-    >
-      Login with google
+          <p v-if="loginError">{{ loginError }}</p>
+          <!-- Auth UI -->
+          <div
+            v-show="user !== undefined && !user && networkOnLine"
+            data-test="login-btn"
+            class="login-btn"
+            @click="login"
+          >
+            <img src="@/assets/img/g-logo.png" width="23" />
+            Mit Google anmelden
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -27,7 +36,7 @@
 import { mapState, mapMutations } from 'vuex'
 import { isNil } from 'lodash'
 import firebase from 'firebase/app'
-import { desktop as isDekstop } from 'is_js'
+import { desktop as isDesktop } from 'is_js'
 
 export default {
   data: () => ({ loginError: null }),
@@ -54,8 +63,8 @@ export default {
       handler(user) {
         if (!isNil(user)) {
           const redirectUrl = isNil(this.$route.query.redirectUrl)
-            ? '/products'
-            : this.$route.query.redirectUrl
+            ? '/projects'
+            : this.$route.query.redirectUrl;
           this.$router.push(redirectUrl)
         }
       },
@@ -65,20 +74,20 @@ export default {
   methods: {
     ...mapMutations('authentication', ['setUser']),
     async login() {
-      this.loginError = null
-      const provider = new firebase.auth.GoogleAuthProvider()
-      this.setUser(undefined)
+      this.loginError = null;
+      const provider = new firebase.auth.GoogleAuthProvider();
+      this.setUser(undefined);
 
       try {
         // Firebase signin with popup is faster than redirect
         // but we can't use it on mobile because it's not well supported
         // when app is running as standalone on ios & android
         // eslint-disable-next-line no-unused-expressions
-        isDekstop()
+        isDesktop()
           ? await firebase.auth().signInWithPopup(provider)
           : await firebase.auth().signInWithRedirect(provider)
       } catch (err) {
-        this.loginError = err
+        this.loginError = err;
         this.setUser(null)
       }
     }
@@ -89,15 +98,15 @@ export default {
 <style lang="scss" scoped>
 @import '@/theme/variables.scss';
 
-.page-wrapper {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
+.title {
+  text-align: center;
+}
 
-  .login-page-title {
-    text-align: center;
-  }
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
 
   .login-btn {
     margin-top: 20px;
