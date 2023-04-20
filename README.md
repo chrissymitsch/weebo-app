@@ -27,6 +27,8 @@ Gehostet auf Google Firebase.
 - Kommentieren und liken
 - Erlangen von Punkten und Auszeichnungen durch Aktivitäten
 - Erhalten von Push-Benachrichtungen zu den wichtigsten Änderungen
+- Offline-Fähigkeit durch Service-Worker und Store
+- Hinzufügen der App auf den Desktop/Homescreen
 
 
 
